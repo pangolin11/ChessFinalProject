@@ -1,0 +1,827 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ChessFinalProject.Views.ChessBoardViewxaml"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="ChessBoardViewxaml">
+    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+
+        <Grid HeightRequest="368" WidthRequest="368">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+                <RowDefinition Height="46" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="46" />
+                <ColumnDefinition Width="46" />
+                <ColumnDefinition Width="46" />
+                <ColumnDefinition Width="46" />
+                <ColumnDefinition Width="46" />
+                <ColumnDefinition Width="46" />
+                <ColumnDefinition Width="46" />
+                <ColumnDefinition Width="46" />
+            </Grid.ColumnDefinitions>
+
+            <!--  ══════════════════════════════════  -->
+            <!--  Rank 8  -->
+            <!--  ══════════════════════════════════  -->
+            <BoxView
+                x:Name="a8"
+                Grid.Row="0"
+                Grid.Column="0"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference a8}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="b8"
+                Grid.Row="0"
+                Grid.Column="1"
+                Color="#b58863" />
+            <Image
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference b8}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="c8"
+                Grid.Row="0"
+                Grid.Column="2"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="0"
+                Grid.Column="2"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference c8}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="d8"
+                Grid.Row="0"
+                Grid.Column="3"
+                Color="#b58863" />
+            <Image
+                Grid.Row="0"
+                Grid.Column="3"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference d8}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="e8"
+                Grid.Row="0"
+                Grid.Column="4"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="0"
+                Grid.Column="4"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference e8}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="f8"
+                Grid.Row="0"
+                Grid.Column="5"
+                Color="#b58863" />
+            <Image
+                Grid.Row="0"
+                Grid.Column="5"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference f8}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="g8"
+                Grid.Row="0"
+                Grid.Column="6"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="0"
+                Grid.Column="6"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference g8}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="h8"
+                Grid.Row="0"
+                Grid.Column="7"
+                Color="#b58863" />
+            <Image
+                Grid.Row="0"
+                Grid.Column="7"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference h8}, Path=BindingContext.PieceImage}" />
+
+            <!--  ══════════════════════════════════  -->
+            <!--  Rank 7  -->
+            <!--  ══════════════════════════════════  -->
+            <BoxView
+                x:Name="a7"
+                Grid.Row="1"
+                Grid.Column="0"
+                Color="#b58863" />
+            <Image
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference a7}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="b7"
+                Grid.Row="1"
+                Grid.Column="1"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference b7}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="c7"
+                Grid.Row="1"
+                Grid.Column="2"
+                Color="#b58863" />
+            <Image
+                Grid.Row="1"
+                Grid.Column="2"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference c7}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="d7"
+                Grid.Row="1"
+                Grid.Column="3"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="1"
+                Grid.Column="3"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference d7}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="e7"
+                Grid.Row="1"
+                Grid.Column="4"
+                Color="#b58863" />
+            <Image
+                Grid.Row="1"
+                Grid.Column="4"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference e7}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="f7"
+                Grid.Row="1"
+                Grid.Column="5"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="1"
+                Grid.Column="5"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference f7}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="g7"
+                Grid.Row="1"
+                Grid.Column="6"
+                Color="#b58863" />
+            <Image
+                Grid.Row="1"
+                Grid.Column="6"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference g7}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="h7"
+                Grid.Row="1"
+                Grid.Column="7"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="1"
+                Grid.Column="7"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference h7}, Path=BindingContext.PieceImage}" />
+
+            <!--  ══════════════════════════════════  -->
+            <!--  Rank 6  -->
+            <!--  ══════════════════════════════════  -->
+            <BoxView
+                x:Name="a6"
+                Grid.Row="2"
+                Grid.Column="0"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference a6}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="b6"
+                Grid.Row="2"
+                Grid.Column="1"
+                Color="#b58863" />
+            <Image
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference b6}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="c6"
+                Grid.Row="2"
+                Grid.Column="2"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="2"
+                Grid.Column="2"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference c6}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="d6"
+                Grid.Row="2"
+                Grid.Column="3"
+                Color="#b58863" />
+            <Image
+                Grid.Row="2"
+                Grid.Column="3"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference d6}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="e6"
+                Grid.Row="2"
+                Grid.Column="4"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="2"
+                Grid.Column="4"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference e6}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="f6"
+                Grid.Row="2"
+                Grid.Column="5"
+                Color="#b58863" />
+            <Image
+                Grid.Row="2"
+                Grid.Column="5"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference f6}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="g6"
+                Grid.Row="2"
+                Grid.Column="6"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="2"
+                Grid.Column="6"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference g6}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="h6"
+                Grid.Row="2"
+                Grid.Column="7"
+                Color="#b58863" />
+            <Image
+                Grid.Row="2"
+                Grid.Column="7"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference h6}, Path=BindingContext.PieceImage}" />
+
+            <!--  ══════════════════════════════════  -->
+            <!--  Rank 5  -->
+            <!--  ══════════════════════════════════  -->
+            <BoxView
+                x:Name="a5"
+                Grid.Row="3"
+                Grid.Column="0"
+                Color="#b58863" />
+            <Image
+                Grid.Row="3"
+                Grid.Column="0"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference a5}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="b5"
+                Grid.Row="3"
+                Grid.Column="1"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference b5}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="c5"
+                Grid.Row="3"
+                Grid.Column="2"
+                Color="#b58863" />
+            <Image
+                Grid.Row="3"
+                Grid.Column="2"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference c5}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="d5"
+                Grid.Row="3"
+                Grid.Column="3"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="3"
+                Grid.Column="3"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference d5}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="e5"
+                Grid.Row="3"
+                Grid.Column="4"
+                Color="#b58863" />
+            <Image
+                Grid.Row="3"
+                Grid.Column="4"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference e5}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="f5"
+                Grid.Row="3"
+                Grid.Column="5"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="3"
+                Grid.Column="5"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference f5}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="g5"
+                Grid.Row="3"
+                Grid.Column="6"
+                Color="#b58863" />
+            <Image
+                Grid.Row="3"
+                Grid.Column="6"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference g5}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="h5"
+                Grid.Row="3"
+                Grid.Column="7"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="3"
+                Grid.Column="7"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference h5}, Path=BindingContext.PieceImage}" />
+
+            <!--  ══════════════════════════════════  -->
+            <!--  Rank 4  -->
+            <!--  ══════════════════════════════════  -->
+            <BoxView
+                x:Name="a4"
+                Grid.Row="4"
+                Grid.Column="0"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="4"
+                Grid.Column="0"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference a4}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="b4"
+                Grid.Row="4"
+                Grid.Column="1"
+                Color="#b58863" />
+            <Image
+                Grid.Row="4"
+                Grid.Column="1"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference b4}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="c4"
+                Grid.Row="4"
+                Grid.Column="2"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="4"
+                Grid.Column="2"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference c4}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="d4"
+                Grid.Row="4"
+                Grid.Column="3"
+                Color="#b58863" />
+            <Image
+                Grid.Row="4"
+                Grid.Column="3"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference d4}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="e4"
+                Grid.Row="4"
+                Grid.Column="4"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="4"
+                Grid.Column="4"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference e4}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="f4"
+                Grid.Row="4"
+                Grid.Column="5"
+                Color="#b58863" />
+            <Image
+                Grid.Row="4"
+                Grid.Column="5"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference f4}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="g4"
+                Grid.Row="4"
+                Grid.Column="6"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="4"
+                Grid.Column="6"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference g4}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="h4"
+                Grid.Row="4"
+                Grid.Column="7"
+                Color="#b58863" />
+            <Image
+                Grid.Row="4"
+                Grid.Column="7"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference h4}, Path=BindingContext.PieceImage}" />
+
+            <!--  ══════════════════════════════════  -->
+            <!--  Rank 3  -->
+            <!--  ══════════════════════════════════  -->
+            <BoxView
+                x:Name="a3"
+                Grid.Row="5"
+                Grid.Column="0"
+                Color="#b58863" />
+            <Image
+                Grid.Row="5"
+                Grid.Column="0"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference a3}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="b3"
+                Grid.Row="5"
+                Grid.Column="1"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="5"
+                Grid.Column="1"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference b3}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="c3"
+                Grid.Row="5"
+                Grid.Column="2"
+                Color="#b58863" />
+            <Image
+                Grid.Row="5"
+                Grid.Column="2"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference c3}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="d3"
+                Grid.Row="5"
+                Grid.Column="3"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="5"
+                Grid.Column="3"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference d3}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="e3"
+                Grid.Row="5"
+                Grid.Column="4"
+                Color="#b58863" />
+            <Image
+                Grid.Row="5"
+                Grid.Column="4"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference e3}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="f3"
+                Grid.Row="5"
+                Grid.Column="5"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="5"
+                Grid.Column="5"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference f3}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="g3"
+                Grid.Row="5"
+                Grid.Column="6"
+                Color="#b58863" />
+            <Image
+                Grid.Row="5"
+                Grid.Column="6"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference g3}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="h3"
+                Grid.Row="5"
+                Grid.Column="7"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="5"
+                Grid.Column="7"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference h3}, Path=BindingContext.PieceImage}" />
+
+            <!--  ══════════════════════════════════  -->
+            <!--  Rank 2  -->
+            <!--  ══════════════════════════════════  -->
+            <BoxView
+                x:Name="a2"
+                Grid.Row="6"
+                Grid.Column="0"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="6"
+                Grid.Column="0"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference a2}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="b2"
+                Grid.Row="6"
+                Grid.Column="1"
+                Color="#b58863" />
+            <Image
+                Grid.Row="6"
+                Grid.Column="1"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference b2}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="c2"
+                Grid.Row="6"
+                Grid.Column="2"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="6"
+                Grid.Column="2"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference c2}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="d2"
+                Grid.Row="6"
+                Grid.Column="3"
+                Color="#b58863" />
+            <Image
+                Grid.Row="6"
+                Grid.Column="3"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference d2}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="e2"
+                Grid.Row="6"
+                Grid.Column="4"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="6"
+                Grid.Column="4"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference e2}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="f2"
+                Grid.Row="6"
+                Grid.Column="5"
+                Color="#b58863" />
+            <Image
+                Grid.Row="6"
+                Grid.Column="5"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference f2}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="g2"
+                Grid.Row="6"
+                Grid.Column="6"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="6"
+                Grid.Column="6"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference g2}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="h2"
+                Grid.Row="6"
+                Grid.Column="7"
+                Color="#b58863" />
+            <Image
+                Grid.Row="6"
+                Grid.Column="7"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference h2}, Path=BindingContext.PieceImage}" />
+
+            <!--  ══════════════════════════════════  -->
+            <!--  Rank 1  -->
+            <!--  ══════════════════════════════════  -->
+            <BoxView
+                x:Name="a1"
+                Grid.Row="7"
+                Grid.Column="0"
+                Color="#b58863" />
+            <Image
+                Grid.Row="7"
+                Grid.Column="0"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference a1}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="b1"
+                Grid.Row="7"
+                Grid.Column="1"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="7"
+                Grid.Column="1"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference b1}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="c1"
+                Grid.Row="7"
+                Grid.Column="2"
+                Color="#b58863" />
+            <Image
+                Grid.Row="7"
+                Grid.Column="2"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference c1}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="d1"
+                Grid.Row="7"
+                Grid.Column="3"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="7"
+                Grid.Column="3"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference d1}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="e1"
+                Grid.Row="7"
+                Grid.Column="4"
+                Color="#b58863" />
+            <Image
+                Grid.Row="7"
+                Grid.Column="4"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference e1}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="f1"
+                Grid.Row="7"
+                Grid.Column="5"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="7"
+                Grid.Column="5"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference f1}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="g1"
+                Grid.Row="7"
+                Grid.Column="6"
+                Color="#b58863" />
+            <Image
+                Grid.Row="7"
+                Grid.Column="6"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference g1}, Path=BindingContext.PieceImage}" />
+
+            <BoxView
+                x:Name="h1"
+                Grid.Row="7"
+                Grid.Column="7"
+                Color="#f0d9b5" />
+            <Image
+                Grid.Row="7"
+                Grid.Column="7"
+                Margin="3"
+                Aspect="AspectFit"
+                Source="{Binding Source={x:Reference h1}, Path=BindingContext.PieceImage}" />
+
+        </Grid>
+    </VerticalStackLayout>
+</ContentPage>
