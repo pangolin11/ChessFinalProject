@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FirebaseWorkout.Views.MainPageView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="MainPageView">
+
+    <Grid>
+        <VerticalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Label
+                    Margin="20"
+                    FontSize="20"
+                    Text="{Binding Name}"
+                    TextColor="BlueViolet"
+                    VerticalOptions="Center"
+                    />
+
+                <!--  Settings Button - go to account page  -->
+                <Button
+                    Margin="0,20,20,20"
+                    Command="{Binding SettingsCommand}"
+                    FontFamily="MaterialIcons"
+                    FontSize="20"
+                    Text="&#xe8b8;"
+                    VerticalOptions="Center" />
+                
+            </HorizontalStackLayout>
+
+            <Label
+                Margin="20"
+                FontSize="20"
+                Text="Make your greatest app here!"
+                TextColor="CadetBlue"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"/>
+
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

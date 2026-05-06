@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "783723578171",
+    "firebase_url": "https://chessfinalproject-66573-default-rtdb.firebaseio.com",
+    "project_id": "chessfinalproject-66573",
+    "storage_bucket": "chessfinalproject-66573.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:783723578171:android:bcd28ab7295a926ef76d1e",
+        "android_client_info": {
+          "package_name": "com.companyname.chessfinalproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-1rftS0chc1MFwagMCdm3wnOAFSjIRdg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
