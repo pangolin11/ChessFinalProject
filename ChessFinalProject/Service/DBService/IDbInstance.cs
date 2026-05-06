@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace che.Service.DBService
+namespace ChessFinalProject.Service.DBService
 {
 	public interface IDbInstance
 	{

@@ -1,7 +1,7 @@
 ﻿using Firebase.Auth;
 using Firebase.Auth.Providers;
-using FirebaseWorkout.Model;
-using FirebaseWorkout.Service.DBService.Firebase;
+using ChessFinalProject.Model;
+using ChessFinalProject.Service.DBService.Firebase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +22,8 @@ namespace ChessFinalProject.Service.DBService.Firebase
 			// Initialize Firebase Authentication Client
 			var config = new FirebaseAuthConfig()
 			{
-				ApiKey = "AIzaSyCxiohGYnbe4uG8DDorCh3KeNc30ulT6Ig",
-				AuthDomain = "kostyafirebase.firebaseapp.com",
+				ApiKey = "AIzaSyB-1rftS0chc1MFwagMCdm3wnOAFSjIRdg",
+				AuthDomain = "chessfinalproject-66573.firebaseapp.com",
 				Providers = new FirebaseAuthProvider[]
 					{
 						new EmailProvider()

@@ -2,12 +2,12 @@
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
 using Firebase.Auth.Repository;
-using FirebaseWorkout.Helper;
-using FirebaseWorkout.Model;
-using FirebaseWorkout.Service;
-using FirebaseWorkout.Service.DBService;
-using FirebaseWorkout.Service.DBService.Firebase;
-using FirebaseWorkout.Views;
+using ChessFinalProject.Helper;
+using ChessFinalProject.Model;
+using ChessFinalProject.Service;
+using ChessFinalProject.Service.DBService;
+using ChessFinalProject.Service.DBService.Firebase;
+using ChessFinalProject.Views;
 using Microsoft.Maui.Controls;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace FirebaseWorkout.ViewModels
+namespace ChessFinalProject.ViewModels
 {
 	public partial class SignInViewModel : ObservableObject
 	{

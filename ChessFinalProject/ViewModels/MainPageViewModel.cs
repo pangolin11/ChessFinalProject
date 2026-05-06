@@ -2,10 +2,10 @@
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
 using Firebase.Database.Streaming;
-using FirebaseWorkout.Model;
-using FirebaseWorkout.Service;
-using FirebaseWorkout.Service.DBService;
-using FirebaseWorkout.Service.DBService.Firebase;
+using ChessFinalProject.Model;
+using ChessFinalProject.Service;
+using ChessFinalProject.Service.DBService;
+using ChessFinalProject.Service.DBService.Firebase;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirebaseWorkout.ViewModels
+namespace ChessFinalProject.ViewModels
 {
 	public partial class MainPageViewModel: ObservableObject
 	{

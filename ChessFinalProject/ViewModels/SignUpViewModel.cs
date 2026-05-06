@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Firebase.Auth;
-using FirebaseWorkout.Helper;
-using FirebaseWorkout.Model;
-using FirebaseWorkout.Service.DBService;
-using FirebaseWorkout.Service.DBService.Firebase;
-using FirebaseWorkout.Views;
+using ChessFinalProject.Helper;
+using ChessFinalProject.Model;
+using ChessFinalProject.Service.DBService;
+using ChessFinalProject.Service.DBService.Firebase;
+using ChessFinalProject.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace FirebaseWorkout.ViewModels
+namespace ChessFinalProject.ViewModels
 {
 	public partial class SignUpViewModel : ObservableObject
 	{

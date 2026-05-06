@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirebaseWorkout.ViewModels
+namespace ChessFinalProject.ViewModels
 {
 	public partial class AdminViewModel : ObservableObject
 	{

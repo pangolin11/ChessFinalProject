@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="FirebaseWorkout.Views.UsersListView"
+    x:Class="ChessFinalProject.Views.UsersListView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:models="clr-namespace:FirebaseWorkout.Model"
-    xmlns:viewmodels="clr-namespace:FirebaseWorkout.ViewModels"
+    xmlns:models="clr-namespace:ChessFinalProject.Model"
+    xmlns:viewmodels="clr-namespace:ChessFinalProject.ViewModels"
     Title="UsersListView"
     x:DataType="viewmodels:UsersListViewModel">
 

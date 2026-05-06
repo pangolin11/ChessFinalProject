@@ -1,6 +1,6 @@
-using FirebaseWorkout.ViewModels;
+using ChessFinalProject.ViewModels;
 
-namespace FirebaseWorkout.Views;
+namespace ChessFinalProject.Views;
 
 public partial class MainPageView : ContentPage
 {

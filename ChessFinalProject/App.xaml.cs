@@ -1,18 +1,22 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ChessFinalProject.Model;
 using ChessFinalProject.Views;
 
 namespace ChessFinalProject
 {
     public partial class App : Application
     {
-        public App()
+        private Page _page;
+		public AppUser? CurrentUser { get; set; } = null;
+        
+		public App(SignInView view)
         {
             InitializeComponent();
-        }
+            _page = view;
+		}
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new ChessBoardViewxaml());
-        }
-    }
+			return new Window(new NavigationPage(_page));
+		}
+	}
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirebaseWorkout.Model
+namespace ChessFinalProject.Model
 {
 	public class AppUser
 	{

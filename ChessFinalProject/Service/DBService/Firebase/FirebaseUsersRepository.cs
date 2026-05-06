@@ -2,7 +2,7 @@
 using Firebase.Database;
 using Firebase.Database.Query;
 using Firebase.Database.Streaming;
-using FirebaseWorkout.Model;
+using ChessFinalProject.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
