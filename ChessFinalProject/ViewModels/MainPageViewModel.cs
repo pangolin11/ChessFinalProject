@@ -29,5 +29,10 @@ namespace ChessFinalProject.ViewModels
 		{
 			await Shell.Current.GoToAsync("AccountView");
 		}
+		[RelayCommand]
+		private async Task NavToChess()
+		{
+			await Shell.Current.GoToAsync("ChessBoardView");
+        }
 	}
 }

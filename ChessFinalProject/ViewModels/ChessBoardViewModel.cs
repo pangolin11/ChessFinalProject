@@ -1,40 +1,69 @@
-﻿using System;
+﻿using ChessFinalProject.Models;
+using ChessFinalProject.Service.DBService.Firebase;
+using System;
 using System.Collections.Generic;
+using System.Reactive.Disposables;
 using System.Text;
 
 namespace ChessFinalProject.ViewModels
 {
     public class ChessBoardViewModel : ViewModelBase
     {
-        private Dictionary<string, string> squares = new Dictionary<string, string>(64);
-        public Dictionary<string, string> Squares
+        private Dictionary<string, string> pieceImages = new Dictionary<string, string>(64);
+        private FirebaseService _firebaseService;
+        private GameState _currentLocalGameState; // Local copy of the full game state
+
+        public Dictionary<string, string> PieceImages
         {
-            get { return squares; }
+            get { return pieceImages; }
             set
             {
-                if (squares != value)
+                if (pieceImages != value)
                 {
-                    squares = value;
+                    pieceImages = value;
                     OnPropertyChanged();
                 }
             }
         }
         public ChessBoardViewModel()
         {
-            InitializeSquares();
-
+/*           InitializeGameListener(_currentLocalGameState.GameId);
+*/
         }
 
-        private void InitializeSquares()
+        private void InitializeGameListener(string gameId)
         {
-            for(char file = 'a'; file <= 'h'; file++ ) 
-            {
-                for(int rank = 1; rank <= 8; rank++)
+            _firebaseService.ListenForGameState(gameId)
+                .Subscribe(firebaseObject =>
                 {
-                    string squareName = $"{file}{rank}";
-                    squares[squareName] = ""; // Initialize with empty string or default piece
-                }
-            }
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        if (firebaseObject != null && firebaseObject.Object != null)
+                        {
+                            _currentLocalGameState = firebaseObject.Object; // Keep a local copy of the full state
+                            pieceImages = _currentLocalGameState.BoardPieces; // Update the piece images based on the current game state
+                        }
+                        else
+                        {
+                            Console.WriteLine("GameState object was null in the update.");
+                        }
+                    });
+                },
+                error =>
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        Console.WriteLine($"Error listening for game state: {error.Message}");
+                        // Handle error, e.g., show an alert
+                    });
+                },
+                () =>
+                {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        Console.WriteLine("Game state listener completed.");
+                    });
+                });
         }
     }
 }

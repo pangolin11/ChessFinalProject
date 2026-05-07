@@ -63,4 +63,8 @@
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPageView}"
         Route="MainPage" />
+    <ShellContent
+    Title="Home"
+    ContentTemplate="{DataTemplate local:ChessBoardView}"
+    Route="ChessBoard" />
 </Shell>

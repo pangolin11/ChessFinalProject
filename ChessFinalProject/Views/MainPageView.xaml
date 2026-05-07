@@ -34,6 +34,13 @@
                 TextColor="CadetBlue"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center"/>
+            <Button
+     Margin="20,20,20,20"
+     Command="{Binding NavToChessCommand}"
+     FontFamily="MaterialIcons"
+     FontSize="20"
+     Text="&#xe8b8;"
+     VerticalOptions="Center" />
 
         </VerticalStackLayout>
     </Grid>

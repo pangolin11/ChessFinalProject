@@ -1,826 +1,747 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="ChessFinalProject.Views.ChessBoardViewxaml"
+    x:Class="ChessFinalProject.Views.ChessBoardView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     Title="ChessBoardViewxaml">
     <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
 
-        <Grid HeightRequest="368" WidthRequest="368">
+        <Grid
+        Padding="10"
+        RowSpacing="0"
+        ColumnSpacing="-6"
+        HorizontalOptions="Center"
+        VerticalOptions="Center">
 
+            <!-- Rows -->
             <Grid.RowDefinitions>
-                <RowDefinition Height="46" />
-                <RowDefinition Height="46" />
-                <RowDefinition Height="46" />
-                <RowDefinition Height="46" />
-                <RowDefinition Height="46" />
-                <RowDefinition Height="46" />
-                <RowDefinition Height="46" />
-                <RowDefinition Height="46" />
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
+            <!-- Columns -->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="46" />
-                <ColumnDefinition Width="46" />
-                <ColumnDefinition Width="46" />
-                <ColumnDefinition Width="46" />
-                <ColumnDefinition Width="46" />
-                <ColumnDefinition Width="46" />
-                <ColumnDefinition Width="46" />
-                <ColumnDefinition Width="46" />
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
 
-            <!--  ══════════════════════════════════  -->
-            <!--  Rank 8  -->
-            <!--  ══════════════════════════════════  -->
-            <BoxView
-                x:Name="a8"
-                Grid.Row="0"
-                Grid.Column="0"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="0"
-                Grid.Column="0"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference a8}, Path=BindingContext.PieceImage}" />
+            <!-- ROW 8 -->
 
-            <BoxView
-                x:Name="b8"
-                Grid.Row="0"
-                Grid.Column="1"
-                Color="#b58863" />
-            <Image
-                Grid.Row="0"
-                Grid.Column="1"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference b8}, Path=BindingContext.PieceImage}" />
+            <!-- A8 -->
+            <Grid Grid.Row="0" Grid.Column="0">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[A8]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="A8"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="c8"
-                Grid.Row="0"
-                Grid.Column="2"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="0"
-                Grid.Column="2"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference c8}, Path=BindingContext.PieceImage}" />
+            <!-- B8 -->
+            <Grid Grid.Row="0" Grid.Column="1">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[B8]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="B8"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="d8"
-                Grid.Row="0"
-                Grid.Column="3"
-                Color="#b58863" />
-            <Image
-                Grid.Row="0"
-                Grid.Column="3"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference d8}, Path=BindingContext.PieceImage}" />
+            <!-- C8 -->
+            <Grid Grid.Row="0" Grid.Column="2">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[C8]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="C8"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="e8"
-                Grid.Row="0"
-                Grid.Column="4"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="0"
-                Grid.Column="4"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference e8}, Path=BindingContext.PieceImage}" />
+            <!-- D8 -->
+            <Grid Grid.Row="0" Grid.Column="3">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[D8]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="D8"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="f8"
-                Grid.Row="0"
-                Grid.Column="5"
-                Color="#b58863" />
-            <Image
-                Grid.Row="0"
-                Grid.Column="5"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference f8}, Path=BindingContext.PieceImage}" />
+            <!-- E8 -->
+            <Grid Grid.Row="0" Grid.Column="4">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[E8]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="E8"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="g8"
-                Grid.Row="0"
-                Grid.Column="6"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="0"
-                Grid.Column="6"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference g8}, Path=BindingContext.PieceImage}" />
+            <!-- F8 -->
+            <Grid Grid.Row="0" Grid.Column="5">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[F8]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="F8"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="h8"
-                Grid.Row="0"
-                Grid.Column="7"
-                Color="#b58863" />
-            <Image
-                Grid.Row="0"
-                Grid.Column="7"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference h8}, Path=BindingContext.PieceImage}" />
+            <!-- G8 -->
+            <Grid Grid.Row="0" Grid.Column="6">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[G8]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="G8"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <!--  ══════════════════════════════════  -->
-            <!--  Rank 7  -->
-            <!--  ══════════════════════════════════  -->
-            <BoxView
-                x:Name="a7"
-                Grid.Row="1"
-                Grid.Column="0"
-                Color="#b58863" />
-            <Image
-                Grid.Row="1"
-                Grid.Column="0"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference a7}, Path=BindingContext.PieceImage}" />
+            <!-- H8 -->
+            <Grid Grid.Row="0" Grid.Column="7">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[H8]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="H8"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="b7"
-                Grid.Row="1"
-                Grid.Column="1"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="1"
-                Grid.Column="1"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference b7}, Path=BindingContext.PieceImage}" />
+            <!-- A7 -->
+            <Grid Grid.Row="1" Grid.Column="0">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[A7]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="A7"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="c7"
-                Grid.Row="1"
-                Grid.Column="2"
-                Color="#b58863" />
-            <Image
-                Grid.Row="1"
-                Grid.Column="2"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference c7}, Path=BindingContext.PieceImage}" />
+            <!-- B7 -->
+            <Grid Grid.Row="1" Grid.Column="1">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[B7]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="B7"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="d7"
-                Grid.Row="1"
-                Grid.Column="3"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="1"
-                Grid.Column="3"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference d7}, Path=BindingContext.PieceImage}" />
+            <!-- C7 -->
+            <Grid Grid.Row="1" Grid.Column="2">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[C7]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="C7"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="e7"
-                Grid.Row="1"
-                Grid.Column="4"
-                Color="#b58863" />
-            <Image
-                Grid.Row="1"
-                Grid.Column="4"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference e7}, Path=BindingContext.PieceImage}" />
+            <!-- D7 -->
+            <Grid Grid.Row="1" Grid.Column="3">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[D7]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="D7"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="f7"
-                Grid.Row="1"
-                Grid.Column="5"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="1"
-                Grid.Column="5"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference f7}, Path=BindingContext.PieceImage}" />
+            <!-- E7 -->
+            <Grid Grid.Row="1" Grid.Column="4">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[E7]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="E7"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="g7"
-                Grid.Row="1"
-                Grid.Column="6"
-                Color="#b58863" />
-            <Image
-                Grid.Row="1"
-                Grid.Column="6"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference g7}, Path=BindingContext.PieceImage}" />
+            <!-- F7 -->
+            <Grid Grid.Row="1" Grid.Column="5">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[F7]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="F7"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="h7"
-                Grid.Row="1"
-                Grid.Column="7"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="1"
-                Grid.Column="7"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference h7}, Path=BindingContext.PieceImage}" />
+            <!-- G7 -->
+            <Grid Grid.Row="1" Grid.Column="6">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[G7]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="G7"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <!--  ══════════════════════════════════  -->
-            <!--  Rank 6  -->
-            <!--  ══════════════════════════════════  -->
-            <BoxView
-                x:Name="a6"
-                Grid.Row="2"
-                Grid.Column="0"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="2"
-                Grid.Column="0"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference a6}, Path=BindingContext.PieceImage}" />
+            <!-- H7 -->
+            <Grid Grid.Row="1" Grid.Column="7">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[H7]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="H7"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="b6"
-                Grid.Row="2"
-                Grid.Column="1"
-                Color="#b58863" />
-            <Image
-                Grid.Row="2"
-                Grid.Column="1"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference b6}, Path=BindingContext.PieceImage}" />
+            <!-- A6 -->
+            <Grid Grid.Row="2" Grid.Column="0">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[A6]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="A6"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="c6"
-                Grid.Row="2"
-                Grid.Column="2"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="2"
-                Grid.Column="2"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference c6}, Path=BindingContext.PieceImage}" />
+            <!-- B6 -->
+            <Grid Grid.Row="2" Grid.Column="1">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[B6]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="B6"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="d6"
-                Grid.Row="2"
-                Grid.Column="3"
-                Color="#b58863" />
-            <Image
-                Grid.Row="2"
-                Grid.Column="3"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference d6}, Path=BindingContext.PieceImage}" />
+            <!-- C6 -->
+            <Grid Grid.Row="2" Grid.Column="2">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[C6]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="C6"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="e6"
-                Grid.Row="2"
-                Grid.Column="4"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="2"
-                Grid.Column="4"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference e6}, Path=BindingContext.PieceImage}" />
+            <!-- D6 -->
+            <Grid Grid.Row="2" Grid.Column="3">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[D6]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="D6"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="f6"
-                Grid.Row="2"
-                Grid.Column="5"
-                Color="#b58863" />
-            <Image
-                Grid.Row="2"
-                Grid.Column="5"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference f6}, Path=BindingContext.PieceImage}" />
+            <!-- E6 -->
+            <Grid Grid.Row="2" Grid.Column="4">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[E6]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="E6"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="g6"
-                Grid.Row="2"
-                Grid.Column="6"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="2"
-                Grid.Column="6"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference g6}, Path=BindingContext.PieceImage}" />
+            <!-- F6 -->
+            <Grid Grid.Row="2" Grid.Column="5">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[F6]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="F6"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="h6"
-                Grid.Row="2"
-                Grid.Column="7"
-                Color="#b58863" />
-            <Image
-                Grid.Row="2"
-                Grid.Column="7"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference h6}, Path=BindingContext.PieceImage}" />
+            <!-- G6 -->
+            <Grid Grid.Row="2" Grid.Column="6">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[G6]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="G6"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <!--  ══════════════════════════════════  -->
-            <!--  Rank 5  -->
-            <!--  ══════════════════════════════════  -->
-            <BoxView
-                x:Name="a5"
-                Grid.Row="3"
-                Grid.Column="0"
-                Color="#b58863" />
-            <Image
-                Grid.Row="3"
-                Grid.Column="0"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference a5}, Path=BindingContext.PieceImage}" />
+            <!-- H6 -->
+            <Grid Grid.Row="2" Grid.Column="7">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[H6]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="H6"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="b5"
-                Grid.Row="3"
-                Grid.Column="1"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="3"
-                Grid.Column="1"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference b5}, Path=BindingContext.PieceImage}" />
+            <!-- A5 -->
+            <Grid Grid.Row="3" Grid.Column="0">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[A5]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="A5"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="c5"
-                Grid.Row="3"
-                Grid.Column="2"
-                Color="#b58863" />
-            <Image
-                Grid.Row="3"
-                Grid.Column="2"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference c5}, Path=BindingContext.PieceImage}" />
+            <!-- B5 -->
+            <Grid Grid.Row="3" Grid.Column="1">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[B5]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="B5"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="d5"
-                Grid.Row="3"
-                Grid.Column="3"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="3"
-                Grid.Column="3"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference d5}, Path=BindingContext.PieceImage}" />
+            <!-- C5 -->
+            <Grid Grid.Row="3" Grid.Column="2">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[C5]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="C5"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="e5"
-                Grid.Row="3"
-                Grid.Column="4"
-                Color="#b58863" />
-            <Image
-                Grid.Row="3"
-                Grid.Column="4"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference e5}, Path=BindingContext.PieceImage}" />
+            <!-- D5 -->
+            <Grid Grid.Row="3" Grid.Column="3">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[D5]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="D5"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="f5"
-                Grid.Row="3"
-                Grid.Column="5"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="3"
-                Grid.Column="5"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference f5}, Path=BindingContext.PieceImage}" />
+            <!-- E5 -->
+            <Grid Grid.Row="3" Grid.Column="4">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[E5]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="E5"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="g5"
-                Grid.Row="3"
-                Grid.Column="6"
-                Color="#b58863" />
-            <Image
-                Grid.Row="3"
-                Grid.Column="6"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference g5}, Path=BindingContext.PieceImage}" />
+            <!-- F5 -->
+            <Grid Grid.Row="3" Grid.Column="5">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[F5]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="F5"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="h5"
-                Grid.Row="3"
-                Grid.Column="7"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="3"
-                Grid.Column="7"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference h5}, Path=BindingContext.PieceImage}" />
+            <!-- G5 -->
+            <Grid Grid.Row="3" Grid.Column="6">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[G5]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="G5"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <!--  ══════════════════════════════════  -->
-            <!--  Rank 4  -->
-            <!--  ══════════════════════════════════  -->
-            <BoxView
-                x:Name="a4"
-                Grid.Row="4"
-                Grid.Column="0"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="4"
-                Grid.Column="0"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference a4}, Path=BindingContext.PieceImage}" />
+            <!-- H5 -->
+            <Grid Grid.Row="3" Grid.Column="7">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[H5]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="H5"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="b4"
-                Grid.Row="4"
-                Grid.Column="1"
-                Color="#b58863" />
-            <Image
-                Grid.Row="4"
-                Grid.Column="1"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference b4}, Path=BindingContext.PieceImage}" />
+            <!-- A4 -->
+            <Grid Grid.Row="4" Grid.Column="0">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[A4]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="A4"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="c4"
-                Grid.Row="4"
-                Grid.Column="2"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="4"
-                Grid.Column="2"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference c4}, Path=BindingContext.PieceImage}" />
+            <!-- B4 -->
+            <Grid Grid.Row="4" Grid.Column="1">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[B4]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="B4"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="d4"
-                Grid.Row="4"
-                Grid.Column="3"
-                Color="#b58863" />
-            <Image
-                Grid.Row="4"
-                Grid.Column="3"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference d4}, Path=BindingContext.PieceImage}" />
+            <!-- C4 -->
+            <Grid Grid.Row="4" Grid.Column="2">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[C4]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="C4"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="e4"
-                Grid.Row="4"
-                Grid.Column="4"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="4"
-                Grid.Column="4"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference e4}, Path=BindingContext.PieceImage}" />
+            <!-- D4 -->
+            <Grid Grid.Row="4" Grid.Column="3">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[D4]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="D4"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="f4"
-                Grid.Row="4"
-                Grid.Column="5"
-                Color="#b58863" />
-            <Image
-                Grid.Row="4"
-                Grid.Column="5"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference f4}, Path=BindingContext.PieceImage}" />
+            <!-- E4 -->
+            <Grid Grid.Row="4" Grid.Column="4">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[E4]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="E4"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="g4"
-                Grid.Row="4"
-                Grid.Column="6"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="4"
-                Grid.Column="6"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference g4}, Path=BindingContext.PieceImage}" />
+            <!-- F4 -->
+            <Grid Grid.Row="4" Grid.Column="5">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[F4]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="F4"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="h4"
-                Grid.Row="4"
-                Grid.Column="7"
-                Color="#b58863" />
-            <Image
-                Grid.Row="4"
-                Grid.Column="7"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference h4}, Path=BindingContext.PieceImage}" />
+            <!-- G4 -->
+            <Grid Grid.Row="4" Grid.Column="6">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[G4]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="G4"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <!--  ══════════════════════════════════  -->
-            <!--  Rank 3  -->
-            <!--  ══════════════════════════════════  -->
-            <BoxView
-                x:Name="a3"
-                Grid.Row="5"
-                Grid.Column="0"
-                Color="#b58863" />
-            <Image
-                Grid.Row="5"
-                Grid.Column="0"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference a3}, Path=BindingContext.PieceImage}" />
+            <!-- H4 -->
+            <Grid Grid.Row="4" Grid.Column="7">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[H4]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="H4"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="b3"
-                Grid.Row="5"
-                Grid.Column="1"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="5"
-                Grid.Column="1"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference b3}, Path=BindingContext.PieceImage}" />
+            <!-- A3 -->
+            <Grid Grid.Row="5" Grid.Column="0">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[A3]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="A3"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="c3"
-                Grid.Row="5"
-                Grid.Column="2"
-                Color="#b58863" />
-            <Image
-                Grid.Row="5"
-                Grid.Column="2"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference c3}, Path=BindingContext.PieceImage}" />
+            <!-- B3 -->
+            <Grid Grid.Row="5" Grid.Column="1">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[B3]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="B3"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="d3"
-                Grid.Row="5"
-                Grid.Column="3"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="5"
-                Grid.Column="3"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference d3}, Path=BindingContext.PieceImage}" />
+            <!-- C3 -->
+            <Grid Grid.Row="5" Grid.Column="2">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[C3]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="C3"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="e3"
-                Grid.Row="5"
-                Grid.Column="4"
-                Color="#b58863" />
-            <Image
-                Grid.Row="5"
-                Grid.Column="4"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference e3}, Path=BindingContext.PieceImage}" />
+            <!-- D3 -->
+            <Grid Grid.Row="5" Grid.Column="3">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[D3]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="D3"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="f3"
-                Grid.Row="5"
-                Grid.Column="5"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="5"
-                Grid.Column="5"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference f3}, Path=BindingContext.PieceImage}" />
+            <!-- E3 -->
+            <Grid Grid.Row="5" Grid.Column="4">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[E3]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="E3"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="g3"
-                Grid.Row="5"
-                Grid.Column="6"
-                Color="#b58863" />
-            <Image
-                Grid.Row="5"
-                Grid.Column="6"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference g3}, Path=BindingContext.PieceImage}" />
+            <!-- F3 -->
+            <Grid Grid.Row="5" Grid.Column="5">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[F3]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="F3"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="h3"
-                Grid.Row="5"
-                Grid.Column="7"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="5"
-                Grid.Column="7"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference h3}, Path=BindingContext.PieceImage}" />
+            <!-- G3 -->
+            <Grid Grid.Row="5" Grid.Column="6">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[G3]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="G3"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <!--  ══════════════════════════════════  -->
-            <!--  Rank 2  -->
-            <!--  ══════════════════════════════════  -->
-            <BoxView
-                x:Name="a2"
-                Grid.Row="6"
-                Grid.Column="0"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="6"
-                Grid.Column="0"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference a2}, Path=BindingContext.PieceImage}" />
+            <!-- H3 -->
+            <Grid Grid.Row="5" Grid.Column="7">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[H3]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="H3"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="b2"
-                Grid.Row="6"
-                Grid.Column="1"
-                Color="#b58863" />
-            <Image
-                Grid.Row="6"
-                Grid.Column="1"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference b2}, Path=BindingContext.PieceImage}" />
+            <!-- A2 -->
+            <Grid Grid.Row="6" Grid.Column="0">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[A2]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="A2"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="c2"
-                Grid.Row="6"
-                Grid.Column="2"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="6"
-                Grid.Column="2"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference c2}, Path=BindingContext.PieceImage}" />
+            <!-- B2 -->
+            <Grid Grid.Row="6" Grid.Column="1">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[B2]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="B2"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="d2"
-                Grid.Row="6"
-                Grid.Column="3"
-                Color="#b58863" />
-            <Image
-                Grid.Row="6"
-                Grid.Column="3"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference d2}, Path=BindingContext.PieceImage}" />
+            <!-- C2 -->
+            <Grid Grid.Row="6" Grid.Column="2">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[C2]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="C2"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="e2"
-                Grid.Row="6"
-                Grid.Column="4"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="6"
-                Grid.Column="4"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference e2}, Path=BindingContext.PieceImage}" />
+            <!-- D2 -->
+            <Grid Grid.Row="6" Grid.Column="3">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[D2]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="D2"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="f2"
-                Grid.Row="6"
-                Grid.Column="5"
-                Color="#b58863" />
-            <Image
-                Grid.Row="6"
-                Grid.Column="5"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference f2}, Path=BindingContext.PieceImage}" />
+            <!-- E2 -->
+            <Grid Grid.Row="6" Grid.Column="4">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[E2]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="E2"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="g2"
-                Grid.Row="6"
-                Grid.Column="6"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="6"
-                Grid.Column="6"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference g2}, Path=BindingContext.PieceImage}" />
+            <!-- F2 -->
+            <Grid Grid.Row="6" Grid.Column="5">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[F2]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="F2"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="h2"
-                Grid.Row="6"
-                Grid.Column="7"
-                Color="#b58863" />
-            <Image
-                Grid.Row="6"
-                Grid.Column="7"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference h2}, Path=BindingContext.PieceImage}" />
+            <!-- G2 -->
+            <Grid Grid.Row="6" Grid.Column="6">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[G2]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="G2"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <!--  ══════════════════════════════════  -->
-            <!--  Rank 1  -->
-            <!--  ══════════════════════════════════  -->
-            <BoxView
-                x:Name="a1"
-                Grid.Row="7"
-                Grid.Column="0"
-                Color="#b58863" />
-            <Image
-                Grid.Row="7"
-                Grid.Column="0"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference a1}, Path=BindingContext.PieceImage}" />
+            <!-- H2 -->
+            <Grid Grid.Row="6" Grid.Column="7">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[H2]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="H2"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="b1"
-                Grid.Row="7"
-                Grid.Column="1"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="7"
-                Grid.Column="1"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference b1}, Path=BindingContext.PieceImage}" />
+            <!-- A1 -->
+            <Grid Grid.Row="7" Grid.Column="0">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[A1]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="A1"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="c1"
-                Grid.Row="7"
-                Grid.Column="2"
-                Color="#b58863" />
-            <Image
-                Grid.Row="7"
-                Grid.Column="2"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference c1}, Path=BindingContext.PieceImage}" />
+            <!-- B1 -->
+            <Grid Grid.Row="7" Grid.Column="1">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[B1]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="B1"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="d1"
-                Grid.Row="7"
-                Grid.Column="3"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="7"
-                Grid.Column="3"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference d1}, Path=BindingContext.PieceImage}" />
+            <!-- C1 -->
+            <Grid Grid.Row="7" Grid.Column="2">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[C1]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="C1"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="e1"
-                Grid.Row="7"
-                Grid.Column="4"
-                Color="#b58863" />
-            <Image
-                Grid.Row="7"
-                Grid.Column="4"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference e1}, Path=BindingContext.PieceImage}" />
+            <!-- D1 -->
+            <Grid Grid.Row="7" Grid.Column="3">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[D1]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="D1"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="f1"
-                Grid.Row="7"
-                Grid.Column="5"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="7"
-                Grid.Column="5"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference f1}, Path=BindingContext.PieceImage}" />
+            <!-- E1 -->
+            <Grid Grid.Row="7" Grid.Column="4">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[E1]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="E1"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="g1"
-                Grid.Row="7"
-                Grid.Column="6"
-                Color="#b58863" />
-            <Image
-                Grid.Row="7"
-                Grid.Column="6"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference g1}, Path=BindingContext.PieceImage}" />
+            <!-- F1 -->
+            <Grid Grid.Row="7" Grid.Column="5">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[F1]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="F1"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
-            <BoxView
-                x:Name="h1"
-                Grid.Row="7"
-                Grid.Column="7"
-                Color="#f0d9b5" />
-            <Image
-                Grid.Row="7"
-                Grid.Column="7"
-                Margin="3"
-                Aspect="AspectFit"
-                Source="{Binding Source={x:Reference h1}, Path=BindingContext.PieceImage}" />
+            <!-- G1 -->
+            <Grid Grid.Row="7" Grid.Column="6">
+                <BoxView Color="#B58863"/>
+                <Image Source="{Binding PieceImages[G1]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="G1"/>
+                </Grid.GestureRecognizers>
+            </Grid>
+
+            <!-- H1 -->
+            <Grid Grid.Row="7" Grid.Column="7">
+                <BoxView Color="#F0D9B5"/>
+                <Image Source="{Binding PieceImages[H1]}" Aspect="AspectFit"/>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer
+            Command="{Binding SquareTappedCommand}"
+            CommandParameter="H1"/>
+                </Grid.GestureRecognizers>
+            </Grid>
 
         </Grid>
     </VerticalStackLayout>

@@ -16,7 +16,8 @@ namespace ChessFinalProject
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-			return new Window(new NavigationPage(_page));
-		}
+            return new Window(new NavigationPage(_page));
+            /*  return new Window(new ChessBoardView());*/
+        }
 	}
 }

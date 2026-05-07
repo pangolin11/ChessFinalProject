@@ -1,8 +1,8 @@
 namespace ChessFinalProject.Views;
 
-public partial class ChessBoardViewxaml : ContentPage
+public partial class ChessBoardView : ContentPage
 {
-	public ChessBoardViewxaml()
+	public ChessBoardView()
 	{
 		InitializeComponent();
 		BindingContext = new ViewModels.ChessBoardViewModel();

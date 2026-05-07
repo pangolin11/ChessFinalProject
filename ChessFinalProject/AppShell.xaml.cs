@@ -13,7 +13,9 @@ namespace ChessFinalProject
 			Routing.RegisterRoute(nameof(AdminView), typeof(AdminView));
 			Routing.RegisterRoute(nameof(AccountView), typeof(AccountView));
 			Routing.RegisterRoute(nameof(UsersListView), typeof(UsersListView));
+            Routing.RegisterRoute(nameof(UsersListView), typeof(UsersListView));
+            Routing.RegisterRoute(nameof(ChessBoardView), typeof(ChessBoardView));
 
-		}
-	}
+        }
+    }
 }
