@@ -1,37 +1,101 @@
 ﻿using ChessFinalProject.Models;
 using ChessFinalProject.Service.DBService.Firebase;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Text;
 
 namespace ChessFinalProject.ViewModels
 {
-    public class ChessBoardViewModel : ViewModelBase
+    public partial class ChessBoardViewModel : ViewModelBase
     {
-        private Dictionary<string, string> pieceImages = new Dictionary<string, string>(64);
         private FirebaseService _firebaseService;
         private GameState _currentLocalGameState; // Local copy of the full game state
+        public ObservableCollection<ChessSquare> Board { get; } = new();
 
-        public Dictionary<string, string> PieceImages
-        {
-            get { return pieceImages; }
-            set
-            {
-                if (pieceImages != value)
-                {
-                    pieceImages = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        [ObservableProperty]
+        private string selectedSquare;
+
+
+
         public ChessBoardViewModel()
         {
-/*           InitializeGameListener(_currentLocalGameState.GameId);
-*/
+           /*InitializeGameListener(_currentLocalGameState.GameId);       */
+
         }
 
-        private void InitializeGameListener(string gameId)
+        public async Task InitializeBoardAsync(int batchSize = 8, int delayMs = 16)
+        {
+            Board.Clear();
+
+            string[] files = { "A", "B", "C", "D", "E", "F", "G", "H" };
+
+            var buffer = new List<ChessSquare>(batchSize);
+
+            for (int row = 8; row >= 1; row--)
+            {
+                for (int col = 0; col < 8; col++)
+                {
+                    if (files[col] + row == "E1")
+                    {
+                        buffer.Add(new ChessSquare
+                        {
+                            Name = files[col] + row,
+                            IsWhite = (row + col) % 2 == 0,
+                            Image = "whiteking.png"
+                        });
+  
+                    }
+                    else
+                    {
+                        buffer.Add(new ChessSquare
+                        {
+                            Name = files[col] + row,
+                            IsWhite = (row + col) % 2 == 0,
+                            Image = null
+                        });
+       
+
+                    }
+             
+
+                    if (buffer.Count >= batchSize)
+                    {
+                        // Add the batch on the UI thread
+                        await MainThread.InvokeOnMainThreadAsync(() =>
+                        {
+                            foreach (var s in buffer) Board.Add(s);
+                        });
+
+                        buffer.Clear();
+
+                        // give UI a tick to render
+                        await Task.Delay(delayMs);
+                    }
+                }
+            }
+
+            // Add any remaining
+            if (buffer.Count > 0)
+            {
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    foreach (var s in buffer) Board.Add(s);
+                });
+            }
+        }
+        [RelayCommand]
+        private void SquareTapped(string square)
+        {
+            Board.FirstOrDefault(s => s.Name == square).Image = "whiteking.png";
+
+
+        }
+
+       /* private void InitializeGameListener(string gameId)
         {
             _firebaseService.ListenForGameState(gameId)
                 .Subscribe(firebaseObject =>
@@ -64,6 +128,6 @@ namespace ChessFinalProject.ViewModels
                         Console.WriteLine("Game state listener completed.");
                     });
                 });
-        }
+        }*/
     }
 }

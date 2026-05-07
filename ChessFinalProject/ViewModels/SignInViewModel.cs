@@ -88,7 +88,7 @@ namespace ChessFinalProject.ViewModels
 		{
 			//Debug Mode
 
-			_userEmail = "konstant_z@yahoo.com";
+			_userEmail = "asd@gmail.com";
 			_userPassword = "123456";
 			_page = view;
 			_isBusy = false;
