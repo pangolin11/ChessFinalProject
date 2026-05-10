@@ -35,20 +35,25 @@ namespace ChessFinalProject.Helper
                         return false;
                     if(IsObstructedBishop(rowFrom, colFrom, rowTo, colTo, Board))
                         return false;
-                    return true;
+                    if(IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo, Board))
+                        return true;
+                    return false;
                 case "blackbishop":
                     if (rowFrom == rowTo || colFrom == colTo)
                         return false;
                     if (IsObstructedBishop(rowFrom, colFrom, rowTo, colTo, Board))
                         return false;
-                    return true;
+                    if (IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo, Board))
+                        return true;
+                    return false;
                 case "whitequeen":
                     if (rowFrom != rowTo && colFrom != colTo)
                     {
                         if(IsObstructedBishop(rowFrom, colFrom, rowTo, colTo, Board))
                             return false;
-                        return true;
-
+                        if(IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo, Board))
+                            return true;
+                        return false;
                     }
                     else
                     {
@@ -61,8 +66,9 @@ namespace ChessFinalProject.Helper
                     {
                         if (IsObstructedBishop(rowFrom, colFrom, rowTo, colTo, Board))
                             return false;
-                        return true;
-
+                        if (IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo, Board))
+                            return true;
+                        return false;
                     }
                     else
                     {
@@ -79,33 +85,141 @@ namespace ChessFinalProject.Helper
                         return true;
                     return false;
                 case "whitepawn":
-                    IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board, true);
+                    
                     if (rowFrom == 2)
                     {
                         if (rowFrom - rowTo == -2 && colFrom == colTo || rowFrom - rowTo == -1 && colFrom == colTo)
+                        {
+                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board))
+                            {
+                                return false;
+                            }
                             return true;
+                        }
+                        else if (rowFrom - rowTo == -1 && colFrom[0] - colTo[0] == -1)
+                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board, true))
+                                return true;
+                        return false;
                     }
                     else
                     {
                         if (rowFrom - rowTo == -1 && colFrom == colTo)
                         {
+                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board))
+                            {
+                                return false;
+                            }
                             return true;
                         }
-
+                        else if (rowFrom - rowTo == -1 && colFrom[0] - colTo[0] == -1)
+                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board, true))
+                                return true;
+                        return false;
                     }  
-                    return false;
+                case "blackpawn":
+                    
+                    if (rowFrom == 7)
+                    {
+                        if (rowFrom - rowTo == 2 && colFrom == colTo || rowFrom - rowTo == 1 && colFrom == colTo)
+                        {
+                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board))
+                            {
+                                return false;
+                            }
+                            return true;
+                        }
+                        else if (rowFrom - rowTo == 1 && colFrom[0] - colTo[0] == 1)
+                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board, true))
+                                return true;
+                        return false;
+                    }
+                    else
+                    {
+                        if (rowFrom - rowTo == 1 && colFrom == colTo)
+                        {
+                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board))
+                            {
+                                return false;
+                            }
+                            return true;
+                        }
+                        else if (rowFrom - rowTo == 1 && colFrom[0] - colTo[0] == 1)
+                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board, true))
+                                return true;
+                        return false;
+                    }
             }
             return false;
         }
 
-        private static void IsObstructedPawn(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board, bool IsWhite)
+        private static bool IsMoveDiagonal(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
         {
             List<string> colArr = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H" };
-
-            if (IsWhite)
+            if (colArr.IndexOf(colFrom) > colArr.IndexOf(colTo) && rowFrom > rowTo)
             {
-                if (board.GetValueOrDefault(colArr[]))
+                for (int i = 1; i < 100; i++)
+                {
+                    colFrom = colArr[colArr.IndexOf(colFrom) - 1];
+                    rowFrom = rowFrom - 1;
+                    if(colFrom == colTo && rowFrom == rowTo)
+                        return true;
+                    if (rowFrom < rowTo || colArr.IndexOf(colFrom) < colArr.IndexOf(colTo))
+                        return false;
+                }
             }
+            else if (colArr.IndexOf(colFrom) > colArr.IndexOf(colTo) && rowFrom < rowTo)
+            {
+                for (int i = 1; i < 100; i++)
+                {
+                    colFrom = colArr[colArr.IndexOf(colFrom) - 1];
+                    rowFrom = rowFrom + 1;
+                    if (colFrom == colTo && rowFrom == rowTo)
+                        return true;
+                    if (rowFrom > rowTo || colArr.IndexOf(colFrom) < colArr.IndexOf(colTo))
+                        return false;
+                }
+            }
+
+            else if (colArr.IndexOf(colFrom) < colArr.IndexOf(colTo) && rowFrom > rowTo)
+            {
+                for (int i = 1; i < 100; i++)
+                {
+                    colFrom = colArr[colArr.IndexOf(colFrom) + 1];
+                    rowFrom = rowFrom - 1;
+                    if (colFrom == colTo && rowFrom == rowTo)
+                        return true;
+                    if (rowFrom < rowTo || colArr.IndexOf(colFrom) > colArr.IndexOf(colTo))
+                        return false;
+                }
+            }
+            else if (colArr.IndexOf(colFrom) < colArr.IndexOf(colTo) && rowFrom < rowTo)
+            {
+                for (int i = 1; i < 100; i++)
+                {
+                    colFrom = colArr[colArr.IndexOf(colFrom) + 1];
+                    rowFrom = rowFrom + 1;
+                    if (colFrom == colTo && rowFrom == rowTo)
+                        return true;
+                    if (rowFrom > rowTo || colArr.IndexOf(colFrom) > colArr.IndexOf(colTo))
+                        return false;
+                }
+            }
+            return false;
+        }
+
+        private static bool IsObstructedPawn(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board, bool IsPieceBeingTaken)
+        {
+            if (board.GetValueOrDefault(colTo + rowTo.ToString()) != null && board.GetValueOrDefault(colTo + rowTo.ToString()) != "")
+                return true;
+            return false;
+        }
+
+        private static bool IsObstructedPawn(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
+        { 
+                if (board.GetValueOrDefault(colTo + rowTo.ToString()) != null && board.GetValueOrDefault(colTo + rowTo.ToString()) != "")
+                    return true;
+                return false;
+ 
         }
 
         private static bool IsObstructedBishop(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
@@ -118,6 +232,7 @@ namespace ChessFinalProject.Helper
                     for(int j = colArr.IndexOf(colFrom) - 1; j > colArr.IndexOf(colTo); j--)
                     {
                         string compare = board.GetValueOrDefault(colArr[j] + i.ToString());
+                        i -= 1;
                         if (compare != null && compare != "")
                             return true;
                     }
@@ -130,6 +245,7 @@ namespace ChessFinalProject.Helper
                     for (int j = colArr.IndexOf(colFrom) - 1; j > colArr.IndexOf(colTo); j--)
                     {
                         string compare = board.GetValueOrDefault(colArr[j] + i.ToString());
+                        i += 1;
                         if (compare != null && compare != "")
                             return true;
                     }
@@ -143,6 +259,7 @@ namespace ChessFinalProject.Helper
                     for (int j = colArr.IndexOf(colFrom) + 1; j < colArr.IndexOf(colTo); j++)
                     {
                         string compare = board.GetValueOrDefault(colArr[j] + i.ToString());
+                        i -= 1;
                         if (compare != null && compare != "")
                             return true;
                     }
@@ -155,6 +272,7 @@ namespace ChessFinalProject.Helper
                     for (int j = colArr.IndexOf(colFrom) + 1; j < colArr.IndexOf(colTo); j++)
                     {
                         string compare = board.GetValueOrDefault(colArr[j] + i.ToString());
+                        i += 1;
                         if (compare != null && compare != "")
                             return true;
                     }

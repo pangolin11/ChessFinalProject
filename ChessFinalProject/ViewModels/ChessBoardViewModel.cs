@@ -223,7 +223,9 @@ namespace ChessFinalProject.ViewModels
             }
             var PieceType = PieceToMove.GetPieceType();
             if (ChessHelper.IsMoveLegal(PieceType, selectedSquare, square, _currentLocalGameState.Board))
-            {
+            { 
+                _currentLocalGameState.Board[square] = PieceToMove.Image;
+                _currentLocalGameState.Board[selectedSquare] = "";
                 Board.FirstOrDefault(s => s.Name == square).Image = PieceToMove.Image;
                 Board.FirstOrDefault(s => s.Name == selectedSquare).Image = null;
                 Board.FirstOrDefault(s => s.Name == selectedSquare).IsYellow = false;
