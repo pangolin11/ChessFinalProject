@@ -16,6 +16,15 @@ namespace ChessFinalProject.Models
 
         [ObservableProperty]
         private bool _IsWhite;
+        [ObservableProperty]
+        private bool _IsYellow;
+
+        public string GetPieceType()
+        {
+            if (Image == null)
+                return "no piece";
+            return Image.Replace(".png", ""); 
+        }
     }
 
 }

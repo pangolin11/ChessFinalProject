@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     x:Class="ChessFinalProject.Views.ChessBoardView"
-    x:Name="RootPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="RootPage"
     Title="ChessBoardViewxaml">
 
-    <Grid x:Name="OuterGrid">
+    <Grid x:Name="OuterGrid" Margin="0,90,0,0">
         <CollectionView ItemsSource="{Binding Board}" SelectionMode="None">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" Span="8" />
@@ -15,15 +15,18 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Grid HeightRequest="48" WidthRequest="48">
-                        <!-- background square without a converter -->
+                        <!--  background square without a converter  -->
                         <BoxView HorizontalOptions="Fill" VerticalOptions="Fill">
                             <BoxView.Style>
                                 <Style TargetType="BoxView">
-                                    <!-- default dark color -->
+                                    <!--  default dark color  -->
                                     <Setter Property="Color" Value="SaddleBrown" />
                                     <Style.Triggers>
-                                        <!-- when IsWhite is true, set a light color -->
-                                        <DataTrigger TargetType="BoxView" Binding="{Binding IsWhite}" Value="True">
+                                        <!--  when IsWhite is true, set a light color  -->
+                                        <DataTrigger
+                                            Binding="{Binding IsWhite}"
+                                            TargetType="BoxView"
+                                            Value="True">
                                             <Setter Property="Color" Value="Beige" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -31,17 +34,25 @@
                             </BoxView.Style>
                         </BoxView>
 
-                        <!-- piece image (empty -> no image shown if you set Image to null/empty) -->
-                        <Image Source="{Binding Image}"
-                               Aspect="AspectFit"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center" />
+                        <!--  piece image (empty -> no image shown if you set Image to null/empty)  -->
+                        <Image
+                            Aspect="AspectFit"
+                            HorizontalOptions="Center"
+                            Source="{Binding Image}"
+                            VerticalOptions="Center">
+                            <Image.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsYellow}"
+                                    TargetType="Image"
+                                    Value="True">
+                                    <Setter Property="BackgroundColor" Value="Yellow" />
+                                </DataTrigger>
+                            </Image.Triggers>
+                        </Image>
 
-                        <!-- tap forwards the square name to the ViewModel command -->
+                        <!--  tap forwards the square name to the ViewModel command  -->
                         <Grid.GestureRecognizers>
-                            <TapGestureRecognizer
-                                Command="{Binding BindingContext.SquareTappedCommand, Source={x:Reference RootPage}}"
-                                CommandParameter="{Binding Name}" />
+                            <TapGestureRecognizer Command="{Binding BindingContext.SquareTappedCommand, Source={x:Reference RootPage}}" CommandParameter="{Binding Name}" />
                         </Grid.GestureRecognizers>
                     </Grid>
                 </DataTemplate>

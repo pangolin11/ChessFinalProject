@@ -17,7 +17,10 @@ public partial class ChessBoardView : ContentPage
         {
             // only initialize once
             if (vm.Board.Count == 0)
-                await vm.InitializeBoardAsync(batchSize: 8, delayMs: 16);
+            {
+                await vm.InitializeBoardAsync(batchSize: 8, delayMs: 0);
+                await vm.InitializePieces();
+            }
         }
     }
 }

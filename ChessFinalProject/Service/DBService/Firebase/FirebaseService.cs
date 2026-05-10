@@ -200,7 +200,7 @@ public class FirebaseService
             CurrentTurnPlayerId = whitePlayerId, // White typically starts
             Status = "waiting",
             LastUpdated = DateTime.UtcNow,
-            BoardPieces = new()
+            Board = new()
 {
     { "A8", "black_rook.png" },
     { "B8", "black_knight.png" },
