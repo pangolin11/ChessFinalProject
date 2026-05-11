@@ -31,23 +31,23 @@ namespace ChessFinalProject.ViewModels
                 LastUpdated = DateTime.UtcNow,
                 Board = new()
 {
-    { "A8", "black_rook.png" },
-    { "B8", "black_knight.png" },
-    { "C8", "black_bishop.png" },
-    { "D8", "black_queen.png" },
-    { "E8", "black_king.png" },
-    { "F8", "black_bishop.png" },
-    { "G8", "black_knight.png" },
-    { "H8", "black_rook.png" },
+    { "A8", "blackrook.png" },
+    { "B8", "blackknight.png" },
+    { "C8", "blackbishop.png" },
+    { "D8", "blackqueen.png" },
+    { "E8", "blackking.png" },
+    { "F8", "blackbishop.png" },
+    { "G8", "blackknight.png" },
+    { "H8", "blackrook.png" },
 
-    { "A7", "black_pawn.png" },
-    { "B7", "black_pawn.png" },
-    { "C7", "black_pawn.png" },
-    { "D7", "black_pawn.png" },
-    { "E7", "black_pawn.png" },
-    { "F7", "black_pawn.png" },
-    { "G7", "black_pawn.png" },
-    { "H7", "black_pawn.png" },
+    { "A7", "blackpawn.png" },
+    { "B7", "blackpawn.png" },
+    { "C7", "blackpawn.png" },
+    { "D7", "blackpawn.png" },
+    { "E7", "blackpawn.png" },
+    { "F7", "blackpawn.png" },
+    { "G7", "blackpawn.png" },
+    { "H7", "blackpawn.png" },
 
     { "A6", "" },
     { "B6", "" },
@@ -85,24 +85,25 @@ namespace ChessFinalProject.ViewModels
     { "G3", "" },
     { "H3", "" },
 
-    { "A2", "white_pawn.png" },
-    { "B2", "white_pawn.png" },
-    { "C2", "white_pawn.png" },
-    { "D2", "white_pawn.png" },
-    { "E2", "white_pawn.png" },
-    { "F2", "white_pawn.png" },
-    { "G2", "white_pawn.png" },
-    { "H2", "white_pawn.png" },
+    { "A2", "whitepawn.png" },
+    { "B2", "whitepawn.png" },
+    { "C2", "whitepawn.png" },
+    { "D2", "whitepawn.png" },
+    { "E2", "whitepawn.png" },
+    { "F2", "whitepawn.png" },
+    { "G2", "whitepawn.png" },
+    { "H2", "whitepawn.png" },
 
-    { "A1", "white_rook.png" },
-    { "B1", "white_knight.png" },
-    { "C1", "white_bishop.png" },
-    { "D1", "white_queen.png" },
-    { "E1", "white_king.png" },
-    { "F1", "white_bishop.png" },
-    { "G1", "white_knight.png" },
-    { "H1", "white_rook.png" }
-}
+    { "A1", "whiterook.png" },
+    { "B1", "whiteknight.png" },
+    { "C1", "whitebishop.png" },
+    { "D1", "whitequeen.png" },
+    { "E1", "whiteking.png" },
+    { "F1", "whitebishop.png" },
+    { "G1", "whiteknight.png" },
+    { "H1", "whiterook.png" }
+},
+                King = "whiteking.png" // White starts with the king for simplicity
             };
         }
 
@@ -223,22 +224,25 @@ namespace ChessFinalProject.ViewModels
             }
             var PieceType = PieceToMove.GetPieceType();
             if (ChessHelper.IsMoveLegal(PieceType, selectedSquare, square, _currentLocalGameState.Board))
-            { 
-                _currentLocalGameState.Board[square] = PieceToMove.Image;
-                _currentLocalGameState.Board[selectedSquare] = "";
-                Board.FirstOrDefault(s => s.Name == square).Image = PieceToMove.Image;
-                Board.FirstOrDefault(s => s.Name == selectedSquare).Image = null;
-                Board.FirstOrDefault(s => s.Name == selectedSquare).IsYellow = false;
-                selectedSquare = null;
-
-                return;
+            {
+                var copy = new Dictionary<string, string>(_currentLocalGameState.Board)
+                {
+                    [square] = PieceToMove.Image,
+                    [selectedSquare] = ""
+                }; // shallow copy
+                if (PieceType.Contains("white") && !ChessHelper.StillInCheck(copy,_currentLocalGameState.King) || PieceType.Contains("black"))
+                {
+                    _currentLocalGameState.Board[square] = PieceToMove.Image;
+                    _currentLocalGameState.Board[selectedSquare] = "";
+                    Board.FirstOrDefault(s => s.Name == square).Image = PieceToMove.Image;
+                    Board.FirstOrDefault(s => s.Name == selectedSquare).Image = null;
+                    Board.FirstOrDefault(s => s.Name == selectedSquare).IsYellow = false;
+                    selectedSquare = null;
+                    return;
+                }
             }
             Board.FirstOrDefault(s => s.Name == selectedSquare).IsYellow = false;
             selectedSquare = null;
-
-
-
-
         }
 
         /* private void InitializeGameListener(string gameId)

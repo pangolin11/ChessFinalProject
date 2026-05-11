@@ -16,12 +16,18 @@ namespace ChessFinalProject.Helper
             string colFrom = selectedSquare.Substring(0, 1);
             int rowTo = int.Parse(square.Substring(1, 1));
             string colTo = square.Substring(0, 1);
+            bool Legal = CheckLegality(pieceType, rowFrom, colFrom, rowTo, colTo, Board);
+            return Legal;
+        }
+
+        private static bool CheckLegality(string pieceType, int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> Board)
+        {
             switch (pieceType)
             {
                 case "whiterook":
-                    if(IsObstructedRook(rowFrom, colFrom, rowTo, colTo, Board))
+                    if (IsObstructedRook(rowFrom, colFrom, rowTo, colTo, Board))
                         return false;
-                    if(rowFrom != rowTo && colFrom != colTo )
+                    if (rowFrom != rowTo && colFrom != colTo)
                         return false;
                     return true;
                 case "blackrook":
@@ -31,11 +37,11 @@ namespace ChessFinalProject.Helper
                         return false;
                     return true;
                 case "whitebishop":
-                    if(rowFrom == rowTo || colFrom == colTo)
+                    if (rowFrom == rowTo || colFrom == colTo)
                         return false;
-                    if(IsObstructedBishop(rowFrom, colFrom, rowTo, colTo, Board))
+                    if (IsObstructedBishop(rowFrom, colFrom, rowTo, colTo, Board))
                         return false;
-                    if(IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo, Board))
+                    if (IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo, Board))
                         return true;
                     return false;
                 case "blackbishop":
@@ -49,9 +55,9 @@ namespace ChessFinalProject.Helper
                 case "whitequeen":
                     if (rowFrom != rowTo && colFrom != colTo)
                     {
-                        if(IsObstructedBishop(rowFrom, colFrom, rowTo, colTo, Board))
+                        if (IsObstructedBishop(rowFrom, colFrom, rowTo, colTo, Board))
                             return false;
-                        if(IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo, Board))
+                        if (IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo, Board))
                             return true;
                         return false;
                     }
@@ -85,7 +91,7 @@ namespace ChessFinalProject.Helper
                         return true;
                     return false;
                 case "whitepawn":
-                    
+
                     if (rowFrom == 2)
                     {
                         if (rowFrom - rowTo == -2 && colFrom == colTo || rowFrom - rowTo == -1 && colFrom == colTo)
@@ -111,13 +117,13 @@ namespace ChessFinalProject.Helper
                             }
                             return true;
                         }
-                        else if (rowFrom - rowTo == -1 && colFrom[0] - colTo[0] == -1)
+                        else if (rowFrom - rowTo == -1 && Math.Abs(colFrom[0] - colTo[0]) == 1)
                             if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board, true))
                                 return true;
                         return false;
-                    }  
+                    }
                 case "blackpawn":
-                    
+
                     if (rowFrom == 7)
                     {
                         if (rowFrom - rowTo == 2 && colFrom == colTo || rowFrom - rowTo == 1 && colFrom == colTo)
@@ -143,11 +149,38 @@ namespace ChessFinalProject.Helper
                             }
                             return true;
                         }
-                        else if (rowFrom - rowTo == 1 && colFrom[0] - colTo[0] == 1)
+                        else if (rowFrom - rowTo == 1 && Math.Abs(colFrom[0] - colTo[0]) == 1)
                             if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board, true))
                                 return true;
                         return false;
                     }
+                case "whiteking":
+                    if (Math.Abs(rowFrom - rowTo) < 2 && Math.Abs(colFrom[0] - colTo[0]) < 2)
+                        return true;
+                    return false;
+                case "blackking":
+                    if (Math.Abs(rowFrom - rowTo) < 2 && Math.Abs(colFrom[0] - colTo[0]) < 2)
+                        return true;
+                    return false;
+            }
+            return false;
+        }
+
+        internal static bool StillInCheck(Dictionary<string, string> board, string king)
+        {
+            string kingLocation = null;
+            foreach(var square in board)
+            {
+                if (square.Value.Contains(king))
+                    kingLocation = square.Key;
+            }
+            foreach(var square in board)
+            {
+                if (square.Value != null && square.Value != "" && square.Value.Substring(0, 2) != king.Substring(0, 2))
+                {
+                    if (IsMoveLegal(square.Value.Replace(".png", ""), square.Key, kingLocation, board))
+                        return true;
+                }
             }
             return false;
         }
@@ -213,7 +246,6 @@ namespace ChessFinalProject.Helper
                 return true;
             return false;
         }
-
         private static bool IsObstructedPawn(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
         { 
                 if (board.GetValueOrDefault(colTo + rowTo.ToString()) != null && board.GetValueOrDefault(colTo + rowTo.ToString()) != "")

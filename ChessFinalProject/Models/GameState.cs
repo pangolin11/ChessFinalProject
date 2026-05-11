@@ -14,6 +14,7 @@ namespace ChessFinalProject.Models
         public List<ChessMove> Moves { get; set; } = new List<ChessMove>();
         public string Status { get; set; } // e.g., "playing", "checkmate", "stalemate"
         public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
+        public string King { get; set; }
         public GameState() { }
     }
 }
