@@ -12,7 +12,6 @@ namespace ChessFinalProject.Models
         public string CurrentTurnPlayerId { get; set; }
         public Dictionary<string, string> Board { get; set; } = new Dictionary<string, string>(); // e.g., "e2" => "white_pawn.png" (white pawn)
         public string Status { get; set; } 
-        public DateTime LastUpdated { get; set; } = DateTime.UtcNow;
         public string squareFrom { get; set; }
         public string squareTo { get; set; }
         public GameState() { }

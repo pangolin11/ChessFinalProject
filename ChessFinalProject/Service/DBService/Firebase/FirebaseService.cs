@@ -45,13 +45,13 @@ public class FirebaseService : IGameService
             .Child("moves")
             .AsObservable<ChessMove>(); 
     }
-    public IObservable<FirebaseObject<GameState>> ListenForGameState(string gameId)
+    public IObservable<FirebaseObject<object>> ListenForGameState(string gameId)
     {
        
         return firebaseClient
             .Child("games")
             .Child(gameId)
-            .AsObservable<GameState>(); 
+            .AsObservable<object>(); 
     }
     public async Task InitializeGame(GameState initialState)
     {
@@ -76,12 +76,7 @@ public class FirebaseService : IGameService
                 .Child("games")
                 .Child(gameId)
                 .OnceSingleAsync<GameState>();
-
-            if (game.Status != "waiting")
-            {
-                return game.GameId; 
-            }
-            else if (!string.IsNullOrEmpty(game.WhitePlayerId))
+            if (blackPlayerId == game.WhitePlayerId|| blackPlayerId == game.BlackPlayerId)
             {
                 return game.GameId; 
             }
@@ -89,7 +84,6 @@ public class FirebaseService : IGameService
             {
                 game.BlackPlayerId = blackPlayerId;
                 game.Status = "playing";
-                game.LastUpdated = DateTime.UtcNow;
                 await firebaseClient
                     .Child("games")
                     .Child(gameId)
@@ -118,7 +112,6 @@ public class FirebaseService : IGameService
             BlackPlayerId = null,
             CurrentTurnPlayerId = whitePlayerId, 
             Status = "waiting",
-            LastUpdated = DateTime.UtcNow,
             Board = new()
 {
     { "A8", "blackrook.png" },
@@ -234,18 +227,15 @@ public class FirebaseService : IGameService
         {
             if (game.Object.WhitePlayerId != null && game.Object.WhitePlayerId == playerId)
             {
-                await JoinGame(game.Object.GameId, playerId);
-                return game.Object.GameId;
+                return await JoinGame(game.Object.GameId, playerId);
             }
             else if(game.Object.BlackPlayerId == null)
             {
-                await JoinGame(game.Object.GameId, playerId);
-                return game.Object.GameId;
+                return await JoinGame(game.Object.GameId, playerId);
             }
             else if(game.Object.BlackPlayerId == playerId)
             {
-                await JoinGame(game.Object.GameId, playerId);
-                return game.Object.GameId;
+                return await JoinGame(game.Object.GameId, playerId);
             }
         }
         return await CreateGame(playerId);

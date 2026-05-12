@@ -11,7 +11,7 @@ namespace ChessFinalProject.Service.DBService.Firebase
     {
         Task<string> FindGame(string Id);
         Task<GameState?> GetGameState(string gameId);
-        IObservable<FirebaseObject<GameState>> ListenForGameState(string gameId);
+        IObservable<FirebaseObject<object>> ListenForGameState(string gameId);
         Task SendToFirebase(GameState gameState);
     }
 }

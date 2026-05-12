@@ -28,14 +28,7 @@ namespace ChessFinalProject.ViewModels
             /*InitializeGameListener(_currentLocalGameState.GameId);       */
             _authService = authService;
             _gameService = gameService;
-            if(_currentLocalGameState?.WhitePlayerId == _authService.GetCurrentUserId())
-            {
-                KingType = "whiteking.png";
-            }
-            else
-            {
-                KingType = "blackking.png";
-            }
+           
         }
         public async Task InitializePieces()
         {
@@ -167,6 +160,8 @@ namespace ChessFinalProject.ViewModels
                     _currentLocalGameState.squareFrom = selectedSquare;
                     _currentLocalGameState.squareTo = square;
                     _gameService.SendToFirebase(_currentLocalGameState);
+                    Board.FirstOrDefault(s => s.Name == square)?.Image = Board.FirstOrDefault(s => s.Name == selectedSquare)?.Image;
+                    Board.FirstOrDefault(s => s.Name == selectedSquare)?.Image = "";
                     Board.FirstOrDefault(s => s.Name == selectedSquare)?.IsYellow = false;
                 }
             }
@@ -178,31 +173,45 @@ namespace ChessFinalProject.ViewModels
             string id = _authService.GetCurrentUserId();
             string gameId = await _gameService.FindGame(id);
             _currentLocalGameState = await _gameService.GetGameState(gameId);
+            if (_currentLocalGameState?.WhitePlayerId == _authService.GetCurrentUserId())
+            {
+                KingType = "whiteking.png";
+            }
+            else
+            {
+                KingType = "blackking.png";
+            }
             StartListening(gameId);
         }
         public void StartListening(string gameId)
         {
-            // Dispose any existing subscription first
+            // for onNext to work i need to get object from the listener and i dont know why
             _gameStateSubscription?.Dispose();
-
+            Console.WriteLine("entered start listening");
             _gameStateSubscription = _gameService
                 .ListenForGameState(gameId)
                 .Subscribe(
                     onNext: firebaseObject =>
                     {
-                        _currentLocalGameState = firebaseObject.Object; // Update local state with latest from Firebase
-                        string squareFrom = firebaseObject.Object.squareFrom;
-                        string squareTo = firebaseObject.Object.squareTo;
-                        Board.FirstOrDefault(s => s.Name == squareFrom)?.Image = "";
-                        Board.FirstOrDefault(s => s.Name == squareTo)?.Image = Board.FirstOrDefault(s => s.Name == squareFrom)?.Image;
+                        Console.WriteLine("entered on next");
+                        //_currentLocalGameState = firebaseObject.Object; // Update local state with latest from Firebase
+                        string squareFrom = _currentLocalGameState.squareFrom;
+                        string squareTo = _currentLocalGameState.squareTo;
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            Board.FirstOrDefault(s => s.Name == squareTo)?.Image = Board.FirstOrDefault(s => s.Name == squareFrom)?.Image;
+                            Board.FirstOrDefault(s => s.Name == squareFrom)?.Image = "";
+                        });
                     },
                     onError: ex =>
                     {
+                        Console.WriteLine("entered error");
                         // Handle errors (e.g. lost connection, permission denied)
                         Console.WriteLine($"Firebase error: {ex.Message}");
                     },
                     onCompleted: () =>
                     {
+                        Console.WriteLine("entered completed");
                         // Stream ended (rarely happens with Firebase listeners)
                         Console.WriteLine("Firebase stream completed.");
                     }
