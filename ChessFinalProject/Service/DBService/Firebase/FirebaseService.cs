@@ -1,27 +1,22 @@
-﻿// Services/FirebaseService.cs
+﻿
 using ChessFinalProject.Models;
 using Firebase.Database;
 using Firebase.Database.Query;
 using Firebase.Database.Streaming;
-using System.Collections.ObjectModel; // If you want to use ObservableCollection
-using System.Reactive.Linq; // Required for Observable functionality
    
 
 namespace ChessFinalProject.Service.DBService.Firebase;
 
-public class FirebaseService
+public class FirebaseService : IGameService
 {
     private readonly FirebaseClient firebaseClient;
     private const string FirebaseDatabaseUrl = "https://chessfinalproject-66573-default-rtdb.firebaseio.com"; // Replace with your DB URL
     // Your Database URL: https://chessfinalproject-66573-default-rtdb.firebaseio.com
-
     public FirebaseService()
     {
         // Initialize Firebase Client
         firebaseClient = new FirebaseClient(FirebaseDatabaseUrl);
     }
-
-    // --- Writing Data (Making a Move) ---
     public async Task SendMove(string gameId, ChessMove move)
     {
         try
@@ -41,29 +36,23 @@ public class FirebaseService
             Console.WriteLine($"Error sending move: {ex.Message}");
         }
     }
-
-    // --- Reading Data (Listening for Opponent's Moves) ---
     public IObservable<FirebaseEvent<ChessMove>> ListenForMoves(string gameId)
     {
-        // Listen for all changes (added, changed, removed) to the "moves" child
+       
         return firebaseClient
             .Child("games")
             .Child(gameId)
             .Child("moves")
-            .AsObservable<ChessMove>(); // This gives you an observable stream of Firebase events
+            .AsObservable<ChessMove>(); 
     }
-
-    // --- Listening for entire GameState (Alternative/Complementary) ---
     public IObservable<FirebaseObject<GameState>> ListenForGameState(string gameId)
     {
-        // Listen for changes to the entire GameState object
+       
         return firebaseClient
             .Child("games")
             .Child(gameId)
-            .AsObservable<GameState>(); // You might store GameState directly at the gameId level
+            .AsObservable<GameState>(); 
     }
-
-    // --- Initializing a new Game State (example) ---
     public async Task InitializeGame(GameState initialState)
     {
         try
@@ -71,122 +60,52 @@ public class FirebaseService
             await firebaseClient
                 .Child("games")
                 .Child(initialState.GameId)
-                .PutAsync(initialState); // Use PutAsync to set the initial state or overwrite
+                .PutAsync(initialState); 
             Console.WriteLine($"Game {initialState.GameId} initialized.");
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error initializing game: {ex.Message}");
         }
-    }
-    //not good, use later
-    /*  public async Task<GameState?> FindOrCreateGame(string currentPlayerId)
-      {
-          Console.WriteLine($"Player {currentPlayerId} is looking for or creating a game...");
-
-          // 1. Try to find an open game (status "waiting")
-          // We limit to first 10 to avoid excessive data transfer if many games exist.
-          var openGames = await firebaseClient
-              .Child("games")
-              .OrderBy("Status") // Ordering might help in finding "waiting" games faster
-              .LimitToFirst(10) // Limit the search
-              .OnceAsync<GameState>();
-
-          foreach (var gameSnapshot in openGames)
-          {
-              var game = gameSnapshot.Object;
-              // Check if the game is actually waiting and has space for a second player
-              if (game.Status == "waiting" && string.IsNullOrEmpty(game.BlackPlayerId))
-              {
-                  // Attempt to join this game using a transaction to prevent race conditions
-                  var joinedGame = await TryJoinGame(game.GameId, currentPlayerId);
-                  if (joinedGame != null)
-                  {
-                      Console.WriteLine($"Joined existing game: {joinedGame.GameId}");
-                      return joinedGame;
-                  }
-              }
-              // Also handle if the player is already white and waiting in this game
-              else if (game.Status == "waiting" && game.WhitePlayerId == currentPlayerId)
-              {
-                  Console.WriteLine($"Rejoined own waiting game: {game.GameId}");
-                  return game;
-              }
-          }
-
-          // 2. If no open game found (or couldn't join one), create a new game
-          Console.WriteLine("No open games found or could be joined. Creating a new game...");
-          return await CreateNewGame(currentPlayerId);
-      }*/
-
-    // --- Helper Method: Try to Join an Existing Game using a Transaction ---
-    // --- Helper Method: Try to Join an Existing Game using a Transaction ---
-    // Services/FirebaseService.cs (Revisiting TryJoinGame)
-    // ... (other parts of FirebaseService) ...
-
-    // --- Helper Method: Try to Join an Existing Game using a Transaction ---
-    public async Task<GameState?> JoinGame(string gameId, string blackPlayerId)
+    }   
+    public async Task<string> JoinGame(string gameId, string blackPlayerId)
     {
         try
         {
-            // 1. Read the current game state
             var game = await firebaseClient
                 .Child("games")
                 .Child(gameId)
                 .OnceSingleAsync<GameState>();
 
-            // 2. Perform checks based on the read state
-            if (game == null)
-            {
-                Console.WriteLine($"Attempted to join game {gameId}, but it was not found.");
-                throw new Exception("Game not found.");
-            }
-
-            // Ensure the GameId property is set from the Firebase key for consistency
-            game.GameId = gameId;
-
             if (game.Status != "waiting")
             {
-                Console.WriteLine($"Attempted to join game {gameId}, but it already started or is finished.");
-                throw new Exception("Game already started or finished.");
+                return game.GameId; 
             }
-
-            if (!string.IsNullOrEmpty(game.BlackPlayerId))
+            else if (!string.IsNullOrEmpty(game.WhitePlayerId))
             {
-                Console.WriteLine($"Attempted to join game {gameId}, but it already has two players.");
-                throw new Exception("Game already has two players.");
+                return game.GameId; 
             }
+            else
+            {
+                game.BlackPlayerId = blackPlayerId;
+                game.Status = "playing";
+                game.LastUpdated = DateTime.UtcNow;
+                await firebaseClient
+                    .Child("games")
+                    .Child(gameId)
+                    .PutAsync(game);
 
-            // 3. Update game state locally
-            game.BlackPlayerId = blackPlayerId;
-            game.Status = "playing";
-            game.LastUpdated = DateTime.UtcNow;
-
-            // 4. Write the updated game state back to Firebase
-            // WARNING: This is the point of the potential race condition.
-            // If another player simultaneously passes the checks and writes before this PutAsync completes,
-            // one of the updates will overwrite the other without explicit error or notification to the overwritten client.
-            await firebaseClient
-                .Child("games")
-                .Child(gameId)
-                .PutAsync(game);
-
-            Console.WriteLine($"Player {blackPlayerId} successfully joined game {gameId}.");
-            return game;
+                Console.WriteLine($"Player {blackPlayerId} successfully joined game {gameId}.");
+                return game.GameId;
+            }
+          
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error joining game {gameId}: {ex.Message}");
-            // Depending on your error handling strategy, you might return null or re-throw
             throw;
         }
     }
-
-    // ... (rest of FirebaseService) ...
-
-
-
-    // --- Helper Method: Create a New Game ---
     public async Task<string> CreateGame(string whitePlayerId)
     {
         // Generate a short, unique game ID (e.g., first 8 characters of a GUID)
@@ -196,29 +115,29 @@ public class FirebaseService
         {
             GameId = gameId,
             WhitePlayerId = whitePlayerId,
-            BlackPlayerId = null, // Initially null, waiting for second player
-            CurrentTurnPlayerId = whitePlayerId, // White typically starts
+            BlackPlayerId = null,
+            CurrentTurnPlayerId = whitePlayerId, 
             Status = "waiting",
             LastUpdated = DateTime.UtcNow,
             Board = new()
 {
-    { "A8", "black_rook.png" },
-    { "B8", "black_knight.png" },
-    { "C8", "black_bishop.png" },
-    { "D8", "black_queen.png" },
-    { "E8", "black_king.png" },
-    { "F8", "black_bishop.png" },
-    { "G8", "black_knight.png" },
-    { "H8", "black_rook.png" },
+    { "A8", "blackrook.png" },
+    { "B8", "blackknight.png" },
+    { "C8", "blackbishop.png" },
+    { "D8", "blackqueen.png" },
+    { "E8", "blackking.png" },
+    { "F8", "blackbishop.png" },
+    { "G8", "blackknight.png" },
+    { "H8", "blackrook.png" },
 
-    { "A7", "black_pawn.png" },
-    { "B7", "black_pawn.png" },
-    { "C7", "black_pawn.png" },
-    { "D7", "black_pawn.png" },
-    { "E7", "black_pawn.png" },
-    { "F7", "black_pawn.png" },
-    { "G7", "black_pawn.png" },
-    { "H7", "black_pawn.png" },
+    { "A7", "blackpawn.png" },
+    { "B7", "blackpawn.png" },
+    { "C7", "blackpawn.png" },
+    { "D7", "blackpawn.png" },
+    { "E7", "blackpawn.png" },
+    { "F7", "blackpawn.png" },
+    { "G7", "blackpawn.png" },
+    { "H7", "blackpawn.png" },
 
     { "A6", "" },
     { "B6", "" },
@@ -256,45 +175,43 @@ public class FirebaseService
     { "G3", "" },
     { "H3", "" },
 
-    { "A2", "white_pawn.png" },
-    { "B2", "white_pawn.png" },
-    { "C2", "white_pawn.png" },
-    { "D2", "white_pawn.png" },
-    { "E2", "white_pawn.png" },
-    { "F2", "white_pawn.png" },
-    { "G2", "white_pawn.png" },
-    { "H2", "white_pawn.png" },
+    { "A2", "whitepawn.png" },
+    { "B2", "whitepawn.png" },
+    { "C2", "whitepawn.png" },
+    { "D2", "whitepawn.png" },
+    { "E2", "whitepawn.png" },
+    { "F2", "whitepawn.png" },
+    { "G2", "whitepawn.png" },
+    { "H2", "whitepawn.png" },
 
-    { "A1", "white_rook.png" },
-    { "B1", "white_knight.png" },
-    { "C1", "white_bishop.png" },
-    { "D1", "white_queen.png" },
-    { "E1", "white_king.png" },
-    { "F1", "white_bishop.png" },
-    { "G1", "white_knight.png" },
-    { "H1", "white_rook.png" }
+    { "A1", "whiterook.png" },
+    { "B1", "whiteknight.png" },
+    { "C1", "whitebishop.png" },
+    { "D1", "whitequeen.png" },
+    { "E1", "whiteking.png" },
+    { "F1", "whitebishop.png" },
+    { "G1", "whiteknight.png" },
+    { "H1", "whiterook.png" }
 }
         };
 
         try
         {
-            // Use PutAsync to create the game at a specific path
+           
             await firebaseClient
                 .Child("games")
                 .Child(gameId)
                 .PutAsync(newGame);
 
             Console.WriteLine($"Game created with ID: {gameId} by {whitePlayerId}");
-            return gameId; // Return this code for Player 1 to share
+            return gameId; 
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error creating game: {ex.Message}");
-            throw; // Re-throw to indicate creation failed
+            throw; 
         }
     }
-
-    // --- General Update Method (useful for updating turn, FEN, status after moves) ---
     public async Task UpdateGameState(GameState state)
     {
         try
@@ -302,13 +219,69 @@ public class FirebaseService
             await firebaseClient
                 .Child("games")
                 .Child(state.GameId)
-                .PutAsync(state); // Overwrites the entire game state at this path
+                .PutAsync(state); 
             Console.WriteLine($"Game {state.GameId} state updated.");
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error updating game state {state.GameId}: {ex.Message}");
-            throw; // Re-throw to indicate update failed
+            throw; 
         }
     }
+    public async Task<string> FindGame(string playerId)
+    {
+        foreach (var game in await firebaseClient.Child("games").OnceAsync<GameState>())
+        {
+            if (game.Object.WhitePlayerId != null && game.Object.WhitePlayerId == playerId)
+            {
+                await JoinGame(game.Object.GameId, playerId);
+                return game.Object.GameId;
+            }
+            else if(game.Object.BlackPlayerId == null)
+            {
+                await JoinGame(game.Object.GameId, playerId);
+                return game.Object.GameId;
+            }
+            else if(game.Object.BlackPlayerId == playerId)
+            {
+                await JoinGame(game.Object.GameId, playerId);
+                return game.Object.GameId;
+            }
+        }
+        return await CreateGame(playerId);
+    }
+    public async Task<GameState?> GetGameState(string gameId)
+    {
+        try
+        {
+            var gameState = await firebaseClient
+                .Child("games")
+                .Child(gameId)
+                .OnceSingleAsync<GameState>();
+            Console.WriteLine($"Game state retrieved for Game ID: {gameId}");
+            return gameState; 
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error retrieving game state for Game ID {gameId}: {ex.Message}");
+            throw; 
+        }
+    }
+    public async Task SendToFirebase(GameState gameState)
+    {
+        try
+        {
+            await firebaseClient
+                .Child("games")
+                .Child(gameState.GameId)
+                .PutAsync(gameState); 
+            Console.WriteLine($"Game state sent to Firebase for Game ID: {gameState.GameId}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error sending game state to Firebase for Game ID {gameState.GameId}: {ex.Message}");
+            throw; 
+        }
+    }
+
 }

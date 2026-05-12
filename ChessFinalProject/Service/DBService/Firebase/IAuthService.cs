@@ -12,5 +12,7 @@ namespace ChessFinalProject.Service.DBService.Firebase
 		Task<string> CreateAuth(string email, string password);
 		Task RemoveAuth(string email, string password);
 		Task SignOut();
-	}
+
+		string GetCurrentUserId();
+    }
 }

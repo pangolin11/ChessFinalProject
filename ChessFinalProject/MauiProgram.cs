@@ -57,13 +57,15 @@ namespace ChessFinalProject
             builder.Services.AddTransient<ViewModels.AdminViewModel>();
 			builder.Services.AddTransient<ViewModels.UsersListViewModel>();
             builder.Services.AddTransient<ViewModels.AccountViewModel>();
-			return builder;
+            builder.Services.AddTransient<ViewModels.ChessBoardViewModel>();
+            return builder;
         }
         public static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
         {
             builder.Services.AddSingleton<IAppLogger,LogService>();
             builder.Services.AddSingleton<IAlertService, AlertService>();
             builder.Services.AddSingleton<IAuthService, FirebaseAuthService>();
+            builder.Services.AddSingleton<IGameService, FirebaseService>();
             builder.Services.AddTransient<IAppUserRepository, FirebaseUsersRepository>();
             return builder;
         }

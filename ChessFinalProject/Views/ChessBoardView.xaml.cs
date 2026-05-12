@@ -1,13 +1,14 @@
+using ChessFinalProject.Service.DBService.Firebase;
 using ChessFinalProject.ViewModels;
 
 namespace ChessFinalProject.Views;
 
 public partial class ChessBoardView : ContentPage
 {
-	public ChessBoardView()
+	public ChessBoardView(ChessBoardViewModel viewModel)
 	{
 		InitializeComponent();
-		BindingContext = new ViewModels.ChessBoardViewModel();
+        BindingContext = viewModel;
     }
     protected override async void OnAppearing()
     {
@@ -18,6 +19,7 @@ public partial class ChessBoardView : ContentPage
             // only initialize once
             if (vm.Board.Count == 0)
             {
+                await vm.StartGame();
                 await vm.InitializeBoardAsync(batchSize: 8, delayMs: 0);
                 await vm.InitializePieces();
             }

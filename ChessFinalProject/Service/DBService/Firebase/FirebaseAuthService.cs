@@ -131,8 +131,21 @@ namespace ChessFinalProject.Service.DBService.Firebase
 				throw new Exception("Remove user from Auth failed!");
 			}
 		}
+        public string? GetCurrentUserId()
+        {
+            // Check if the auth client is initialized and if a user is signed in
+            if (_authClient?.User != null)
+            {
+                return _authClient.User.Uid; // Or _authClient.User.Info.Uid;
+            }
+            return null; // No user is currently signed in
+        }
 
-		public async Task SignOut()
+        public bool IsUserSignedIn()
+        {
+            return _authClient?.User != null;
+        }
+        public async Task SignOut()
 		{
 			throw new NotImplementedException();
 		}

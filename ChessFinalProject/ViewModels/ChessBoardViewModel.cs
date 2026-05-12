@@ -11,102 +11,32 @@ using System.Text;
 
 namespace ChessFinalProject.ViewModels
 {
-    public partial class ChessBoardViewModel : ViewModelBase
+    public partial class ChessBoardViewModel : ViewModelBase, IDisposable
     {
-        private FirebaseService _firebaseService;
-        private GameState _currentLocalGameState; // Local copy of the full game state
+        #region Variables
+        private readonly IAuthService _authService;
+        private readonly IGameService _gameService;
+        private IDisposable _gameStateSubscription;
+        private GameState _currentLocalGameState;
+        private string KingType;
         public ObservableCollection<ChessSquare> Board { get; } = new();
 
         private string selectedSquare;
-
-
-
-        public ChessBoardViewModel()
+        #endregion
+        public ChessBoardViewModel(IAuthService authService, IGameService gameService)
         {
             /*InitializeGameListener(_currentLocalGameState.GameId);       */
-            _currentLocalGameState = new GameState
+            _authService = authService;
+            _gameService = gameService;
+            if(_currentLocalGameState?.WhitePlayerId == _authService.GetCurrentUserId())
             {
-                BlackPlayerId = null, // Initially null, waiting for second player
-                Status = "waiting",
-                LastUpdated = DateTime.UtcNow,
-                Board = new()
-{
-    { "A8", "blackrook.png" },
-    { "B8", "blackknight.png" },
-    { "C8", "blackbishop.png" },
-    { "D8", "blackqueen.png" },
-    { "E8", "blackking.png" },
-    { "F8", "blackbishop.png" },
-    { "G8", "blackknight.png" },
-    { "H8", "blackrook.png" },
-
-    { "A7", "blackpawn.png" },
-    { "B7", "blackpawn.png" },
-    { "C7", "blackpawn.png" },
-    { "D7", "blackpawn.png" },
-    { "E7", "blackpawn.png" },
-    { "F7", "blackpawn.png" },
-    { "G7", "blackpawn.png" },
-    { "H7", "blackpawn.png" },
-
-    { "A6", "" },
-    { "B6", "" },
-    { "C6", "" },
-    { "D6", "" },
-    { "E6", "" },
-    { "F6", "" },
-    { "G6", "" },
-    { "H6", "" },
-
-    { "A5", "" },
-    { "B5", "" },
-    { "C5", "" },
-    { "D5", "" },
-    { "E5", "" },
-    { "F5", "" },
-    { "G5", "" },
-    { "H5", "" },
-
-    { "A4", "" },
-    { "B4", "" },
-    { "C4", "" },
-    { "D4", "" },
-    { "E4", "" },
-    { "F4", "" },
-    { "G4", "" },
-    { "H4", "" },
-
-    { "A3", "" },
-    { "B3", "" },
-    { "C3", "" },
-    { "D3", "" },
-    { "E3", "" },
-    { "F3", "" },
-    { "G3", "" },
-    { "H3", "" },
-
-    { "A2", "whitepawn.png" },
-    { "B2", "whitepawn.png" },
-    { "C2", "whitepawn.png" },
-    { "D2", "whitepawn.png" },
-    { "E2", "whitepawn.png" },
-    { "F2", "whitepawn.png" },
-    { "G2", "whitepawn.png" },
-    { "H2", "whitepawn.png" },
-
-    { "A1", "whiterook.png" },
-    { "B1", "whiteknight.png" },
-    { "C1", "whitebishop.png" },
-    { "D1", "whitequeen.png" },
-    { "E1", "whiteking.png" },
-    { "F1", "whitebishop.png" },
-    { "G1", "whiteknight.png" },
-    { "H1", "whiterook.png" }
-},
-                King = "whiteking.png" // White starts with the king for simplicity
-            };
+                KingType = "whiteking.png";
+            }
+            else
+            {
+                KingType = "blackking.png";
+            }
         }
-
         public async Task InitializePieces()
         {
             Board.FirstOrDefault(s => s.Name == "A1")?.Image = "whiterook.png";
@@ -143,7 +73,6 @@ namespace ChessFinalProject.ViewModels
             Board.FirstOrDefault(s => s.Name == "H7")?.Image = "blackpawn.png";
 
         }
-
         public async Task InitializeBoardAsync(int batchSize = 8, int delayMs = 16)
         {
             Board.Clear();
@@ -207,13 +136,15 @@ namespace ChessFinalProject.ViewModels
         [RelayCommand]
         private void SquareTapped(string square)
         {
+            if (KingType == "whiteking.png" && square.Contains("black") || KingType == "blackking.png" && square.Contains("white"))
+                return;
             if (selectedSquare == null)
             {
-                if (Board.FirstOrDefault(s => s.Name == square).Image == null || Board.FirstOrDefault(s => s.Name == square).Image == "")
+                if (Board.FirstOrDefault(s => s.Name == square)?.Image == null || Board.FirstOrDefault(s => s.Name == square)?.Image == "")
                     return;
 
                 selectedSquare = square;
-                Board.FirstOrDefault(s => s.Name == square).IsYellow = true;
+                Board.FirstOrDefault(s => s.Name == square)?.IsYellow = true;
                 return;
             }
             var PieceToMove = Board.FirstOrDefault(s => s.Name == selectedSquare);
@@ -230,54 +161,62 @@ namespace ChessFinalProject.ViewModels
                     [square] = PieceToMove.Image,
                     [selectedSquare] = ""
                 }; // shallow copy
-                if (PieceType.Contains("white") && !ChessHelper.StillInCheck(copy,_currentLocalGameState.King) || PieceType.Contains("black"))
+                if (!ChessHelper.StillInCheck(copy,KingType))
                 {
-                    _currentLocalGameState.Board[square] = PieceToMove.Image;
-                    _currentLocalGameState.Board[selectedSquare] = "";
-                    Board.FirstOrDefault(s => s.Name == square).Image = PieceToMove.Image;
-                    Board.FirstOrDefault(s => s.Name == selectedSquare).Image = null;
-                    Board.FirstOrDefault(s => s.Name == selectedSquare).IsYellow = false;
-                    selectedSquare = null;
-                    return;
+                    _currentLocalGameState.Board = copy;
+                    _currentLocalGameState.squareFrom = selectedSquare;
+                    _currentLocalGameState.squareTo = square;
+                    _gameService.SendToFirebase(_currentLocalGameState);
+                    Board.FirstOrDefault(s => s.Name == selectedSquare)?.IsYellow = false;
                 }
             }
-            Board.FirstOrDefault(s => s.Name == selectedSquare).IsYellow = false;
+            Board.FirstOrDefault(s => s.Name == selectedSquare)?.IsYellow = false;
             selectedSquare = null;
         }
+        internal async Task StartGame()
+        {
+            string id = _authService.GetCurrentUserId();
+            string gameId = await _gameService.FindGame(id);
+            _currentLocalGameState = await _gameService.GetGameState(gameId);
+            StartListening(gameId);
+        }
+        public void StartListening(string gameId)
+        {
+            // Dispose any existing subscription first
+            _gameStateSubscription?.Dispose();
 
-        /* private void InitializeGameListener(string gameId)
-         {
-             _firebaseService.ListenForGameState(gameId)
-                 .Subscribe(firebaseObject =>
-                 {
-                     MainThread.BeginInvokeOnMainThread(() =>
-                     {
-                         if (firebaseObject != null && firebaseObject.Object != null)
-                         {
-                             _currentLocalGameState = firebaseObject.Object; // Keep a local copy of the full state
-                             pieceImages = _currentLocalGameState.BoardPieces; // Update the piece images based on the current game state
-                         }
-                         else
-                         {
-                             Console.WriteLine("GameState object was null in the update.");
-                         }
-                     });
-                 },
-                 error =>
-                 {
-                     MainThread.BeginInvokeOnMainThread(() =>
-                     {
-                         Console.WriteLine($"Error listening for game state: {error.Message}");
-                         // Handle error, e.g., show an alert
-                     });
-                 },
-                 () =>
-                 {
-                     MainThread.BeginInvokeOnMainThread(() =>
-                     {
-                         Console.WriteLine("Game state listener completed.");
-                     });
-                 });
-         }*/
+            _gameStateSubscription = _gameService
+                .ListenForGameState(gameId)
+                .Subscribe(
+                    onNext: firebaseObject =>
+                    {
+                        _currentLocalGameState = firebaseObject.Object; // Update local state with latest from Firebase
+                        string squareFrom = firebaseObject.Object.squareFrom;
+                        string squareTo = firebaseObject.Object.squareTo;
+                        Board.FirstOrDefault(s => s.Name == squareFrom)?.Image = "";
+                        Board.FirstOrDefault(s => s.Name == squareTo)?.Image = Board.FirstOrDefault(s => s.Name == squareFrom)?.Image;
+                    },
+                    onError: ex =>
+                    {
+                        // Handle errors (e.g. lost connection, permission denied)
+                        Console.WriteLine($"Firebase error: {ex.Message}");
+                    },
+                    onCompleted: () =>
+                    {
+                        // Stream ended (rarely happens with Firebase listeners)
+                        Console.WriteLine("Firebase stream completed.");
+                    }
+                );
+        }
+        public void Dispose()
+        {
+            StopListening();
+            GC.SuppressFinalize(this); 
+        }
+        public void StopListening()
+        {
+            _gameStateSubscription?.Dispose();
+            _gameStateSubscription = null;
+        }
     }
 }
