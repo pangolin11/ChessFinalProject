@@ -127,7 +127,7 @@ namespace ChessFinalProject.ViewModels
             }
         }
         [RelayCommand]
-        private void SquareTapped(string square)
+        private async Task SquareTapped(string square)
         {
             if (KingType == "whiteking.png" && square.Contains("black") || KingType == "blackking.png" && square.Contains("white"))
                 return;
@@ -156,13 +156,7 @@ namespace ChessFinalProject.ViewModels
                 }; // shallow copy
                 if (!ChessHelper.StillInCheck(copy,KingType))
                 {
-                    _currentLocalGameState.Board = copy;
-                    _currentLocalGameState.squareFrom = selectedSquare;
-                    _currentLocalGameState.squareTo = square;
-                    _gameService.SendToFirebase(_currentLocalGameState);
-                    Board.FirstOrDefault(s => s.Name == square)?.Image = Board.FirstOrDefault(s => s.Name == selectedSquare)?.Image;
-                    Board.FirstOrDefault(s => s.Name == selectedSquare)?.Image = "";
-                    Board.FirstOrDefault(s => s.Name == selectedSquare)?.IsYellow = false;
+                    await _gameService.SendToFirebase(selectedSquare, square, _currentLocalGameState.GameId);
                 }
             }
             Board.FirstOrDefault(s => s.Name == selectedSquare)?.IsYellow = false;
@@ -194,14 +188,23 @@ namespace ChessFinalProject.ViewModels
                     onNext: firebaseObject =>
                     {
                         Console.WriteLine("entered on next");
-                        //_currentLocalGameState = firebaseObject.Object; // Update local state with latest from Firebase
-                        string squareFrom = _currentLocalGameState.squareFrom;
-                        string squareTo = _currentLocalGameState.squareTo;
-                        MainThread.BeginInvokeOnMainThread(() =>
+                        /*                        Console.WriteLine($"Type of firebaseObject.Object: {firebaseObject.Object.GetType()}");
+                                                var json = Newtonsoft.Json.JsonConvert.SerializeObject(firebaseObject.Object, Newtonsoft.Json.Formatting.Indented);
+                                                Console.WriteLine($"Raw Firebase object received:\n{json}");*/
+                        if (firebaseObject.Object.CanBeChanged)
                         {
-                            Board.FirstOrDefault(s => s.Name == squareTo)?.Image = Board.FirstOrDefault(s => s.Name == squareFrom)?.Image;
-                            Board.FirstOrDefault(s => s.Name == squareFrom)?.Image = "";
-                        });
+                            _currentLocalGameState = firebaseObject.Object;
+                            //_currentLocalGameState = firebaseObject.Object; // Update local state with latest from Firebase
+                            string squareFrom = _currentLocalGameState.squareFrom;
+                            string squareTo = _currentLocalGameState.squareTo;
+
+                            MainThread.BeginInvokeOnMainThread(() =>
+                            {
+                                Board.FirstOrDefault(s => s.Name == squareTo)?.Image = Board.FirstOrDefault(s => s.Name == squareFrom)?.Image;
+                                Board.FirstOrDefault(s => s.Name == squareFrom)?.Image = "";
+                            });
+                        }
+                       
                     },
                     onError: ex =>
                     {

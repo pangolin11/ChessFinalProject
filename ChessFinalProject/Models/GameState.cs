@@ -14,6 +14,7 @@ namespace ChessFinalProject.Models
         public string Status { get; set; } 
         public string squareFrom { get; set; }
         public string squareTo { get; set; }
+        public bool CanBeChanged { get; set; }
         public GameState() { }
     }
 }
