@@ -284,4 +284,24 @@ public class FirebaseService : IGameService
 
     }
 
+    public async Task EndGame(GameState currentLocalGameState, string gameId, string kingType)
+    {
+        if(kingType == "whiteking.png")
+        {
+            currentLocalGameState.Status = "black wins";
+        }
+        else
+        {
+            currentLocalGameState.Status = "white wins";
+        }
+        await firebaseClient
+            .Child("games")
+            .Child(gameId)
+            .Child(gameId)
+            .PutAsync(currentLocalGameState);
+        await firebaseClient
+            .Child("games")
+            .Child(gameId)
+            .PutAsync(null);
+    }
 }

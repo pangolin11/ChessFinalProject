@@ -366,5 +366,51 @@ namespace ChessFinalProject.Helper
            
             return false;
         }
+        internal static bool IsCheckmate(Dictionary<string, string> board, string king)
+        {
+            // Can't be checkmate if not currently in check
+            if (!StillInCheck(board, king))
+                return false;
+
+            string kingPrefix = king.Substring(0, 2); // "wh" or "bl"
+
+            // Try every friendly piece
+            foreach (var square in board)
+            {
+                if (square.Value == null || square.Value == "")
+                    continue;
+
+                if (square.Value.Substring(0, 2) != kingPrefix)
+                    continue;
+
+                string pieceType = square.Value.Replace(".png", "");
+                string fromSquare = square.Key;
+
+                // Try every square on the board as a destination
+                foreach (var col in colArr)
+                {
+                    for (int row = 1; row <= 8; row++)
+                    {
+                        string toSquare = col + row.ToString();
+
+                        if (!IsMoveLegal(pieceType, fromSquare, toSquare, board))
+                            continue;
+
+                        // Simulate the move on a copy of the board
+                        var simulatedBoard = new Dictionary<string, string>(board);
+                        simulatedBoard[toSquare] = simulatedBoard[fromSquare];
+                        simulatedBoard[fromSquare] = "";
+
+                        // If any move gets us out of check, it's not checkmate
+                        if (!StillInCheck(simulatedBoard, king))
+                            return false;
+                    }
+                }
+            }
+
+            // No move could escape check — checkmate
+            return true;
+        }
     }
+
 }

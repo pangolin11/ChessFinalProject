@@ -15,7 +15,11 @@ namespace ChessFinalProject.ViewModels
     {
         #region Variables
         private readonly IAuthService _authService;
+        private bool IsEnding;
         private IDispatcherTimer _playerTimer; // Local timer for smooth UI countdown
+        [ObservableProperty]
+        public partial string PlayerTime { get; set; }
+
         private bool _busy;
         public bool Busy
         {
@@ -60,7 +64,7 @@ namespace ChessFinalProject.ViewModels
             _playerTimer = Application.Current.Dispatcher.CreateTimer();
             _playerTimer.Interval = TimeSpan.FromSeconds(1); // Update every second
             _playerTimer.Tick += OnPlayerTimerTick;
-            
+
 
         }
 
@@ -69,13 +73,15 @@ namespace ChessFinalProject.ViewModels
             if (WhiteTimeDisplay.TotalSeconds > 0)
             {
                 WhiteTimeDisplay = WhiteTimeDisplay.Subtract(TimeSpan.FromSeconds(1));
+                PlayerTime = "bye";
                 // Notify UI if using data binding
                 OnPropertyChanged(nameof(WhiteTimeDisplay));
             }
             else
             {
                 _playerTimer.Stop();
-                await Shell.Current.GoToAsync("MainPageView");
+                IsEnding = true;
+                await EndGame();
 
                 // Handle timeout — e.g., end turn, declare winner, etc.
             }
@@ -85,7 +91,7 @@ namespace ChessFinalProject.ViewModels
         }
         public async Task InitializeBoardAsync(Dictionary<string, string> board, int batchSize = 64, int delayMs = 0)
         {
-           
+
             Board.Clear();
             string[] files = { "A", "B", "C", "D", "E", "F", "G", "H" };
 
@@ -96,12 +102,12 @@ namespace ChessFinalProject.ViewModels
                 for (int col = 0; col < 8; col++)
                 {
                     string square = files[col] + row;
-                        buffer.Add(new ChessSquare
-                        {
-                            Name = square,
-                            IsWhite = (row + col) % 2 == 0,
-                            Image = board.FirstOrDefault(x => x.Key == square).Value
-                        });
+                    buffer.Add(new ChessSquare
+                    {
+                        Name = square,
+                        IsWhite = (row + col) % 2 == 0,
+                        Image = board.FirstOrDefault(x => x.Key == square).Value
+                    });
                     if (buffer.Count >= batchSize)
                     {
                         // Add the batch on the UI thread
@@ -137,7 +143,7 @@ namespace ChessFinalProject.ViewModels
             if (_currentLocalGameState.Status == "waiting")
                 return;
             if (KingType == "whiteking.png" && _currentLocalGameState.Board.FirstOrDefault(x => x.Key == square).Value.Contains("black") || KingType == "blackking.png" && _currentLocalGameState.Board.FirstOrDefault(x => x.Key == square).Value.Contains("white"))
-                if(selectedSquare == null)
+                if (selectedSquare == null)
                     return;
             if (KingType == "whiteking.png" && _currentLocalGameState.IsWhiteTurn == false || KingType == "blackking.png" && _currentLocalGameState.IsWhiteTurn == true)
                 return;
@@ -164,9 +170,9 @@ namespace ChessFinalProject.ViewModels
                     [square] = PieceToMove.Image,
                     [selectedSquare] = ""
                 }; // shallow copy
-                if (!ChessHelper.StillInCheck(copy,KingType))
+                if (!ChessHelper.StillInCheck(copy, KingType))
                 {
-                    
+
                     await _gameService.SendToFirebase(selectedSquare, square, _currentLocalGameState.GameId);
                 }
             }
@@ -189,9 +195,9 @@ namespace ChessFinalProject.ViewModels
                 KingType = "blackking.png";
             }
             await InitializeBoardAsync(_currentLocalGameState.Board);
-            if(KingType == "whiteking.png")
+            if (KingType == "whiteking.png")
                 _playerTimer.Start();
-
+            LoadingMessage = "hello";
 
 
         }
@@ -202,7 +208,7 @@ namespace ChessFinalProject.ViewModels
             _gameStateSubscription = _gameService
                 .ListenForGameState(gameId)
                 .Subscribe(
-                    onNext: firebaseObject =>
+                    onNext: async firebaseObject =>
                     {
                         if (firebaseObject == null || firebaseObject.Object == null)
                             return;
@@ -227,12 +233,18 @@ namespace ChessFinalProject.ViewModels
                                 Board.FirstOrDefault(s => s.Name == squareTo)?.Image = Board.FirstOrDefault(s => s.Name == squareFrom)?.Image;
                                 Board.FirstOrDefault(s => s.Name == squareFrom)?.Image = "";
                             });
+                            if (ChessHelper.IsCheckmate(_currentLocalGameState.Board, KingType))
+                            {
+                                _playerTimer.Stop();
+                                IsEnding = true;
+                                await EndGame();
+                            }
                             if (_playerTimer.IsRunning)
                                 _playerTimer.Stop();
                             else
-                            _playerTimer.Start();
+                                _playerTimer.Start();
                         }
-                       
+
                     },
                     onError: ex =>
                     {
@@ -251,7 +263,7 @@ namespace ChessFinalProject.ViewModels
         public void Dispose()
         {
             StopListening();
-            GC.SuppressFinalize(this); 
+            GC.SuppressFinalize(this);
         }
         public void StopListening()
         {
@@ -260,7 +272,13 @@ namespace ChessFinalProject.ViewModels
         }
         public async Task EndGame()
         {
-
+            if (!IsEnding)
+                return;
+            IsEnding = false;
+            _gameStateSubscription?.Dispose();
+            await _gameService.EndGame(_currentLocalGameState, _currentLocalGameState.GameId, KingType);
+            Console.WriteLine("EndGame");
+            await Shell.Current.Navigation.PopToRootAsync();
         }
     }
 }
