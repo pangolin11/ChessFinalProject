@@ -286,19 +286,39 @@ public class FirebaseService : IGameService
 
     public async Task EndGame(GameState currentLocalGameState, string gameId, string kingType)
     {
-        if(kingType == "whiteking.png")
+        var newGameState = new GameState
         {
+            GameId = currentLocalGameState.GameId,
+            WhitePlayerId = currentLocalGameState.WhitePlayerId,
+            BlackPlayerId = currentLocalGameState.BlackPlayerId,
+            CurrentTurnPlayerId = currentLocalGameState.CurrentTurnPlayerId,
+            Status = currentLocalGameState.Status, // We will update this below
+            squareFrom = currentLocalGameState.squareFrom,
+            squareTo = currentLocalGameState.squareTo,
+            IsWhiteTurn = currentLocalGameState.IsWhiteTurn,
+            CanBeChanged = currentLocalGameState.CanBeChanged
+        };
+        if (kingType == "whiteking.png")
+        {
+            newGameState.WinningPlayerId = currentLocalGameState.BlackPlayerId;
             currentLocalGameState.Status = "black wins";
         }
         else
         {
+            newGameState.WinningPlayerId = currentLocalGameState.WhitePlayerId;
+
             currentLocalGameState.Status = "white wins";
         }
+        await firebaseClient
+             .Child("users")
+             .Child(newGameState.WinningPlayerId)
+             .PutAsync(newGameState);
         await firebaseClient
             .Child("games")
             .Child(gameId)
             .Child(gameId)
             .PutAsync(currentLocalGameState);
+
         await firebaseClient
             .Child("games")
             .Child(gameId)

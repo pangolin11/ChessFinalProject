@@ -60,7 +60,7 @@ namespace ChessFinalProject.ViewModels
             /*InitializeGameListener(_currentLocalGameState.GameId);       */
             _authService = authService;
             _gameService = gameService;
-            WhiteTimeDisplay = TimeSpan.FromSeconds(5);
+            WhiteTimeDisplay = TimeSpan.FromSeconds(20);
             _playerTimer = Application.Current.Dispatcher.CreateTimer();
             _playerTimer.Interval = TimeSpan.FromSeconds(1); // Update every second
             _playerTimer.Tick += OnPlayerTimerTick;
@@ -88,9 +88,82 @@ namespace ChessFinalProject.ViewModels
 
 
         }
-        public async Task InitializeBoardAsync(Dictionary<string, string> board, int batchSize = 64, int delayMs = 0)
+        public async Task InitializeBoardAsync( int batchSize = 64, int delayMs = 0)
         {
+            Dictionary<string, string> board = new()
+{
+    { "A8", "blackrook.png" },
+    { "B8", "blackknight.png" },
+    { "C8", "blackbishop.png" },
+    { "D8", "blackqueen.png" },
+    { "E8", "blackking.png" },
+    { "F8", "blackbishop.png" },
+    { "G8", "blackknight.png" },
+    { "H8", "blackrook.png" },
 
+    { "A7", "blackpawn.png" },
+    { "B7", "blackpawn.png" },
+    { "C7", "blackpawn.png" },
+    { "D7", "blackpawn.png" },
+    { "E7", "blackpawn.png" },
+    { "F7", "blackpawn.png" },
+    { "G7", "blackpawn.png" },
+    { "H7", "blackpawn.png" },
+
+    { "A6", "" },
+    { "B6", "" },
+    { "C6", "" },
+    { "D6", "" },
+    { "E6", "" },
+    { "F6", "" },
+    { "G6", "" },
+    { "H6", "" },
+
+    { "A5", "" },
+    { "B5", "" },
+    { "C5", "" },
+    { "D5", "" },
+    { "E5", "" },
+    { "F5", "" },
+    { "G5", "" },
+    { "H5", "" },
+
+    { "A4", "" },
+    { "B4", "" },
+    { "C4", "" },
+    { "D4", "" },
+    { "E4", "" },
+    { "F4", "" },
+    { "G4", "" },
+    { "H4", "" },
+
+    { "A3", "" },
+    { "B3", "" },
+    { "C3", "" },
+    { "D3", "" },
+    { "E3", "" },
+    { "F3", "" },
+    { "G3", "" },
+    { "H3", "" },
+
+    { "A2", "whitepawn.png" },
+    { "B2", "whitepawn.png" },
+    { "C2", "whitepawn.png" },
+    { "D2", "whitepawn.png" },
+    { "E2", "whitepawn.png" },
+    { "F2", "whitepawn.png" },
+    { "G2", "whitepawn.png" },
+    { "H2", "whitepawn.png" },
+
+    { "A1", "whiterook.png" },
+    { "B1", "whiteknight.png" },
+    { "C1", "whitebishop.png" },
+    { "D1", "whitequeen.png" },
+    { "E1", "whiteking.png" },
+    { "F1", "whitebishop.png" },
+    { "G1", "whiteknight.png" },
+    { "H1", "whiterook.png" }
+};
             Board.Clear();
             string[] files = { "A", "B", "C", "D", "E", "F", "G", "H" };
 
@@ -193,7 +266,7 @@ namespace ChessFinalProject.ViewModels
             {
                 KingType = "blackking.png";
             }
-            await InitializeBoardAsync(_currentLocalGameState.Board);
+            await InitializeBoardAsync();
             if (KingType == "whiteking.png")
                 _playerTimer.Start();
             LoadingMessage = "hello";

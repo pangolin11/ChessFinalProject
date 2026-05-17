@@ -16,6 +16,7 @@ namespace ChessFinalProject.Models
         public string squareTo { get; set; }
         public bool IsWhiteTurn { get; set; }
         public bool CanBeChanged { get; set; }
+        public string WinningPlayerId { get; set; }
         public GameState() { }
     }
 }
