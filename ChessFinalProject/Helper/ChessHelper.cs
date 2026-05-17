@@ -7,6 +7,8 @@ namespace ChessFinalProject.Helper
 {
     public static class ChessHelper
     {
+        private static readonly List<string> colArr = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H" };
+
         internal static bool IsMoveLegal(string pieceType, string selectedSquare, string square, Dictionary<string, string> Board)
         {
             var PieceOnSquare = Board.GetValueOrDefault(square);
@@ -187,7 +189,6 @@ namespace ChessFinalProject.Helper
 
         private static bool IsMoveDiagonal(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
         {
-            List<string> colArr = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H" };
             if (colArr.IndexOf(colFrom) > colArr.IndexOf(colTo) && rowFrom > rowTo)
             {
                 for (int i = 1; i < 100; i++)
@@ -239,7 +240,6 @@ namespace ChessFinalProject.Helper
             }
             return false;
         }
-
         private static bool IsObstructedPawn(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board, bool IsPieceBeingTaken)
         {
             if (board.GetValueOrDefault(colTo + rowTo.ToString()) != null && board.GetValueOrDefault(colTo + rowTo.ToString()) != "")
@@ -256,7 +256,6 @@ namespace ChessFinalProject.Helper
 
         private static bool IsObstructedBishop(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
         {
-            List<string> colArr = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H" };
             if (colArr.IndexOf(colFrom) > colArr.IndexOf(colTo) && rowFrom > rowTo)
             {
                 for (int i = rowFrom - 1; i > rowTo; i--)
@@ -314,9 +313,7 @@ namespace ChessFinalProject.Helper
         }
 
         private static bool IsObstructedRook(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
-        {
-            List<string> colArr = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H" };
-            
+        {            
             string compare;
             if (rowFrom == rowTo)
             {

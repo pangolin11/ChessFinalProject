@@ -20,9 +20,16 @@ public partial class ChessBoardView : ContentPage
             if (vm.Board.Count == 0)
             {
                 await vm.StartGame();
-                await vm.InitializeBoardAsync(batchSize: 8, delayMs: 0);
-                await vm.InitializePieces();
+
             }
+        }
+    }
+
+    protected override async void OnDisappearing()
+    {
+        if (BindingContext is ChessBoardViewModel vm)
+        {
+            await vm.EndGame();
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace ChessFinalProject.ViewModels
 {
-    public class ViewModelBase : ObservableObject, INotifyPropertyChanged
+    public partial class ViewModelBase : ObservableObject, INotifyPropertyChanged
     {
         private bool _isBusy;
         public bool IsBusy

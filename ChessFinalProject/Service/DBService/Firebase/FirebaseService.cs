@@ -38,7 +38,6 @@ public class FirebaseService : IGameService
     }
     public IObservable<FirebaseObject<GameState>> ListenForGameState(string gameId)
     {
-
         return firebaseClient
             .Child("games")
             .Child(gameId)
@@ -81,6 +80,12 @@ public class FirebaseService : IGameService
                     .Child(gameId)
                     .Child(gameId)
                     .PutAsync(game);
+                game.Status = "Playing";
+                await firebaseClient
+                    .Child("games")
+                    .Child(gameId)
+                    .Child(gameId)
+                    .PutAsync(game);
 
                 Console.WriteLine($"Player {blackPlayerId} successfully joined game {gameId}.");
                 return game.GameId;
@@ -104,6 +109,7 @@ public class FirebaseService : IGameService
             WhitePlayerId = whitePlayerId,
             BlackPlayerId = null,
             CurrentTurnPlayerId = whitePlayerId, 
+            IsWhiteTurn = true,
             Status = "waiting",
             Board = new()
 {
@@ -251,6 +257,11 @@ public class FirebaseService : IGameService
     public async Task SendToFirebase(string squareFrom, string squareTo, string gameid)
     {
             var gameState = await GetGameState(gameid);
+        if (gameState.IsWhiteTurn)
+            gameState.IsWhiteTurn = false;
+
+        else
+            gameState.IsWhiteTurn = true;
         gameState?.Board[squareTo] = gameState.Board[squareFrom];
         gameState?.Board[squareFrom] = "";
 

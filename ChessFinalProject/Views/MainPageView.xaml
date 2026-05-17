@@ -13,8 +13,7 @@
                     FontSize="20"
                     Text="{Binding Name}"
                     TextColor="BlueViolet"
-                    VerticalOptions="Center"
-                    />
+                    VerticalOptions="Center" />
 
                 <!--  Settings Button - go to account page  -->
                 <Button
@@ -24,23 +23,23 @@
                     FontSize="20"
                     Text="&#xe8b8;"
                     VerticalOptions="Center" />
-                
+
             </HorizontalStackLayout>
 
             <Label
                 Margin="20"
                 FontSize="20"
+                HorizontalOptions="Center"
                 Text="Make your greatest app here!"
                 TextColor="CadetBlue"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center"/>
+                VerticalOptions="Center" />
             <Button
-     Margin="20,20,20,20"
-     Command="{Binding NavToChessCommand}"
-     FontFamily="MaterialIcons"
-     FontSize="20"
-     Text="&#xe8b8;"
-     VerticalOptions="Center" />
+                Margin="20,20,20,20"
+                Command="{Binding NavToChessCommand}"
+                FontFamily="MaterialIcons"
+                FontSize="20"
+                Text="&#xe8b8;"
+                VerticalOptions="Center" />
 
         </VerticalStackLayout>
     </Grid>

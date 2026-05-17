@@ -7,7 +7,10 @@
     Title="ChessBoardViewxaml">
 
     <Grid x:Name="OuterGrid" Margin="0,90,0,0">
-        <CollectionView ItemsSource="{Binding Board}" SelectionMode="None">
+        <CollectionView
+            FlowDirection="LeftToRight"
+            ItemsSource="{Binding Board}"
+            SelectionMode="None">
             <CollectionView.ItemsLayout>
                 <GridItemsLayout Orientation="Vertical" Span="8" />
             </CollectionView.ItemsLayout>
@@ -58,5 +61,28 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <Grid
+            HorizontalOptions="Fill"
+            IsVisible="{Binding Busy}"
+            VerticalOptions="Fill">
+
+            <BoxView
+                BackgroundColor="LightBlue"
+                HorizontalOptions="Fill"
+                Opacity="0.7"
+                VerticalOptions="Fill" />
+
+            <ActivityIndicator
+                IsRunning="True"
+                WidthRequest="100"
+                Color="Beige" />
+            <Label
+            Text="{Binding LoadingMessage}"
+            HorizontalOptions="Center"
+            TextColor="White"
+            Margin="0,400,0,0"
+            FontSize="16" />
+        </Grid>
     </Grid>
 </ContentPage>
