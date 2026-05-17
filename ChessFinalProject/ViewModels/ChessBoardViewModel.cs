@@ -19,7 +19,32 @@ namespace ChessFinalProject.ViewModels
         private IDispatcherTimer _playerTimer; // Local timer for smooth UI countdown
         [ObservableProperty]
         public partial string PlayerTime { get; set; }
-
+        private string _friendlyTime;
+        public string FriendlyTime
+        {
+            get => _friendlyTime;
+            set
+            {
+                if (_friendlyTime != value)
+                {
+                    _friendlyTime = value;
+                    OnPropertyChanged(nameof(FriendlyTime));
+                }
+            }
+        }
+        private string _enemyTime;
+        public string EnemyTime
+        {
+            get => _enemyTime;
+            set
+            {
+                if (_enemyTime != value)
+                {
+                    _enemyTime = value;
+                    OnPropertyChanged(nameof(EnemyTime));
+                }
+            }
+        }
         private bool _busy;
         public bool Busy
         {
@@ -60,7 +85,7 @@ namespace ChessFinalProject.ViewModels
             /*InitializeGameListener(_currentLocalGameState.GameId);       */
             _authService = authService;
             _gameService = gameService;
-            WhiteTimeDisplay = TimeSpan.FromSeconds(20);
+            WhiteTimeDisplay = TimeSpan.FromSeconds(2000);
             _playerTimer = Application.Current.Dispatcher.CreateTimer();
             _playerTimer.Interval = TimeSpan.FromSeconds(1); // Update every second
             _playerTimer.Tick += OnPlayerTimerTick;
@@ -73,9 +98,7 @@ namespace ChessFinalProject.ViewModels
             if (WhiteTimeDisplay.TotalSeconds > 0)
             {
                 WhiteTimeDisplay = WhiteTimeDisplay.Subtract(TimeSpan.FromSeconds(1));
-                PlayerTime = "bye";
-                // Notify UI if using data binding
-                OnPropertyChanged(nameof(WhiteTimeDisplay));
+                await _gameService.SendTime(_currentLocalGameState,WhiteTimeDisplay.ToString(), KingType);
             }
             else
             {
@@ -269,7 +292,7 @@ namespace ChessFinalProject.ViewModels
             await InitializeBoardAsync();
             if (KingType == "whiteking.png")
                 _playerTimer.Start();
-            LoadingMessage = "hello";
+            EnemyTime = WhiteTimeDisplay.ToString();
 
 
         }
@@ -289,14 +312,32 @@ namespace ChessFinalProject.ViewModels
                             _currentLocalGameState = firebaseObject.Object;
 
                         }
-                        Console.WriteLine("entered on next");
-                        /*                        Console.WriteLine($"Type of firebaseObject.Object: {firebaseObject.Object.GetType()}");
-                                                var json = Newtonsoft.Json.JsonConvert.SerializeObject(firebaseObject.Object, Newtonsoft.Json.Formatting.Indented);
-                                                Console.WriteLine($"Raw Firebase object received:\n{json}");*/
+                        if (firebaseObject.Object.Status.Contains("wins"))
+                        {
+                            _currentLocalGameState = null;
+                            await MainThread.InvokeOnMainThreadAsync(async () =>
+                            {
+                                await Shell.Current.Navigation.PopToRootAsync();
+                            });
+                        }
+                        _currentLocalGameState = firebaseObject.Object;
+                        if (KingType == "whiteking.png")
+                        {
+                            if(_currentLocalGameState.WhiteTime != null)
+                            FriendlyTime = _currentLocalGameState.WhiteTime;
+                            if (_currentLocalGameState.BlackTime != null)
+                                EnemyTime = _currentLocalGameState.BlackTime;
+                        }
+                        else
+                        {
+                            if (_currentLocalGameState.BlackTime != null)
+                                FriendlyTime = _currentLocalGameState.BlackTime;
+                            if (_currentLocalGameState.WhiteTime != null)
+                                EnemyTime = _currentLocalGameState.WhiteTime;
+                        }
                         if (firebaseObject.Object.CanBeChanged)
                         {
                             _currentLocalGameState = firebaseObject.Object;
-                            //_currentLocalGameState = firebaseObject.Object; // Update local state with latest from Firebase
                             string squareFrom = _currentLocalGameState.squareFrom;
                             string squareTo = _currentLocalGameState.squareTo;
 
@@ -344,6 +385,8 @@ namespace ChessFinalProject.ViewModels
         }
         public async Task EndGame()
         {
+            if (_currentLocalGameState == null)
+                return;
             _playerTimer.Stop();
             _playerTimer.Tick -= OnPlayerTimerTick;
             IsEnding = false;
@@ -351,21 +394,6 @@ namespace ChessFinalProject.ViewModels
             await _gameService.EndGame(_currentLocalGameState, _currentLocalGameState.GameId, KingType);
             Console.WriteLine("EndGame");
             
-        }
-        public async Task EndGame(bool isEnding)
-        {
-            IsEnding = isEnding;
-            if (!IsEnding)
-                return;
-            //just in case
-            _playerTimer.Stop();
-            _playerTimer.Tick -= OnPlayerTimerTick;
-            IsEnding = false;
-            _gameStateSubscription?.Dispose();
-            if(_currentLocalGameState != null && KingType != null)
-            await _gameService.EndGame(_currentLocalGameState, _currentLocalGameState.GameId, KingType);
-            Console.WriteLine("EndGame");
-            await Shell.Current.Navigation.PopToRootAsync();
         }
     }
 }

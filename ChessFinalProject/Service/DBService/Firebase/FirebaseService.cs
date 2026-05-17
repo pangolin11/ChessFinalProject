@@ -256,6 +256,7 @@ public class FirebaseService : IGameService
     }
     public async Task SendToFirebase(string squareFrom, string squareTo, string gameid)
     {
+
             var gameState = await GetGameState(gameid);
         if (gameState.IsWhiteTurn)
             gameState.IsWhiteTurn = false;
@@ -283,7 +284,6 @@ public class FirebaseService : IGameService
                .PutAsync(gameState);
 
     }
-
     public async Task EndGame(GameState currentLocalGameState, string gameId, string kingType)
     {
         var newGameState = new GameState
@@ -296,33 +296,88 @@ public class FirebaseService : IGameService
             squareFrom = currentLocalGameState.squareFrom,
             squareTo = currentLocalGameState.squareTo,
             IsWhiteTurn = currentLocalGameState.IsWhiteTurn,
+            UnImportant = currentLocalGameState.UnImportant,
             CanBeChanged = currentLocalGameState.CanBeChanged
         };
         if (kingType == "whiteking.png")
         {
             newGameState.WinningPlayerId = currentLocalGameState.BlackPlayerId;
+            newGameState.Status = "victory";
+            newGameState.LosingPlayerId = currentLocalGameState.WhitePlayerId;
             currentLocalGameState.Status = "black wins";
         }
         else
         {
             newGameState.WinningPlayerId = currentLocalGameState.WhitePlayerId;
+            newGameState.Status = "victory";
+            newGameState.LosingPlayerId = currentLocalGameState.BlackPlayerId;
 
             currentLocalGameState.Status = "white wins";
         }
-        await firebaseClient
-             .Child("users")
-             .Child(newGameState.WinningPlayerId)
-             .PutAsync(newGameState);
+        //save game to firebase
         await firebaseClient
             .Child("games")
             .Child(gameId)
             .Child(gameId)
             .PutAsync(currentLocalGameState);
-
+        currentLocalGameState.UnImportant = !currentLocalGameState.UnImportant;
+        await firebaseClient
+            .Child("games")
+            .Child(gameId)
+            .Child(gameId)
+            .PutAsync(currentLocalGameState);
         await firebaseClient
             .Child("games")
             .Child(gameId)
             .Child(gameId)
             .DeleteAsync();
+        //save game as victory for victorious player
+        await firebaseClient
+             .Child("users")
+             .Child(newGameState.WinningPlayerId)
+             .Child(newGameState.GameId)
+             .PutAsync(newGameState);
+        newGameState.Status = "defeat";
+        //save game as loss for defeated player
+        await firebaseClient
+            .Child("users")
+             .Child(newGameState.LosingPlayerId)
+             .Child(newGameState.GameId)
+             .PutAsync(newGameState);
+       
+    }
+
+    public async Task SendTime(GameState currentLocalGameState, string time, string kingType)
+    {
+            if (kingType == "whiteking.png")
+            {
+                currentLocalGameState.WhiteTime = time;
+            await firebaseClient
+                .Child("games")
+                .Child(currentLocalGameState.GameId)
+                .Child(currentLocalGameState.GameId)
+                .PutAsync(time);
+        }
+            else
+            {
+                currentLocalGameState.BlackTime = time;
+            }
+            
+            currentLocalGameState.UnImportant = !currentLocalGameState.UnImportant;
+         if (kingType == "whiteking.png")
+        {
+            currentLocalGameState.WhiteTime = time;
+        }
+        else
+        {
+            currentLocalGameState.BlackTime = time;
+        }
+        await firebaseClient
+                .Child("games")
+                .Child(currentLocalGameState.GameId)
+                .Child(currentLocalGameState.GameId)
+                                .Child(kingType)
+
+                .PutAsync(time);
     }
 }
