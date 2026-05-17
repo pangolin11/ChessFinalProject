@@ -302,6 +302,7 @@ public class FirebaseService : IGameService
         await firebaseClient
             .Child("games")
             .Child(gameId)
-            .PutAsync(null);
+            .Child(gameId)
+            .DeleteAsync();
     }
 }

@@ -29,6 +29,7 @@ public partial class ChessBoardView : ContentPage
     {
         if (BindingContext is ChessBoardViewModel vm)
         {
+            
             await vm.EndGame();
         }
     }

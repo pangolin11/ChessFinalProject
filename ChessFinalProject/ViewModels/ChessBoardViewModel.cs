@@ -60,7 +60,7 @@ namespace ChessFinalProject.ViewModels
             /*InitializeGameListener(_currentLocalGameState.GameId);       */
             _authService = authService;
             _gameService = gameService;
-            WhiteTimeDisplay = TimeSpan.FromSeconds(10);
+            WhiteTimeDisplay = TimeSpan.FromSeconds(5);
             _playerTimer = Application.Current.Dispatcher.CreateTimer();
             _playerTimer.Interval = TimeSpan.FromSeconds(1); // Update every second
             _playerTimer.Tick += OnPlayerTimerTick;
@@ -81,9 +81,8 @@ namespace ChessFinalProject.ViewModels
             {
                 _playerTimer.Stop();
                 IsEnding = true;
-                await EndGame();
-
-                // Handle timeout — e.g., end turn, declare winner, etc.
+                await Shell.Current.Navigation.PopToRootAsync();
+              
             }
 
 
@@ -237,7 +236,7 @@ namespace ChessFinalProject.ViewModels
                             {
                                 _playerTimer.Stop();
                                 IsEnding = true;
-                                await EndGame();
+                                await Shell.Current.Navigation.PopToRootAsync();
                             }
                             if (_playerTimer.IsRunning)
                                 _playerTimer.Stop();
@@ -272,10 +271,25 @@ namespace ChessFinalProject.ViewModels
         }
         public async Task EndGame()
         {
-            if (!IsEnding)
-                return;
+            _playerTimer.Stop();
+            _playerTimer.Tick -= OnPlayerTimerTick;
             IsEnding = false;
             _gameStateSubscription?.Dispose();
+            await _gameService.EndGame(_currentLocalGameState, _currentLocalGameState.GameId, KingType);
+            Console.WriteLine("EndGame");
+            
+        }
+        public async Task EndGame(bool isEnding)
+        {
+            IsEnding = isEnding;
+            if (!IsEnding)
+                return;
+            //just in case
+            _playerTimer.Stop();
+            _playerTimer.Tick -= OnPlayerTimerTick;
+            IsEnding = false;
+            _gameStateSubscription?.Dispose();
+            if(_currentLocalGameState != null && KingType != null)
             await _gameService.EndGame(_currentLocalGameState, _currentLocalGameState.GameId, KingType);
             Console.WriteLine("EndGame");
             await Shell.Current.Navigation.PopToRootAsync();
