@@ -73,9 +73,14 @@ namespace ChessFinalProject.ViewModels
         }
         private readonly IGameService _gameService;
         private TimeSpan WhiteTimeDisplay;
+        private TimeSpan Infinite;
+        private IDispatcherTimer _infinityTimer;
         private IDisposable _gameStateSubscription;
         private GameState _currentLocalGameState;
         private string KingType;
+        private string HypotheticalWhiteTime = "";
+        private string HypotheticalBlackTime = "";
+
         public ObservableCollection<ChessSquare> Board { get; } = new();
 
         private string selectedSquare;
@@ -89,8 +94,28 @@ namespace ChessFinalProject.ViewModels
             _playerTimer = Application.Current.Dispatcher.CreateTimer();
             _playerTimer.Interval = TimeSpan.FromSeconds(1); // Update every second
             _playerTimer.Tick += OnPlayerTimerTick;
-
-
+            Infinite = TimeSpan.FromHours(9999);
+            _infinityTimer = Application.Current.Dispatcher.CreateTimer();
+            _infinityTimer.Interval = TimeSpan.FromSeconds(3);
+            _infinityTimer.Tick += async (s, e) =>
+            {
+                if (!_playerTimer.IsRunning)
+                {
+                    if (HypotheticalBlackTime == _currentLocalGameState?.BlackTime && HypotheticalWhiteTime == _currentLocalGameState.WhiteTime)
+                    {
+                        if(KingType == "whiteking.png")
+                            KingType = "blackking.png";
+                        else
+                            KingType = "whiteking.png";
+                        await Shell.Current.Navigation.PopToRootAsync();
+                    }
+                }
+                else
+                {
+                    HypotheticalBlackTime = _currentLocalGameState.BlackTime;
+                    HypotheticalWhiteTime = _currentLocalGameState.WhiteTime;
+                }
+            };
         }
 
         private async void OnPlayerTimerTick(object? sender, EventArgs e)
@@ -201,7 +226,7 @@ namespace ChessFinalProject.ViewModels
                     {
                         Name = square,
                         IsWhite = (row + col) % 2 == 0,
-                        Image = board.FirstOrDefault(x => x.Key == square).Value
+                        Image = _currentLocalGameState.Board.FirstOrDefault(x => x.Key == square).Value
                     });
                     if (buffer.Count >= batchSize)
                     {
@@ -293,6 +318,7 @@ namespace ChessFinalProject.ViewModels
             if (KingType == "whiteking.png")
                 _playerTimer.Start();
             EnemyTime = WhiteTimeDisplay.ToString();
+            FriendlyTime = WhiteTimeDisplay.ToString();
 
 
         }
@@ -343,7 +369,7 @@ namespace ChessFinalProject.ViewModels
 
                             MainThread.BeginInvokeOnMainThread(() =>
                             {
-                                Board.FirstOrDefault(s => s.Name == squareTo)?.Image = Board.FirstOrDefault(s => s.Name == squareFrom)?.Image;
+                                Board.FirstOrDefault(s => s.Name == squareTo)?.Image = _currentLocalGameState.Board[squareTo];
                                 Board.FirstOrDefault(s => s.Name == squareFrom)?.Image = "";
                             });
                             if (ChessHelper.IsCheckmate(_currentLocalGameState.Board, KingType))

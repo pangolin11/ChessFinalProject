@@ -1,3 +1,4 @@
+using Android.Health.Connect.DataTypes;
 using ChessFinalProject.Service.DBService.Firebase;
 using ChessFinalProject.ViewModels;
 
@@ -13,7 +14,6 @@ public partial class ChessBoardView : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-
         if (BindingContext is ChessBoardViewModel vm)
         {
             // only initialize once
@@ -27,10 +27,7 @@ public partial class ChessBoardView : ContentPage
 
     protected override async void OnDisappearing()
     {
-        if (BindingContext is ChessBoardViewModel vm)
-        {
-            
+        if (BindingContext is ChessBoardViewModel vm)       
             await vm.EndGame();
-        }
     }
 }

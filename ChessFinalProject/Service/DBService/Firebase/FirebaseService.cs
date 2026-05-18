@@ -275,14 +275,6 @@ public class FirebaseService : IGameService
                 .Child(gameState?.GameId)
                 .Child(gameState?.GameId)
                 .PutAsync(gameState);
-        gameState?.squareFrom = null;
-        gameState?.squareTo = null;
-        gameState.CanBeChanged = false;
-        await firebaseClient
-               .Child("games")
-               .Child(gameState?.GameId)
-               .Child(gameState?.GameId)
-               .PutAsync(gameState);
 
     }
     public async Task EndGame(GameState currentLocalGameState, string gameId, string kingType)
@@ -350,6 +342,7 @@ public class FirebaseService : IGameService
 
     public async Task SendTime(GameState currentLocalGameState, string time, string kingType)
     {
+        Console.WriteLine("send time");
             if (kingType == "whiteking.png")
             {
                 var asd = new Dictionary<string, string>();
@@ -364,16 +357,13 @@ public class FirebaseService : IGameService
             else
             {
                 currentLocalGameState.BlackTime = time;
-            }
-            
-            currentLocalGameState.UnImportant = !currentLocalGameState.UnImportant;
-         if (kingType == "whiteking.png")
-        {
-            currentLocalGameState.WhiteTime = time;
-        }
-        else
-        {
-            currentLocalGameState.BlackTime = time;
+                var asd = new Dictionary<string, string>();
+                asd.Add("BlackTime", time);
+                await firebaseClient
+                  .Child("games")
+                  .Child(currentLocalGameState.GameId)
+                  .Child(currentLocalGameState.GameId)
+                  .PatchAsync(asd);
         }
     }
 }
