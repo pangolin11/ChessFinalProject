@@ -3,7 +3,8 @@ using ChessFinalProject.Models;
 using Firebase.Database;
 using Firebase.Database.Query;
 using Firebase.Database.Streaming;
-   
+using Java.Nio.Channels;
+
 
 namespace ChessFinalProject.Service.DBService.Firebase;
 
@@ -351,12 +352,14 @@ public class FirebaseService : IGameService
     {
             if (kingType == "whiteking.png")
             {
+                var asd = new Dictionary<string, string>();
+                asd.Add("WhiteTime", time);
                 currentLocalGameState.WhiteTime = time;
-            await firebaseClient
-                .Child("games")
-                .Child(currentLocalGameState.GameId)
-                .Child(currentLocalGameState.GameId)
-                .PutAsync(time);
+                await firebaseClient
+                   .Child("games")
+                   .Child(currentLocalGameState.GameId)
+                   .Child(currentLocalGameState.GameId)
+                   .PatchAsync(asd);
         }
             else
             {
@@ -372,12 +375,5 @@ public class FirebaseService : IGameService
         {
             currentLocalGameState.BlackTime = time;
         }
-        await firebaseClient
-                .Child("games")
-                .Child(currentLocalGameState.GameId)
-                .Child(currentLocalGameState.GameId)
-                                .Child(kingType)
-
-                .PutAsync(time);
     }
 }
