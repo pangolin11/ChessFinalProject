@@ -43,7 +43,7 @@ namespace ChessFinalProject.Helper
                         return false;
                     if (IsObstructedBishop(rowFrom, colFrom, rowTo, colTo, Board))
                         return false;
-                    if (IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo, Board))
+                    if (IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo))
                         return true;
                     return false;
                 case "blackbishop":
@@ -51,7 +51,7 @@ namespace ChessFinalProject.Helper
                         return false;
                     if (IsObstructedBishop(rowFrom, colFrom, rowTo, colTo, Board))
                         return false;
-                    if (IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo, Board))
+                    if (IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo))
                         return true;
                     return false;
                 case "whitequeen":
@@ -59,7 +59,7 @@ namespace ChessFinalProject.Helper
                     {
                         if (IsObstructedBishop(rowFrom, colFrom, rowTo, colTo, Board))
                             return false;
-                        if (IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo, Board))
+                        if (IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo))
                             return true;
                         return false;
                     }
@@ -74,7 +74,7 @@ namespace ChessFinalProject.Helper
                     {
                         if (IsObstructedBishop(rowFrom, colFrom, rowTo, colTo, Board))
                             return false;
-                        if (IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo, Board))
+                        if (IsMoveDiagonal(rowFrom, colFrom, rowTo, colTo))
                             return true;
                         return false;
                     }
@@ -187,58 +187,11 @@ namespace ChessFinalProject.Helper
             return false;
         }
 
-        private static bool IsMoveDiagonal(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
+        private static bool IsMoveDiagonal(int rowFrom, string colFrom, int rowTo, string colTo)
         {
-            if (colArr.IndexOf(colFrom) > colArr.IndexOf(colTo) && rowFrom > rowTo)
-            {
-                for (int i = 1; i < 100; i++)
-                {
-                    colFrom = colArr[colArr.IndexOf(colFrom) - 1];
-                    rowFrom = rowFrom - 1;
-                    if(colFrom == colTo && rowFrom == rowTo)
-                        return true;
-                    if (rowFrom < rowTo || colArr.IndexOf(colFrom) < colArr.IndexOf(colTo))
-                        return false;
-                }
-            }
-            else if (colArr.IndexOf(colFrom) > colArr.IndexOf(colTo) && rowFrom < rowTo)
-            {
-                for (int i = 1; i < 100; i++)
-                {
-                    colFrom = colArr[colArr.IndexOf(colFrom) - 1];
-                    rowFrom = rowFrom + 1;
-                    if (colFrom == colTo && rowFrom == rowTo)
-                        return true;
-                    if (rowFrom > rowTo || colArr.IndexOf(colFrom) < colArr.IndexOf(colTo))
-                        return false;
-                }
-            }
-
-            else if (colArr.IndexOf(colFrom) < colArr.IndexOf(colTo) && rowFrom > rowTo)
-            {
-                for (int i = 1; i < 100; i++)
-                {
-                    colFrom = colArr[colArr.IndexOf(colFrom) + 1];
-                    rowFrom = rowFrom - 1;
-                    if (colFrom == colTo && rowFrom == rowTo)
-                        return true;
-                    if (rowFrom < rowTo || colArr.IndexOf(colFrom) > colArr.IndexOf(colTo))
-                        return false;
-                }
-            }
-            else if (colArr.IndexOf(colFrom) < colArr.IndexOf(colTo) && rowFrom < rowTo)
-            {
-                for (int i = 1; i < 100; i++)
-                {
-                    colFrom = colArr[colArr.IndexOf(colFrom) + 1];
-                    rowFrom = rowFrom + 1;
-                    if (colFrom == colTo && rowFrom == rowTo)
-                        return true;
-                    if (rowFrom > rowTo || colArr.IndexOf(colFrom) > colArr.IndexOf(colTo))
-                        return false;
-                }
-            }
-            return false;
+            int colDiff = Math.Abs(colArr.IndexOf(colFrom) - colArr.IndexOf(colTo));
+            int rowDiff = Math.Abs(rowFrom - rowTo);
+            return colDiff == rowDiff && colDiff != 0;
         }
         private static bool IsObstructedPawn(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board, bool IsPieceBeingTaken)
         {

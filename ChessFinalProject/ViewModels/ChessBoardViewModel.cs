@@ -376,9 +376,12 @@ namespace ChessFinalProject.ViewModels
                             {
                                 _playerTimer.Stop();
                                 IsEnding = true;
-                                await Shell.Current.Navigation.PopToRootAsync();
+                                await MainThread.InvokeOnMainThreadAsync(async () => 
+                                {
+                                    await Shell.Current.Navigation.PopToRootAsync();
+                                });
                             }
-                            if (_playerTimer.IsRunning)
+                            if (_currentLocalGameState.IsWhiteTurn && KingType == "blackking.png" || !_currentLocalGameState.IsWhiteTurn && KingType == "whiteking.png")
                                 _playerTimer.Stop();
                             else
                                 _playerTimer.Start();
