@@ -53,18 +53,6 @@ namespace ChessFinalProject.ViewModels
 		///////////////////////////////////////////////////////////////////
 
 		[RelayCommand]
-		private void ClearFilter()
-		{
-			throw new NotImplementedException();
-		}
-
-		[RelayCommand]
-		private void Search()
-		{
-			throw new NotImplementedException();
-		}
-
-		[RelayCommand]
 		private async Task NavigateToAccountPage()
 		{
 			if (SelectedUser != null)

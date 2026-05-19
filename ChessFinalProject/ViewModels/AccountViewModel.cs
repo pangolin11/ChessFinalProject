@@ -102,7 +102,7 @@ namespace ChessFinalProject.ViewModels
 				catch (Exception ex)
 				{
 					IsBusy = false;
-					await _alertService.ShowAlertAsync("KASATA", ex.Message, "OK");
+					await _alertService.ShowAlertAsync("Error", ex.Message, "OK");
 				}
 			}
 		}
@@ -115,7 +115,7 @@ namespace ChessFinalProject.ViewModels
 			if (!Validate())
 			{
 				//ErrorMessageIsVisible = true;
-				await _alertService.ShowAlertAsync("KASATA", ErrorMessage, "OK");
+				await _alertService.ShowAlertAsync("Error", ErrorMessage, "OK");
 				return;
 			}
 
@@ -141,12 +141,12 @@ namespace ChessFinalProject.ViewModels
 				await _dbService.UpdateAsync(user);
 				IsBusy = false;
 
-				await _alertService.ShowAlertAsync("KASATA", "User details updated successfully!", "OK");
+				await _alertService.ShowAlertAsync("Success", "User details updated successfully!", "OK");
 			}
 			catch (Exception ex)
 			{
 				IsBusy = false;
-				await _alertService.ShowAlertAsync("KASATA", $"Error updating user details: {ex.Message}", "OK");
+				await _alertService.ShowAlertAsync("Error", $"Error updating user details: {ex.Message}", "OK");
 			}
 		}
 		//AccountViewModel Entry Point

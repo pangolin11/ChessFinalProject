@@ -144,9 +144,5 @@ namespace ChessFinalProject.Service.DBService.Firebase
         {
             return _authClient?.User != null;
         }
-        public async Task SignOut()
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

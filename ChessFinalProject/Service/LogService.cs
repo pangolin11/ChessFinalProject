@@ -9,23 +9,23 @@ namespace ChessFinalProject.Service
 {
 	public class LogService : IAppLogger
 	{
-		private readonly string TAG = "KASATA";
+		private readonly string TAG = "Chess";
 
 		public void LogDebug(string message)
 		{
-#if ANDROID
-			Android.Util.Log.Debug(TAG,message);
-#endif
-			//Debug.WriteLine($"Log {TAG}: {message}");
+/*#if ANDROID
+*/			Android.Util.Log.Debug(TAG,message);
+/*#endif
+*/			//Debug.WriteLine($"Log {TAG}: {message}");
 
 		}
 
 		public void LogError(string message)
 		{
-#if ANDROID
-			Android.Util.Log.Error(TAG,message);
-#endif
-			//Debug.WriteLine($"Error {TAG}: {message}");
+/*#if ANDROID
+*/			Android.Util.Log.Error(TAG,message);
+/*#endif
+*/			//Debug.WriteLine($"Error {TAG}: {message}");
 		}
 	}
 }
