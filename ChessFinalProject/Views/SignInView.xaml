@@ -28,7 +28,7 @@
                 FontAttributes="Bold"
                 FontSize="30"
                 HorizontalOptions="Center"
-                Text="KASATA"
+                Text="Welcome to my chess app!"
                 TextColor="Snow"
                 VerticalOptions="Center" />
 

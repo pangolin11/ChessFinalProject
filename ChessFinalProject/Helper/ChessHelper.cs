@@ -8,7 +8,6 @@ namespace ChessFinalProject.Helper
     public static class ChessHelper
     {
         private static readonly List<string> colArr = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H" };
-
         internal static bool IsMoveLegal(string pieceType, string selectedSquare, string square, Dictionary<string, string> Board)
         {
             var PieceOnSquare = Board.GetValueOrDefault(square);
@@ -21,7 +20,6 @@ namespace ChessFinalProject.Helper
             bool Legal = CheckLegality(pieceType, rowFrom, colFrom, rowTo, colTo, Board);
             return Legal;
         }
-
         private static bool CheckLegality(string pieceType, int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> Board)
         {
             switch (pieceType)
@@ -167,7 +165,6 @@ namespace ChessFinalProject.Helper
             }
             return false;
         }
-
         internal static bool StillInCheck(Dictionary<string, string> board, string king)
         {
             string kingLocation = null;
@@ -186,7 +183,6 @@ namespace ChessFinalProject.Helper
             }
             return false;
         }
-
         private static bool IsMoveDiagonal(int rowFrom, string colFrom, int rowTo, string colTo)
         {
             int colDiff = Math.Abs(colArr.IndexOf(colFrom) - colArr.IndexOf(colTo));
@@ -206,7 +202,6 @@ namespace ChessFinalProject.Helper
                 return false;
  
         }
-
         private static bool IsObstructedBishop(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
         {
             if (colArr.IndexOf(colFrom) > colArr.IndexOf(colTo) && rowFrom > rowTo)
@@ -264,7 +259,6 @@ namespace ChessFinalProject.Helper
             }
             return false;
         }
-
         private static bool IsObstructedRook(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
         {            
             string compare;
