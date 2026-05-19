@@ -117,36 +117,6 @@ namespace ChessFinalProject.Service.DBService.Firebase
 			{			
 				throw new Exception($"FirebaseUsersRepository GetUserByIdAsync failed! {ex.Message}");
 			}
-
-			//var users = await  
-			//.Child("Users")
-			//.OrderBy("Id")
-			//.EqualTo(userId)
-			//.OnceAsync<AppUser>();
-
-			//	להגדיר ב-Firebase Console תחת לשונית Rules אינדקס לשדה Id:
-			//			{
-			//				"rules": {
-			//					"Users": {
-			//						".indexOn": ["Id"]
-			//					}
-			//				}
-			//			}	
-
-			// מדפיס את תוכן התשובה מהשרת - כאן תראה את הסיבה האמיתית
-			//Debug.WriteLine($"Database Error Content: {ex.ResponseContent}");
-			//Debug.WriteLine($"Database Error Message: {ex.Message}");
-
-			//string userMessage = "אירעה שגיאה בתקשורת עם בסיס הנתונים.";
-
-			//if (ex.Message.Contains("401") || ex.ResponseContent.Contains("Permission denied"))
-			//{
-			//	userMessage = "אין לך הרשאות לבצע את הפעולה הזו (בדוק את ה-Rules).";
-			//}
-			//else if (ex.Message.Contains("404"))
-			//{
-			//	userMessage = "הנתיב בבסיס הנתונים לא נמצא.";
-			//}
 		}
 		public async Task UpdateAsync(AppUser appUser)
 		{

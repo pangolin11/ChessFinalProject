@@ -140,7 +140,6 @@ namespace ChessFinalProject.Service.DBService.Firebase
             }
             return null; // No user is currently signed in
         }
-
         public bool IsUserSignedIn()
         {
             return _authClient?.User != null;

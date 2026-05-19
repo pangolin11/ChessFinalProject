@@ -129,14 +129,14 @@ namespace ChessFinalProject.ViewModels
 			IsBusy = true;
 
 			newUser = new AppUser()
-			{				
+			{
 				FirstName = FName,
 				LastName = LName,
 				UserEmail = UEmail,
 				UserPassword = UPassword,
 				UserMobile = UMobile,
 				RegDate = DateTime.Now.ToShortDateString(),
-				UBDate = DateTime.Now.ToShortDateString()
+				UBDate = DateTime.Now.ToShortDateString(),
 			};
 
 			try

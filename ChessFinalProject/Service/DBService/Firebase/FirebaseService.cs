@@ -326,14 +326,14 @@ public class FirebaseService : IGameService
             .DeleteAsync();
         //save game as victory for victorious player
         await firebaseClient
-             .Child("users")
+             .Child("UserGames")
              .Child(newGameState.WinningPlayerId)
              .Child(newGameState.GameId)
              .PutAsync(newGameState);
         newGameState.Status = "defeat";
         //save game as loss for defeated player
         await firebaseClient
-            .Child("users")
+            .Child("UserGames")
              .Child(newGameState.LosingPlayerId)
              .Child(newGameState.GameId)
              .PutAsync(newGameState);

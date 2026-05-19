@@ -96,7 +96,6 @@ namespace ChessFinalProject.ViewModels
 						}
 						else if (item.EventType == FirebaseEventType.Delete)
 						{
-							// משתמשים ב-Key למחיקה בטוחה
 							RemoveUser(item.Key);
 						}
 						FillUsersList();

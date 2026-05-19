@@ -15,30 +15,20 @@
                     TextColor="BlueViolet"
                     VerticalOptions="Center" />
 
-                <!--  Settings Button - go to account page  -->
-                <Button
-                    Margin="0,20,20,20"
-                    Command="{Binding SettingsCommand}"
-                    FontFamily="MaterialIcons"
-                    FontSize="20"
-                    Text="&#xe8b8;"
-                    VerticalOptions="Center" />
-
             </HorizontalStackLayout>
 
             <Label
                 Margin="20"
                 FontSize="20"
                 HorizontalOptions="Center"
-                Text="Make your greatest app here!"
+                Text="Click here to start a new chess game"
                 TextColor="CadetBlue"
                 VerticalOptions="Center" />
             <Button
                 Margin="20,20,20,20"
                 Command="{Binding NavToChessCommand}"
-                FontFamily="MaterialIcons"
+                Text="Play now!"
                 FontSize="20"
-                Text="&#xe8b8;"
                 VerticalOptions="Center" />
 
         </VerticalStackLayout>

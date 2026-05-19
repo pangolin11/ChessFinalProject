@@ -13,7 +13,7 @@ namespace ChessFinalProject.Service.DBService.Firebase
 
 		public FirebaseRealtimeService()
 		{
-			_firebaseClient = new FirebaseClient("https://big17datafb-default-rtdb.europe-west1.firebasedatabase.app/");
+			_firebaseClient = new FirebaseClient("https://chessfinalproject-66573-default-rtdb.firebaseio.com");
 		}
 		public string Info()
 		{

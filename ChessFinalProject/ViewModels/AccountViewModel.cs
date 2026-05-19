@@ -149,13 +149,6 @@ namespace ChessFinalProject.ViewModels
 				await _alertService.ShowAlertAsync("KASATA", $"Error updating user details: {ex.Message}", "OK");
 			}
 		}
-
-		[RelayCommand]
-		private void GetUserImage()
-		{
-			// Implement get user image functionality here
-		}
-
 		//AccountViewModel Entry Point
 		public void ApplyQueryAttributes(IDictionary<string, object> query)
 		{
@@ -178,8 +171,6 @@ namespace ChessFinalProject.ViewModels
 			LastName = user.LastName!;
 			UserEmail = user.UserEmail!;
 			UserMobile = user.UserMobile!;
-			//UserImageBase64 = user.ImageBase64; // Load the user's image base64 string
-			UserImageBase64 = null!;
 		}
 
 		#region Validation Methods

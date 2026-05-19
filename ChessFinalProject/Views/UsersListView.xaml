@@ -106,21 +106,6 @@
                                 Text="{Binding UserEmail}"
                                 TextColor="Gray"
                                 VerticalOptions="Center" />
-
-                            <!--  Registration Date  -->
-                            <Border
-                                Grid.RowSpan="2"
-                                Grid.Column="1"
-                                Padding="10,5"
-                                StrokeShape="RoundRectangle 15"
-                                VerticalOptions="Center">
-
-                                <Label
-                                    FontAttributes="Bold"
-                                    FontSize="12"
-                                    Text="{Binding RegDate, StringFormat='{0:dd/MM/yyyy}'}"
-                                    VerticalOptions="Center" />
-                            </Border>
                         </Grid>
                     </Border>
                 </DataTemplate>
