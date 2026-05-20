@@ -8,62 +8,23 @@ using Java.Nio.Channels;
 
 namespace ChessFinalProject.Service.DBService.Firebase;
 
-public class FirebaseService : IGameService
+public class FirebaseService : FirebaseRealtimeService,IGameService
 {
-    private readonly FirebaseClient firebaseClient;
-    private const string FirebaseDatabaseUrl = "https://chessfinalproject-66573-default-rtdb.firebaseio.com"; // Replace with your DB URL
-    // Your Database URL: https://chessfinalproject-66573-default-rtdb.firebaseio.com
     public FirebaseService()
     {
-        // Initialize Firebase Client
-        firebaseClient = new FirebaseClient(FirebaseDatabaseUrl);
-    }
-    public async Task SendMove(string gameId, ChessMove move)
-    {
-        try
-        {
-            // Pushes a new ChessMove object to a list of moves under a specific gameId
-            // This will generate a unique key for each move.
-            await firebaseClient
-                .Child("games")      // Top-level "games" node
-                .Child(gameId)       // Specific game instance (e.g., "game_123")
-                .Child("moves")      // A list of moves for this game
-                .PostAsync(move);    // Post the move object
-
-            Console.WriteLine($"Move sent successfully for Game ID: {gameId}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error sending move: {ex.Message}");
-        }
     }
     public IObservable<FirebaseObject<GameState>> ListenForGameState(string gameId)
     {
-        return firebaseClient
+        return _firebaseClient!
             .Child("games")
             .Child(gameId)
             .AsObservable<GameState>();
-    }
-    public async Task InitializeGame(GameState initialState)
-    {
-        try
-        {
-            await firebaseClient
-                .Child("games")
-                .Child(initialState.GameId)
-                .PutAsync(initialState); 
-            Console.WriteLine($"Game {initialState.GameId} initialized.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error initializing game: {ex.Message}");
-        }
-    }   
+    } 
     public async Task<string> JoinGame(string gameId, string blackPlayerId)
     {
         try
         {
-            var game = await firebaseClient
+            var game = await _firebaseClient!
                 .Child("games")
                 .Child(gameId)
                 .Child(gameId)
@@ -76,13 +37,13 @@ public class FirebaseService : IGameService
             {
                 game.BlackPlayerId = blackPlayerId;
                 game.Status = "playing";
-                await firebaseClient
+                await _firebaseClient!
                     .Child("games")
                     .Child(gameId)
                     .Child(gameId)
                     .PutAsync(game);
                 game.Status = "Playing";
-                await firebaseClient
+                await _firebaseClient!
                     .Child("games")
                     .Child(gameId)
                     .Child(gameId)
@@ -101,7 +62,6 @@ public class FirebaseService : IGameService
     }
     public async Task<string> CreateGame(string whitePlayerId)
     {
-        // Generate a short, unique game ID (e.g., first 8 characters of a GUID)
         var gameId = Guid.NewGuid().ToString("N")[..8];
 
         var newGame = new GameState
@@ -191,7 +151,7 @@ public class FirebaseService : IGameService
         try
         {
            
-            await firebaseClient
+            await _firebaseClient!
                 .Child("games")
                 .Child(gameId)
                 .Child(gameId)
@@ -206,27 +166,11 @@ public class FirebaseService : IGameService
             throw; 
         }
     }
-    public async Task UpdateGameState(GameState state)
-    {
-        try
-        {
-            await firebaseClient
-                .Child("games")
-                .Child(state.GameId)
-                .PutAsync(state); 
-            Console.WriteLine($"Game {state.GameId} state updated.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error updating game state {state.GameId}: {ex.Message}");
-            throw; 
-        }
-    }
     public async Task<string> FindGame(string playerId)
     {
-        foreach (var game in await firebaseClient.Child("games").OnceAsync<GameState>())
+        foreach (var game in await _firebaseClient!.Child("games").OnceAsync<GameState>())
         {
-            var gameState = await firebaseClient
+            var gameState = await _firebaseClient!
                 .Child("games")
                 .Child(game.Key)
                 .Child(game.Key)
@@ -235,11 +179,7 @@ public class FirebaseService : IGameService
             {
                 return await JoinGame(gameState.GameId, playerId);
             }
-            else if(gameState.BlackPlayerId == null)
-            {
-                return await JoinGame(gameState.GameId, playerId);
-            }
-            else if(gameState.BlackPlayerId == playerId)
+            else if(gameState.BlackPlayerId == null || gameState.BlackPlayerId == playerId)
             {
                 return await JoinGame(gameState.GameId, playerId);
             }
@@ -248,7 +188,7 @@ public class FirebaseService : IGameService
     }
     public async Task<GameState?> GetGameState(string gameId)
     {
-            var gameState = await firebaseClient
+            var gameState = await _firebaseClient!
                 .Child("games")
                 .Child(gameId)
                 .Child(gameId)
@@ -268,9 +208,9 @@ public class FirebaseService : IGameService
         gameState?.Board[squareFrom] = "";
 
         gameState?.squareFrom = squareFrom;
-            gameState?.squareTo = squareTo;
+        gameState?.squareTo = squareTo;
         gameState.CanBeChanged = true;
-            await firebaseClient
+            await _firebaseClient!
                 .Child("games")
                 .Child(gameState?.GameId)
                 .Child(gameState?.GameId)
@@ -285,7 +225,7 @@ public class FirebaseService : IGameService
             WhitePlayerId = currentLocalGameState.WhitePlayerId,
             BlackPlayerId = currentLocalGameState.BlackPlayerId,
             CurrentTurnPlayerId = currentLocalGameState.CurrentTurnPlayerId,
-            Status = currentLocalGameState.Status, // We will update this below
+            Status = currentLocalGameState.Status, 
             squareFrom = currentLocalGameState.squareFrom,
             squareTo = currentLocalGameState.squareTo,
             IsWhiteTurn = currentLocalGameState.IsWhiteTurn,
@@ -307,63 +247,56 @@ public class FirebaseService : IGameService
 
             currentLocalGameState.Status = "white wins";
         }
-        //save game to firebase
-        await firebaseClient
+        
+        await _firebaseClient!
             .Child("games")
             .Child(gameId)
             .Child(gameId)
             .PutAsync(currentLocalGameState);
-        currentLocalGameState.UnImportant = !currentLocalGameState.UnImportant;
-        await firebaseClient
-            .Child("games")
-            .Child(gameId)
-            .Child(gameId)
-            .PutAsync(currentLocalGameState);
-        await firebaseClient
+        await _firebaseClient!
             .Child("games")
             .Child(gameId)
             .Child(gameId)
             .DeleteAsync();
         //save game as victory for victorious player
-        await firebaseClient
+        await _firebaseClient!
              .Child("UserGames")
              .Child(newGameState.WinningPlayerId)
              .Child(newGameState.GameId)
              .PutAsync(newGameState);
         newGameState.Status = "defeat";
         //save game as loss for defeated player
-        await firebaseClient
+        await _firebaseClient!
             .Child("UserGames")
              .Child(newGameState.LosingPlayerId)
              .Child(newGameState.GameId)
              .PutAsync(newGameState);
        
     }
-
     public async Task SendTime(GameState currentLocalGameState, string time, string kingType)
     {
         Console.WriteLine("send time");
             if (kingType == "whiteking.png")
             {
-                var asd = new Dictionary<string, string>();
-                asd.Add("WhiteTime", time);
+                var timeDictionary = new Dictionary<string, string>();
+            timeDictionary.Add("WhiteTime", time);
                 currentLocalGameState.WhiteTime = time;
-                await firebaseClient
+                await _firebaseClient!
                    .Child("games")
                    .Child(currentLocalGameState.GameId)
                    .Child(currentLocalGameState.GameId)
-                   .PatchAsync(asd);
+                   .PatchAsync(timeDictionary);
         }
             else
             {
                 currentLocalGameState.BlackTime = time;
-                var asd = new Dictionary<string, string>();
-                asd.Add("BlackTime", time);
-                await firebaseClient
+                var timeDictionary = new Dictionary<string, string>();
+            timeDictionary.Add("BlackTime", time);
+                await _firebaseClient!
                   .Child("games")
                   .Child(currentLocalGameState.GameId)
                   .Child(currentLocalGameState.GameId)
-                  .PatchAsync(asd);
+                  .PatchAsync(timeDictionary);
         }
     }
 }

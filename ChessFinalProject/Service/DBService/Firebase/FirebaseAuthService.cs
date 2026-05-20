@@ -89,20 +89,7 @@ namespace ChessFinalProject.Service.DBService.Firebase
 				}
 
 				_logger.LogDebug($"CreateUserAuth failed: {ex.Message}");
-				throw new Exception(errorMessage);
-
-				//// Exception reason
-				//AuthErrorReason reason = ex.Reason;
-
-				//string errorMessage = reason switch
-				//{
-				//	AuthErrorReason.InvalidEmailAddress => "Error: Incorrect email adress", // "כתובת האימייל לא תקינה",
-				//	AuthErrorReason.WrongPassword => "Error: Incorrect password", // "סיסמה שגויה",					
-				//	AuthErrorReason.EmailExists => "Error: This email allready exist", //"האימייל כבר רשום במערכת",
-				//	_ => "Error: Unknown exception" // "אירעה שגיאה לא ידועה"
-				//};
-
-				//_appLogger.LogDebug($"Firebase Auth creation failed: {errorMessage}");				
+				throw new Exception(errorMessage);				
 			}
 			catch (Exception ex)
 			{
@@ -139,10 +126,6 @@ namespace ChessFinalProject.Service.DBService.Firebase
                 return _authClient.User.Uid; // Or _authClient.User.Info.Uid;
             }
             return null; // No user is currently signed in
-        }
-        public bool IsUserSignedIn()
-        {
-            return _authClient?.User != null;
         }
 	}
 }
