@@ -103,7 +103,7 @@ namespace ChessFinalProject.Helper
                             return true;
                         }
                         else if (rowFrom - rowTo == -1 && colFrom[0] - colTo[0] == -1)
-                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board, true))
+                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board))
                                 return true;
                         return false;
                     }
@@ -118,7 +118,7 @@ namespace ChessFinalProject.Helper
                             return true;
                         }
                         else if (rowFrom - rowTo == -1 && Math.Abs(colFrom[0] - colTo[0]) == 1)
-                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board, true))
+                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board))
                                 return true;
                         return false;
                     }
@@ -135,7 +135,7 @@ namespace ChessFinalProject.Helper
                             return true;
                         }
                         else if (rowFrom - rowTo == 1 && colFrom[0] - colTo[0] == 1)
-                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board, true))
+                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board))
                                 return true;
                         return false;
                     }
@@ -150,7 +150,7 @@ namespace ChessFinalProject.Helper
                             return true;
                         }
                         else if (rowFrom - rowTo == 1 && Math.Abs(colFrom[0] - colTo[0]) == 1)
-                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board, true))
+                            if (IsObstructedPawn(rowFrom, colFrom, rowTo, colTo, Board))
                                 return true;
                         return false;
                     }
@@ -167,15 +167,10 @@ namespace ChessFinalProject.Helper
         }
         internal static bool StillInCheck(Dictionary<string, string> board, string king)
         {
-            string kingLocation = null;
+            var kingLocation = board.FirstOrDefault(x => x.Value.Contains(king)).Key;
             foreach(var square in board)
             {
-                if (square.Value.Contains(king))
-                    kingLocation = square.Key;
-            }
-            foreach(var square in board)
-            {
-                if (square.Value != null && square.Value != "" && square.Value.Substring(0, 2) != king.Substring(0, 2))
+                if (!string.IsNullOrEmpty(square.Value) && square.Value.Substring(0, 2) != king.Substring(0, 2))
                 {
                     if (IsMoveLegal(square.Value.Replace(".png", ""), square.Key, kingLocation, board))
                         return true;
@@ -189,139 +184,72 @@ namespace ChessFinalProject.Helper
             int rowDiff = Math.Abs(rowFrom - rowTo);
             return colDiff == rowDiff && colDiff != 0;
         }
-        private static bool IsObstructedPawn(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board, bool IsPieceBeingTaken)
-        {
-            if (board.GetValueOrDefault(colTo + rowTo.ToString()) != null && board.GetValueOrDefault(colTo + rowTo.ToString()) != "")
-                return true;
-            return false;
-        }
         private static bool IsObstructedPawn(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
         { 
-                if (board.GetValueOrDefault(colTo + rowTo.ToString()) != null && board.GetValueOrDefault(colTo + rowTo.ToString()) != "")
-                    return true;
-                return false;
+                if (string.IsNullOrEmpty(board.GetValueOrDefault(colTo + rowTo.ToString())))
+                    return false;
+                return true;
  
         }
         private static bool IsObstructedBishop(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
         {
-            if (colArr.IndexOf(colFrom) > colArr.IndexOf(colTo) && rowFrom > rowTo)
+            int colFromIdx = colArr.IndexOf(colFrom);
+            int colToIdx = colArr.IndexOf(colTo);
+
+            int rowStep = rowTo > rowFrom ? 1 : -1;
+            int colStep = colToIdx > colFromIdx ? 1 : -1;
+
+            int row = rowFrom + rowStep;
+            int col = colFromIdx + colStep;
+
+            while (row != rowTo && col != colToIdx)
             {
-                for (int i = rowFrom - 1; i > rowTo; i--)
-                {
-                    for(int j = colArr.IndexOf(colFrom) - 1; j > colArr.IndexOf(colTo); j--)
-                    {
-                        string compare = board.GetValueOrDefault(colArr[j] + i.ToString());
-                        i -= 1;
-                        if (compare != null && compare != "")
-                            return true;
-                    }
-                }
-            }
-            else if (colArr.IndexOf(colFrom) > colArr.IndexOf(colTo) && rowFrom < rowTo)
-            {
-                for (int i = rowFrom + 1; i < rowTo; i++)
-                {
-                    for (int j = colArr.IndexOf(colFrom) - 1; j > colArr.IndexOf(colTo); j--)
-                    {
-                        string compare = board.GetValueOrDefault(colArr[j] + i.ToString());
-                        i += 1;
-                        if (compare != null && compare != "")
-                            return true;
-                    }
-                }
+                string square = board.GetValueOrDefault(colArr[col] + row.ToString());
+                if (!string.IsNullOrEmpty(square))
+                    return true;
+
+                row += rowStep;
+                col += colStep;
             }
 
-            else if (colArr.IndexOf(colFrom) < colArr.IndexOf(colTo) && rowFrom > rowTo)
-            {
-                for (int i = rowFrom - 1; i > rowTo; i--)
-                {
-                    for (int j = colArr.IndexOf(colFrom) + 1; j < colArr.IndexOf(colTo); j++)
-                    {
-                        string compare = board.GetValueOrDefault(colArr[j] + i.ToString());
-                        i -= 1;
-                        if (compare != null && compare != "")
-                            return true;
-                    }
-                }
-            }
-            else if (colArr.IndexOf(colFrom) < colArr.IndexOf(colTo) && rowFrom < rowTo)
-            {
-                for (int i = rowFrom + 1; i < rowTo; i++)
-                {
-                    for (int j = colArr.IndexOf(colFrom) + 1; j < colArr.IndexOf(colTo); j++)
-                    {
-                        string compare = board.GetValueOrDefault(colArr[j] + i.ToString());
-                        i += 1;
-                        if (compare != null && compare != "")
-                            return true;
-                    }
-                }
-            }
             return false;
         }
         private static bool IsObstructedRook(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board)
-        {            
-            string compare;
+        {
+            int colFromIdx = colArr.IndexOf(colFrom);
+            int colToIdx = colArr.IndexOf(colTo);
+
             if (rowFrom == rowTo)
             {
-                if (colArr.IndexOf(colFrom) < colArr.IndexOf(colTo))
+                int step = colToIdx > colFromIdx ? 1 : -1;
+                int i = colFromIdx + step;
+                while (i != colToIdx)
                 {
-
-                    for (int i = colArr.IndexOf(colFrom) + 1; i < colArr.IndexOf(colTo); i++)
-                    {
-                        compare = board.GetValueOrDefault(colArr[i] + rowFrom.ToString());
-                        if (compare != null && compare != "")
-                            return true;
-
-                    }
-                }
-                else
-                {
-                    for (int i = colArr.IndexOf(colFrom) - 1; i > colArr.IndexOf(colTo); i--)
-                    {
-                        compare = board.GetValueOrDefault(colArr[i] + rowFrom.ToString());
-                        if (compare != null && compare != "")
-                            return true;
-
-                    }
+                    if (!string.IsNullOrEmpty(board.GetValueOrDefault(colArr[i] + rowFrom.ToString())))
+                        return true;
+                    i += step;
                 }
             }
             else
             {
-                if (rowFrom < rowTo)
+                int step = rowTo > rowFrom ? 1 : -1;
+                int i = rowFrom + step;
+                while (i != rowTo)
                 {
-
-                    for (int i = rowFrom + 1; i < rowTo; i++)
-                    {
-                        compare = board.GetValueOrDefault(colFrom + i.ToString());
-                        if (compare != null && compare != "")
-                            return true;
-
-                    }
-                }
-                else
-                {
-                    for (int i = rowFrom - 1; i > rowTo; i--)
-                    {
-                        compare = board.GetValueOrDefault(colFrom + i.ToString());
-                        if (compare != null && compare != "")
-                            return true;
-
-                    }
+                    if (!string.IsNullOrEmpty(board.GetValueOrDefault(colFrom + i.ToString())))
+                        return true;
+                    i += step;
                 }
             }
-           
+
             return false;
         }
         internal static bool IsCheckmate(Dictionary<string, string> board, string king)
         {
-            // Can't be checkmate if not currently in check
             if (!StillInCheck(board, king))
                 return false;
+            string kingPrefix = king.Substring(0, 2); 
 
-            string kingPrefix = king.Substring(0, 2); // "wh" or "bl"
-
-            // Try every friendly piece
             foreach (var square in board)
             {
                 if (square.Value == null || square.Value == "")
@@ -333,7 +261,6 @@ namespace ChessFinalProject.Helper
                 string pieceType = square.Value.Replace(".png", "");
                 string fromSquare = square.Key;
 
-                // Try every square on the board as a destination
                 foreach (var col in colArr)
                 {
                     for (int row = 1; row <= 8; row++)
@@ -342,22 +269,15 @@ namespace ChessFinalProject.Helper
 
                         if (!IsMoveLegal(pieceType, fromSquare, toSquare, board))
                             continue;
-
-                        // Simulate the move on a copy of the board
                         var simulatedBoard = new Dictionary<string, string>(board);
                         simulatedBoard[toSquare] = simulatedBoard[fromSquare];
                         simulatedBoard[fromSquare] = "";
-
-                        // If any move gets us out of check, it's not checkmate
                         if (!StillInCheck(simulatedBoard, king))
                             return false;
                     }
                 }
             }
-
-            // No move could escape check — checkmate
             return true;
         }
     }
-
 }

@@ -22,19 +22,14 @@ namespace ChessFinalProject.ViewModels
 		#region Fields
 		[ObservableProperty]
 		private string _firstName;
-
 		[ObservableProperty]
 		private string _lastName;
-
 		[ObservableProperty]
 		private string _userEmail;
-
 		[ObservableProperty]
 		private string _userMobile;
-
 		[ObservableProperty]
-		private AppUser _recievedUser; // Used to receive user details from the UsersListPage
-
+		private AppUser _recievedUser; 
 		[ObservableProperty]
 		private bool _isDeleteButtonVisible;
 
@@ -48,36 +43,15 @@ namespace ChessFinalProject.ViewModels
 		private string _errorMessage;
 
 		[ObservableProperty]
-		private bool _isBusy;
-
-		[ObservableProperty]
-		private string _userImageBase64; // Base64 string for the user image	
-
-		[ObservableProperty]
-		private ImageSource _userImageSource;
+		private bool _isBusy;	
 		#endregion
-
-		//public ImageSource UserImageSource => ImageSource.FromStream(() =>
-		//{
-		//	byte[] bytes = Convert.FromBase64String(UserImageBase64);
-		//	return new MemoryStream(bytes);
-		//});
-
 
 		public AccountViewModel(IAppUserRepository dbService, IAlertService alertService) 
 		{	
 			_alertService = alertService;
 			_dbService = dbService;
 			DeleteIcon = FontHelper.DELETE_USER_ICON;
-			IsDeleteButtonVisible = false; // Initially hide the delete button	
-			if(!string.IsNullOrEmpty(UserImageBase64))
-			{
-				_userImageSource = ImageSource.FromStream(() =>
-				{
-					byte[] bytes = Convert.FromBase64String(UserImageBase64);
-					return new MemoryStream(bytes);
-				});
-			}		
+			IsDeleteButtonVisible = false; // Initially hide the delete button		
 		}
 
 		[RelayCommand]
@@ -118,9 +92,7 @@ namespace ChessFinalProject.ViewModels
 				await _alertService.ShowAlertAsync("Error", ErrorMessage, "OK");
 				return;
 			}
-
 			AppUser? user = null;
-
 			// If RecievedUser is not null (Came from Admin), use it; otherwise, use the current user
 			if (RecievedUser != null)
 			{
@@ -154,7 +126,7 @@ namespace ChessFinalProject.ViewModels
 		{
 			RecievedUser = query.ContainsKey("selectedUser") ? (AppUser)query["selectedUser"] : null;
 
-			if (RecievedUser != null) // Load the user from UsersListPage
+			if (RecievedUser != null) 
 			{				
 				LoadUserDetails(RecievedUser);
 				IsDeleteButtonVisible = RecievedUser.Id != (App.Current as App)!.CurrentUser!.Id; // Show delete button if not current user

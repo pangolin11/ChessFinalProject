@@ -175,6 +175,15 @@ public class FirebaseService : FirebaseRealtimeService,IGameService
                 .Child(game.Key)
                 .Child(game.Key)
                 .OnceSingleAsync<GameState>();
+            if (gameState.Status == null)
+            {
+                await _firebaseClient!
+                   .Child("games")
+                   .Child(game.Key)
+                   .Child(game.Key)
+                   .DeleteAsync();
+                continue;
+            } 
             if (gameState.WhitePlayerId != null && gameState.WhitePlayerId == playerId)
             {
                 return await JoinGame(gameState.GameId, playerId);
