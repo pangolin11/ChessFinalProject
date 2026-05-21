@@ -229,7 +229,6 @@ public class FirebaseService : FirebaseRealtimeService,IGameService
             squareFrom = currentLocalGameState.squareFrom,
             squareTo = currentLocalGameState.squareTo,
             IsWhiteTurn = currentLocalGameState.IsWhiteTurn,
-            UnImportant = currentLocalGameState.UnImportant,
             CanBeChanged = currentLocalGameState.CanBeChanged
         };
         if (kingType == "whiteking.png")

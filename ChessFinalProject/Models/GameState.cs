@@ -18,8 +18,6 @@ namespace ChessFinalProject.Models
         public bool CanBeChanged { get; set; }
         public string WinningPlayerId { get; set; }
         public string LosingPlayerId { get; set; }
-        public bool UnImportant { get; set; } = true; //used to initiate to changes every time instead of one because onNext lags
-
         public string WhiteTime { get; set; }
         public string BlackTime { get; set; }
 

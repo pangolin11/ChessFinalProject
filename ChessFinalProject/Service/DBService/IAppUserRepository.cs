@@ -14,7 +14,6 @@ namespace ChessFinalProject.Service.DBService
 		Task DeleteAsync(AppUser appUser);
 		Task<AppUser> SignInAsync(string userEmail, string userPassword);
 		Task<AppUser> GetUserByIdAsync(string userId);
-		List<AppUser> GetAllAsync();
 		Task SetToAdmin(string userId);
 	}
 }

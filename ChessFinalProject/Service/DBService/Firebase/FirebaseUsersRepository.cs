@@ -79,10 +79,6 @@ namespace ChessFinalProject.Service.DBService.Firebase
 				throw new Exception("Delete user failed!");
 			}
 		}
-		public List<AppUser> GetAllAsync()
-		{
-			throw new NotImplementedException();
-		}
 		public async Task<AppUser> GetUserByIdAsync(string userId)
 		{
 			string errorMessage = string.Empty;
@@ -171,7 +167,7 @@ namespace ChessFinalProject.Service.DBService.Firebase
 				await _firebaseClient!
 					.Child("users")
 					.Child(userId)
-					.PatchAsync(new { IsAdmin = true }); // שולח רק את השדה הזה
+					.PatchAsync(new { IsAdmin = true }); 
 
 				_appLogger.LogDebug("User admin status updated successfully.");
 			}
@@ -181,33 +177,6 @@ namespace ChessFinalProject.Service.DBService.Firebase
 				throw new Exception("SetToAdmin failed!");
 			}
 		}
-		public async Task<List<AppUser>> GetAllUserAsync()
-		{
-			try
-			{
-				var users = await _firebaseClient!
-					.Child("users")
-					.OnceAsync<AppUser>();
-
-				//users - collection of Firebase objects => Convert to List<AppUser>
-				return users.Select(u => new AppUser()
-				{
-					Id = u.Object.Id,
-					FirstName = u.Object.FirstName,
-					LastName = u.Object.LastName,
-					UserEmail = u.Object.UserEmail,
-					UserPassword = u.Object.UserPassword,
-					RegDate = u.Object.RegDate,
-					UBDate = u.Object.UBDate,
-					IsAdmin = u.Object.IsAdmin
-				}).ToList();
-			}
-			catch (FirebaseException ex)
-			{
-				_appLogger.LogDebug($"GetAllUsers failed: {ex.Message}");
-				return new List<AppUser>();
-			}
-		}
 		public IObservable<FirebaseEvent<AppUser>> SubscribeToUserChanges()
 		{
 			try
@@ -215,7 +184,6 @@ namespace ChessFinalProject.Service.DBService.Firebase
 				return _firebaseClient!
 				.Child("users")
 				.AsObservable<AppUser>();
-				//.ObserveOn(System.Reactive.Concurrency.Scheduler.Default);
 			}
 			catch (Exception ex)
 			{
