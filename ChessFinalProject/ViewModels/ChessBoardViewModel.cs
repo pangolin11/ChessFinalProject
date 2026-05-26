@@ -20,6 +20,7 @@ namespace ChessFinalProject.ViewModels
         [ObservableProperty]
         public partial string PlayerTime { get; set; }
         private string _friendlyTime;
+        private bool hasCastled = false;
         public string FriendlyTime
         {
             get => _friendlyTime;
@@ -294,16 +295,23 @@ namespace ChessFinalProject.ViewModels
                     await _gameService.SendToFirebase(selectedSquare, square, _currentLocalGameState.GameId, Side);
 
                 }
-                var copy = new Dictionary<string, string>(_currentLocalGameState.Board)
+                else
                 {
-                    [square] = PieceToMove.Image,
-                    [selectedSquare] = ""
-                }; // shallow copy
-                if (!ChessHelper.StillInCheck(copy, KingType))
-                {
+                    var copy = new Dictionary<string, string>(_currentLocalGameState.Board)
+                    {
+                        [square] = PieceToMove.Image,
+                        [selectedSquare] = ""
+                    }; // shallow copy
+                    if (!ChessHelper.StillInCheck(copy, KingType))
+                    {
+                        if (PieceType.Contains("rook") || PieceType.Contains("king"))
+                            await _gameService.SendToFirebase(selectedSquare, square, _currentLocalGameState.GameId, true);
+                        else
+                            await _gameService.SendToFirebase(selectedSquare, square, _currentLocalGameState.GameId);
 
-                    await _gameService.SendToFirebase(selectedSquare, square, _currentLocalGameState.GameId);
+                    }
                 }
+           
             }
             Board.FirstOrDefault(s => s.Name == selectedSquare)?.IsYellow = false;
             selectedSquare = null;
@@ -342,11 +350,6 @@ namespace ChessFinalProject.ViewModels
                     {
                         if (firebaseObject == null || firebaseObject.Object == null)
                             return;
-                        if (firebaseObject.Object.Status != "waiting")
-                        {
-                            _currentLocalGameState = firebaseObject.Object;
-
-                        }
                         if (firebaseObject.Object.Status.Contains("wins"))
                         {
                             _currentLocalGameState = null;
@@ -372,12 +375,38 @@ namespace ChessFinalProject.ViewModels
                         }
                         if (firebaseObject.Object.CanBeChanged)
                         {
-                            _currentLocalGameState = firebaseObject.Object;
                             string squareFrom = _currentLocalGameState.squareFrom;
                             string squareTo = _currentLocalGameState.squareTo;
-                            if (firebaseObject.Object.Status.Contains("castl"))
+                            if (firebaseObject.Object.Status.Contains("castl") && !hasCastled)
                             {
-                                if(firebaseObject.Object.Status.Contains("E1"))
+                                if (firebaseObject.Object.Status.Contains(KingType))
+                                {
+                                    if (firebaseObject.Object.Status.Contains("right"))
+                                    {
+
+                                        string rookTo = $"{(char)(squareTo[0] - 1)}{squareTo[1]}";
+                                        string rookFrom = $"H{squareTo[1]}";
+                                        MainThread.BeginInvokeOnMainThread(() =>
+                                        {
+                                            Board.FirstOrDefault(s => s.Name == rookTo).Image = Board.FirstOrDefault(s => s.Name == rookFrom).Image;
+                                            Board.FirstOrDefault(s => s.Name == rookFrom).Image = "";
+                                        });
+                                        hasCastled = true;
+
+                                    }
+                                    else
+                                    {
+                                        string rookTo = $"{(char)(squareTo[0] + 1)}{squareTo[1]}";
+                                        string rookFrom = $"A{squareTo[1]}";
+                                        MainThread.BeginInvokeOnMainThread(() =>
+                                        {
+                                            Board.FirstOrDefault(s => s.Name == rookTo)!.Image = Board.FirstOrDefault(s => s.Name == rookFrom)!.Image;
+                                            Board.FirstOrDefault(s => s.Name == rookFrom)!.Image = "";
+                                        });
+                                        hasCastled = true;
+
+                                    }
+                                }
                             }
                             MainThread.BeginInvokeOnMainThread(() =>
                             {
