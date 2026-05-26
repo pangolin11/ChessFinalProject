@@ -4,6 +4,7 @@ using Firebase.Database;
 using Firebase.Database.Query;
 using Firebase.Database.Streaming;
 using Java.Nio.Channels;
+using static Android.Graphics.ColorSpace;
 
 
 namespace ChessFinalProject.Service.DBService.Firebase;
@@ -145,7 +146,16 @@ public class FirebaseService : FirebaseRealtimeService,IGameService
     { "F1", "whitebishop.png" },
     { "G1", "whiteknight.png" },
     { "H1", "whiterook.png" }
-}
+},
+            CastlingPiecesMoved = new()
+            {
+                { "A1", false },
+                { "E1", false },
+                { "E8", false },
+                { "H8", false },
+                { "A8", false },
+                { "H1", false }
+            }
         };
 
         try
@@ -306,5 +316,49 @@ public class FirebaseService : FirebaseRealtimeService,IGameService
                   .Child(currentLocalGameState.GameId)
                   .PatchAsync(timeDictionary);
         }
+    }
+
+    public async Task SendToFirebase(string squareFrom, string squareTo, string gameid, string Side)
+    {
+
+        var gameState = await GetGameState(gameid);
+        if (gameState.IsWhiteTurn)
+            gameState.IsWhiteTurn = false;
+
+        else
+            gameState.IsWhiteTurn = true;
+        gameState?.Board[squareTo] = gameState.Board[squareFrom];
+        gameState?.Board[squareFrom] = "";
+
+        gameState?.squareFrom = squareFrom;
+        gameState?.squareTo = squareTo;
+        gameState.CanBeChanged = true;
+        gameState.Status = $"castle occured on {Side} on square {squareFrom}";
+/*        gameState.CastlingPiecesMoved[squareFrom] = true;
+        if (squareFrom == "E1" && Side == "right")
+        {
+            gameState.CastlingPiecesMoved["H1"] = true;
+        }
+        else if (squareFrom == "E1" && Side == "left")
+        {
+            gameState.CastlingPiecesMoved["A1"] = true;
+
+        }
+        else if (squareFrom == "E8" && Side == "right")
+        {
+            gameState.CastlingPiecesMoved["H8"] = true;
+
+        }
+        else if (squareFrom == "E8" && Side == "left")
+        {
+            gameState.CastlingPiecesMoved["A8"] = true;
+
+        }*/
+        await _firebaseClient!
+            .Child("games")
+            .Child(gameState?.GameId)
+            .Child(gameState?.GameId)
+            .PutAsync(gameState);
+
     }
 }

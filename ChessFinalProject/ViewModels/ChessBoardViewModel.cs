@@ -120,10 +120,13 @@ namespace ChessFinalProject.ViewModels
 
         private async void OnPlayerTimerTick(object? sender, EventArgs e)
         {
-            if (WhiteTimeDisplay.TotalSeconds > 0)
+            if (WhiteTimeDisplay.TotalSeconds > 0 )
             {
-                WhiteTimeDisplay = WhiteTimeDisplay.Subtract(TimeSpan.FromSeconds(1));
-                await _gameService.SendTime(_currentLocalGameState,WhiteTimeDisplay.ToString(), KingType);
+                if (_currentLocalGameState.Status != "waiting")
+                {
+                    WhiteTimeDisplay = WhiteTimeDisplay.Subtract(TimeSpan.FromSeconds(1));
+                    await _gameService.SendTime(_currentLocalGameState, WhiteTimeDisplay.ToString(), KingType);
+                }
             }
             else
             {
@@ -262,7 +265,7 @@ namespace ChessFinalProject.ViewModels
         {
             if (_currentLocalGameState.Status == "waiting")
                 return;
-            if (KingType == "whiteking.png" && _currentLocalGameState.Board.FirstOrDefault(x => x.Key == square).Value.Contains("black") || KingType == "blackking.png" && _currentLocalGameState.Board.FirstOrDefault(x => x.Key == square).Value.Contains("white"))
+            if (!_currentLocalGameState.Board.FirstOrDefault(x => x.Key == square).Value.Contains(KingType.Substring(0,2)))
                 if (selectedSquare == null)
                     return;
             if (KingType == "whiteking.png" && _currentLocalGameState.IsWhiteTurn == false || KingType == "blackking.png" && _currentLocalGameState.IsWhiteTurn == true)
@@ -277,14 +280,20 @@ namespace ChessFinalProject.ViewModels
                 return;
             }
             var PieceToMove = Board.FirstOrDefault(s => s.Name == selectedSquare);
-            if (PieceToMove?.Image == null || PieceToMove.Image == "" || PieceToMove == null)
+            if (PieceToMove == null || string.IsNullOrEmpty(PieceToMove.Image))
             {
                 selectedSquare = null;
                 return;
             }
             var PieceType = PieceToMove.GetPieceType();
-            if (ChessHelper.IsMoveLegal(PieceType, selectedSquare, square, _currentLocalGameState.Board))
+            if (ChessHelper.IsMoveLegal(PieceType, selectedSquare, square, _currentLocalGameState.Board, _currentLocalGameState.CastlingPiecesMoved))
             {
+                if(PieceType.Contains("king") && Math.Abs(selectedSquare[0] - square[0]) == 2)
+                {
+                    string Side = square[0] > selectedSquare[0] ? "right" : "left";
+                    await _gameService.SendToFirebase(selectedSquare, square, _currentLocalGameState.GameId, Side);
+
+                }
                 var copy = new Dictionary<string, string>(_currentLocalGameState.Board)
                 {
                     [square] = PieceToMove.Image,
@@ -366,7 +375,10 @@ namespace ChessFinalProject.ViewModels
                             _currentLocalGameState = firebaseObject.Object;
                             string squareFrom = _currentLocalGameState.squareFrom;
                             string squareTo = _currentLocalGameState.squareTo;
-
+                            if (firebaseObject.Object.Status.Contains("castl"))
+                            {
+                                if(firebaseObject.Object.Status.Contains("E1"))
+                            }
                             MainThread.BeginInvokeOnMainThread(() =>
                             {
                                 Board.FirstOrDefault(s => s.Name == squareTo)?.Image = _currentLocalGameState.Board[squareTo];

@@ -1,4 +1,6 @@
 ﻿
+using ChessFinalProject.Models;
+using ChessFinalProject.Service.DBService.Firebase;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +10,7 @@ namespace ChessFinalProject.Helper
     public static class ChessHelper
     {
         private static readonly List<string> colArr = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H" };
-        internal static bool IsMoveLegal(string pieceType, string selectedSquare, string square, Dictionary<string, string> Board)
+        internal static bool IsMoveLegal(string pieceType, string selectedSquare, string square, Dictionary<string, string> Board, Dictionary<string, bool> castlingPiecesMoved)
         {
             var PieceOnSquare = Board.GetValueOrDefault(square);
             if (selectedSquare == square || PieceOnSquare != null && PieceOnSquare != "" && pieceType.Substring(0,2) == PieceOnSquare.Substring(0,2))
@@ -17,10 +19,10 @@ namespace ChessFinalProject.Helper
             string colFrom = selectedSquare.Substring(0, 1);
             int rowTo = int.Parse(square.Substring(1, 1));
             string colTo = square.Substring(0, 1);
-            bool Legal = CheckLegality(pieceType, rowFrom, colFrom, rowTo, colTo, Board);
+            bool Legal = CheckLegality(pieceType, rowFrom, colFrom, rowTo, colTo, Board, castlingPiecesMoved);
             return Legal;
         }
-        private static bool CheckLegality(string pieceType, int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> Board)
+        private static bool CheckLegality(string pieceType, int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> Board, Dictionary<string, bool> castlingPiecesMoved)
         {
             switch (pieceType)
             {
@@ -157,14 +159,85 @@ namespace ChessFinalProject.Helper
                 case "whiteking":
                     if (Math.Abs(rowFrom - rowTo) < 2 && Math.Abs(colFrom[0] - colTo[0]) < 2)
                         return true;
+                    else if (Math.Abs(rowFrom - rowTo) == 0 && Math.Abs(colFrom[0] - colTo[0]) == 2 && castlingPiecesMoved != null)
+                        return CanCastle(rowFrom, colFrom, rowTo, colTo, Board, castlingPiecesMoved, pieceType);
                     return false;
                 case "blackking":
                     if (Math.Abs(rowFrom - rowTo) < 2 && Math.Abs(colFrom[0] - colTo[0]) < 2)
                         return true;
+                    else if (Math.Abs(rowFrom - rowTo) == 0 && Math.Abs(colFrom[0] - colTo[0]) == 2 && castlingPiecesMoved != null)
+                        return CanCastle(rowFrom, colFrom, rowTo, colTo, Board, castlingPiecesMoved, pieceType);
                     return false;
             }
             return false;
         }
+
+        private static bool CanCastle(int rowFrom, string colFrom, int rowTo, string colTo, Dictionary<string, string> board, Dictionary<string, bool> castlingPiecesMoved, string pieceType)
+        {
+            if(StillInCheck(board, pieceType))
+                return false;
+            bool isMovingRight = colFrom[0] < colTo[0];
+            if (pieceType == "whiteking")
+            {
+                if (isMovingRight && !castlingPiecesMoved["E1"] && !castlingPiecesMoved["H1"] && string.IsNullOrEmpty(board["F1"]) && string.IsNullOrEmpty(board["G1"]))
+                {
+                    var simulatedBoard = new Dictionary<string, string>(board);
+                    simulatedBoard["E1"] = "";
+                    simulatedBoard["F1"] = "whiteking.png";
+                    if (StillInCheck(simulatedBoard, pieceType, "F1"))
+                        return false;
+                    simulatedBoard["F1"] = "";
+                    simulatedBoard["G1"] = "whiteking.png";
+                    if (StillInCheck(simulatedBoard, pieceType, "G1"))
+                        return false;
+                    return true;
+                }
+                else if (!isMovingRight && !castlingPiecesMoved["E1"] && !castlingPiecesMoved["A1"] && string.IsNullOrEmpty(board["B1"]) && string.IsNullOrEmpty(board["C1"]) && string.IsNullOrEmpty(board["D1"]))
+                {
+                    var simulatedBoard = new Dictionary<string, string>(board);
+                    simulatedBoard["E1"] = "";
+                    simulatedBoard["D1"] = "whiteking.png";
+                    if (StillInCheck(simulatedBoard, pieceType, "D1"))
+                        return false;
+                    simulatedBoard["D1"] = "";
+                    simulatedBoard["C1"] = "whiteking.png";
+                    if (StillInCheck(simulatedBoard, pieceType, "C1"))
+                        return false;
+                    return true;
+                }
+            }
+            else
+            {
+                if (isMovingRight && !castlingPiecesMoved["E8"] && !castlingPiecesMoved["H8"] && string.IsNullOrEmpty(board["F8"]) && string.IsNullOrEmpty(board["G8"]))
+                {
+                    var simulatedBoard = new Dictionary<string, string>(board);
+                    simulatedBoard["E8"] = "";
+                    simulatedBoard["F8"] = "blackking.png";
+                    if (StillInCheck(simulatedBoard, pieceType, "F8"))
+                        return false;
+                    simulatedBoard["F8"] = "";
+                    simulatedBoard["G8"] = "blackking.png";
+                    if (StillInCheck(simulatedBoard, pieceType, "G8"))
+                        return false;
+                    return true;
+                }
+                else if (!isMovingRight && !castlingPiecesMoved["E8"] && !castlingPiecesMoved["A8"] && string.IsNullOrEmpty(board["B8"]) && string.IsNullOrEmpty(board["C8"]) && string.IsNullOrEmpty(board["D8"]))
+                {
+                    var simulatedBoard = new Dictionary<string, string>(board);
+                    simulatedBoard["E8"] = "";
+                    simulatedBoard["D8"] = "blackking.png";
+                    if (StillInCheck(simulatedBoard, pieceType, "D8"))
+                        return false;
+                    simulatedBoard["D8"] = "";
+                    simulatedBoard["C8"] = "blackking.png";
+                    if (StillInCheck(simulatedBoard, pieceType, "C8"))
+                        return false;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         internal static bool StillInCheck(Dictionary<string, string> board, string king)
         {
             var kingLocation = board.FirstOrDefault(x => x.Value.Contains(king)).Key;
@@ -172,7 +245,19 @@ namespace ChessFinalProject.Helper
             {
                 if (!string.IsNullOrEmpty(square.Value) && square.Value.Substring(0, 2) != king.Substring(0, 2))
                 {
-                    if (IsMoveLegal(square.Value.Replace(".png", ""), square.Key, kingLocation, board))
+                    if (IsMoveLegal(square.Value.Replace(".png", ""), square.Key, kingLocation, board, null))
+                        return true;
+                }
+            }
+            return false;
+        }
+        internal static bool StillInCheck(Dictionary<string, string> board, string king, string kingLocation)
+        {
+            foreach (var square in board)
+            {
+                if (!string.IsNullOrEmpty(square.Value) && square.Value.Substring(0, 2) != king.Substring(0, 2))
+                {
+                    if (IsMoveLegal(square.Value.Replace(".png", ""), square.Key, kingLocation, board, null))
                         return true;
                 }
             }
@@ -267,7 +352,7 @@ namespace ChessFinalProject.Helper
                     {
                         string toSquare = col + row.ToString();
 
-                        if (!IsMoveLegal(pieceType, fromSquare, toSquare, board))
+                        if (!IsMoveLegal(pieceType, fromSquare, toSquare, board, null))
                             continue;
                         var simulatedBoard = new Dictionary<string, string>(board);
                         simulatedBoard[toSquare] = simulatedBoard[fromSquare];

@@ -142,17 +142,8 @@ namespace ChessFinalProject.ViewModels
 			try
 			{
 				newUser.Id = await _dbService!.CreateAsync(newUser);
-
-				//Set as admin
-				//await (_dbService as FirebaseUsersRepository)!.SetToAdmin(newUser.Id);
-				//newUser.IsAdmin = true;
-
 				IsBusy = false;
-
-				//Set CurrentUser
 				(App.Current as App)!.CurrentUser = newUser;
-
-				// Navigate to Main Page
 				var mainPage = IPlatformApplication.Current!.Services.GetService<AppShell>();
 				Application.Current!.Windows[0].Page = mainPage;
 			}

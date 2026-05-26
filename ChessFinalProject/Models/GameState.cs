@@ -20,6 +20,8 @@ namespace ChessFinalProject.Models
         public string LosingPlayerId { get; set; }
         public string WhiteTime { get; set; }
         public string BlackTime { get; set; }
+        public Dictionary<string, bool> CastlingPiecesMoved { get; set; } = new Dictionary<string, bool>(); 
+
 
         public GameState() { }
     }

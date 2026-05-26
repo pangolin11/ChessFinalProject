@@ -22,25 +22,17 @@ namespace ChessFinalProject.ViewModels
 		private readonly IAppLogger _appLogger;
 		private readonly IAlertService _alertService;
 		private readonly IAppUserRepository _dbService;
-
 		IDisposable? _dbSubscription; // Cancel subscription to db updates when not needed
 		private List<AppUser> _allUsers = new(); //List of users to be displayed
 		public ObservableCollection<AppUser> AllUsers { get; set; }
-
 		[ObservableProperty]
 		private AppUser? _selectedUser;
-
 		[ObservableProperty]
 		private bool _isBusy;
-
 		[ObservableProperty]
 		private string _filterIcon;
-
 		[ObservableProperty]
 		private string _searchText;
-
-		//public Command? GetAllUsersCommand { get { return new Command(GetUsersListFromDB); } }
-
 		public UsersListViewModel(IAlertService alertService, IAppUserRepository dbService, IAppLogger appLogger)
 		{
 			_appLogger = appLogger;
@@ -49,22 +41,13 @@ namespace ChessFinalProject.ViewModels
 			FilterIcon = FontHelper.FILTER_ON_ICON;
 			AllUsers = new ObservableCollection<AppUser>();
 		}
-
-		///////////////////////////////////////////////////////////////////
-
 		[RelayCommand]
 		private async Task NavigateToAccountPage()
 		{
-			if (SelectedUser != null)
-			{
 				Dictionary<string, object> param = new Dictionary<string, object>();
-				param.Add("selectedUser", SelectedUser);
+				param.Add("selectedUser", SelectedUser!);
 				await Shell.Current.GoToAsync("AccountView", param);
-			}
-			else
-			{
-				// Handle the case where user is null, if necessary
-			}
+			
 		}
 
 		private async Task SubscribeToDbUpdates()
@@ -91,7 +74,6 @@ namespace ChessFinalProject.ViewModels
 				},
 				ex => _appLogger.LogDebug($"Error: {ex.Message}"));
 		}
-
 		private void FillUsersList()
 		{
 			AllUsers.Clear(); // Clear the existing collection
@@ -100,38 +82,33 @@ namespace ChessFinalProject.ViewModels
 				AllUsers.Add(user); // Add each user to the ObservableCollection
 			}			
 		}
-
 		private void AddOrUpdateUser(AppUser item)
 		{
 			//Check if user already exists in the list
 			var index = _allUsers.FindIndex(u => u.Id == item.Id);
 
-			if (index != -1) // המשתמש קיים - נחליף אותו במיקום שלו
+			if (index != -1) //user exists
 			{
 				_allUsers[index] = item;
 			}
-			else // משתמש חדש - נוסיף לרשימה
+			else //new user
 			{
 				_allUsers.Add(item);
 			}
 		}
-
 		private void RemoveUser(string userId)
 		{
-			//bool confirm = await Shell.Current.DisplayAlert("Firebase App", "Remove User?", "Yes","No");
 			var item = _allUsers.Where(u => u.Id == userId).FirstOrDefault();
 			if (item != null)
 			{
 				_allUsers.Remove(item);
 			}
-		}
-		
+		}	
 		private void CancelDbSubscription()
 		{
 			_dbSubscription?.Dispose();
 			_dbSubscription = null;
 		}
-
 		internal async void OnAppearing()
 		{
 			//Clear existing users list before subscribing to db updates
@@ -139,7 +116,6 @@ namespace ChessFinalProject.ViewModels
 			await SubscribeToDbUpdates(); //Subscribe to db updates			
 			SelectedUser = null!;
 		}
-
 		internal void OnDisappearing()
 		{
 			CancelDbSubscription();

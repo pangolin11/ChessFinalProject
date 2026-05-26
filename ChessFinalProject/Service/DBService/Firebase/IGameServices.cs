@@ -15,5 +15,6 @@ namespace ChessFinalProject.Service.DBService.Firebase
         IObservable<FirebaseObject<GameState>> ListenForGameState(string gameId);
         Task SendTime(GameState currentLocalGameState, string v, string kingType);
         Task SendToFirebase(string squareFrom, string squareTo, string gameid);
+        Task SendToFirebase(string selectedSquare, string square, string gameId, string isRightSide);
     }
 }
