@@ -356,32 +356,13 @@ public class FirebaseService : FirebaseRealtimeService,IGameService
 
         gameState.CastlingPiecesMoved[squareFrom] = true;
         if (squareFrom == "E1" && Side == "right")
-        {
             gameState.CastlingPiecesMoved["H1"] = true;
-            gameState.Board["H1"] = "";
-            gameState.Board["F1"] = "whiterook.png";
-        }
         else if (squareFrom == "E1" && Side == "left")
-        {
             gameState.CastlingPiecesMoved["A1"] = true;
-            gameState.Board["A1"] = "";
-            gameState.Board["D1"] = "whiterook.png";
-
-        }
         else if (squareFrom == "E8" && Side == "right")
-        {
             gameState.CastlingPiecesMoved["H8"] = true;
-            gameState.Board["H8"] = "";
-            gameState.Board["F8"] = "blackrook.png";
-
-        }
         else if (squareFrom == "E8" && Side == "left")
-        {
             gameState.CastlingPiecesMoved["A8"] = true;
-            gameState.Board["A8"] = "";
-            gameState.Board["D8"] = "blackrook.png";
-
-        }
         await _firebaseClient!
             .Child("games")
             .Child(gameState?.GameId)

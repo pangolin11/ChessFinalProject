@@ -91,7 +91,7 @@ namespace ChessFinalProject.ViewModels
             /*InitializeGameListener(_currentLocalGameState.GameId);       */
             _authService = authService;
             _gameService = gameService;
-            WhiteTimeDisplay = TimeSpan.FromSeconds(2000);
+            WhiteTimeDisplay = TimeSpan.FromMinutes(10);
             _playerTimer = Application.Current.Dispatcher.CreateTimer();
             _playerTimer.Interval = TimeSpan.FromSeconds(1); // Update every second
             _playerTimer.Tick += OnPlayerTimerTick;
@@ -293,7 +293,6 @@ namespace ChessFinalProject.ViewModels
                 {
                     string Side = square[0] > selectedSquare[0] ? "right" : "left";
                     await _gameService.SendToFirebase(selectedSquare, square, _currentLocalGameState.GameId, Side);
-
                 }
                 else
                 {
@@ -348,7 +347,7 @@ namespace ChessFinalProject.ViewModels
                 .Subscribe(
                     onNext: async firebaseObject =>
                     {
-                        if (firebaseObject == null || firebaseObject.Object == null)
+                        if (firebaseObject == null || firebaseObject.Object == null || firebaseObject.Object.Status == null)
                             return;
                         if (firebaseObject.Object.Status.Contains("wins"))
                         {
@@ -392,6 +391,7 @@ namespace ChessFinalProject.ViewModels
                                             Board.FirstOrDefault(s => s.Name == rookFrom).Image = "";
                                         });
                                         hasCastled = true;
+                                        await _gameService.SendToFirebase(rookFrom, rookTo, _currentLocalGameState.GameId);
 
                                     }
                                     else
@@ -404,7 +404,7 @@ namespace ChessFinalProject.ViewModels
                                             Board.FirstOrDefault(s => s.Name == rookFrom)!.Image = "";
                                         });
                                         hasCastled = true;
-
+                                        await _gameService.SendToFirebase(rookFrom, rookTo, _currentLocalGameState.GameId);
                                     }
                                 }
                             }
