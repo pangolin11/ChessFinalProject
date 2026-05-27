@@ -245,6 +245,15 @@ public class FirebaseService : FirebaseRealtimeService,IGameService
     }
     public async Task EndGame(GameState currentLocalGameState, string gameId, string kingType)
     {
+        if (currentLocalGameState.BlackPlayerId == null)
+        {
+            await _firebaseClient!
+            .Child("games")
+            .Child(gameId)
+            .Child(gameId)
+            .DeleteAsync();
+            return;
+        }
         var newGameState = new GameState
         {
             GameId = currentLocalGameState.GameId,
