@@ -338,11 +338,12 @@ public class FirebaseService : FirebaseRealtimeService,IGameService
     {
 
         var gameState = await GetGameState(gameid);
-        if (gameState.IsWhiteTurn)
+        //removed because after castling player will always make another send to firebase to move the rook which would grant them an extra turn
+        /*if (gameState.IsWhiteTurn)
             gameState.IsWhiteTurn = false;
 
         else
-            gameState.IsWhiteTurn = true;
+            gameState.IsWhiteTurn = true;*/
         gameState?.Board[squareTo] = gameState.Board[squareFrom];
         gameState?.Board[squareFrom] = "";
 

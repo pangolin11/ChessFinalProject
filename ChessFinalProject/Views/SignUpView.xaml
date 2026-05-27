@@ -8,17 +8,14 @@
     NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Background>
-        <!--  Man Of Steel  -->
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
             <GradientStop Offset="0.0" Color="#780206" />
-            <!--<GradientStop Offset="0.5" Color="#12D8FA"/>-->
             <GradientStop Offset="1.0" Color="#061161" />
         </LinearGradientBrush>
     </ContentPage.Background>
     <Grid>
         <Grid ColumnDefinitions="*,8*,*" RowDefinitions="0.6*,4*,*">
 
-            <!--  כותרת  -->
             <HorizontalStackLayout
                 Grid.Column="1"
                 HorizontalOptions="Center"
@@ -31,7 +28,6 @@
 
             <VerticalStackLayout Grid.Row="1" Grid.Column="1">
 
-                <!--  שדה שם פרטי  -->
                 <Border
                     Margin="0,0,0,10"
                     Padding="10"
@@ -47,7 +43,6 @@
 
                 </Border>
 
-                <!--  שדה שם משפחה  -->
                 <Border
                     Margin="0,0,0,10"
                     Padding="10"
@@ -61,8 +56,7 @@
                         Text="{Binding LName}"
                         TextColor="Wheat" />
                 </Border>
-
-                <!--  שדה דואל  -->
+                
                 <Border
                     Margin="0,0,0,10"
                     Padding="10"
@@ -79,7 +73,6 @@
 
                 </Border>
 
-                <!--  שדה סיסמה  -->
                 <Border
                     Margin="0,0,0,10"
                     Stroke="#ccc"
@@ -113,7 +106,6 @@
                     </Grid>
                 </Border>
 
-                <!--  שדה מספר נייד  -->
                 <Border
                     Margin="0,0,0,10"
                     Padding="10"
@@ -129,7 +121,6 @@
                         TextColor="Wheat" />
                 </Border>
 
-                <!--  כפתור כניסה  -->
                 <Button
                     Command="{Binding SignUpCommand}"
                     CornerRadius="8"
@@ -138,14 +129,13 @@
                     Text="Sign Up"
                     TextColor="White" />
 
-                <!--  Already have an account?  -->
                 <HorizontalStackLayout
                     Margin="0,10,0,0"
                     HorizontalOptions="Center"
                     VerticalOptions="Center">
 
                     <Label
-                        Margin="14,0,0,0"
+                        Margin="-5,0,0,0"
                         FontSize="16"
                         Text="Already have an account?"
                         TextColor="White"
@@ -160,7 +150,6 @@
 
                 </HorizontalStackLayout>
 
-                <!--  Error Message  -->
                 <Label
                     Margin="0,10,0,0"
                     FontSize="16"
@@ -172,7 +161,6 @@
             </VerticalStackLayout>
         </Grid>
 
-        <!--  מסך טעינה  -->
         <Grid
             HorizontalOptions="Fill"
             IsVisible="{Binding IsBusy}"

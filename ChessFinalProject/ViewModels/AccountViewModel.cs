@@ -53,7 +53,6 @@ namespace ChessFinalProject.ViewModels
 			DeleteIcon = FontHelper.DELETE_USER_ICON;
 			IsDeleteButtonVisible = false; // Initially hide the delete button		
 		}
-
 		[RelayCommand]
 		private async Task Delete()
 		{
@@ -80,11 +79,9 @@ namespace ChessFinalProject.ViewModels
 				}
 			}
 		}
-
 		[RelayCommand]
 		private async Task Update()
 		{
-			//await Toast.Make($"Error deleting user in DB: {ex.Message}", ToastDuration.Short, 14).Show();
 			ErrorMessageIsVisible = false;
 			if (!Validate())
 			{
@@ -112,8 +109,8 @@ namespace ChessFinalProject.ViewModels
 
 				await _dbService.UpdateAsync(user);
 				IsBusy = false;
-
-				await _alertService.ShowAlertAsync("Success", "User details updated successfully!", "OK");
+				(App.Current as App)!.CurrentUser = user;
+                await _alertService.ShowAlertAsync("Success", "User details updated successfully!", "OK");
 			}
 			catch (Exception ex)
 			{
@@ -121,7 +118,6 @@ namespace ChessFinalProject.ViewModels
 				await _alertService.ShowAlertAsync("Error", $"Error updating user details: {ex.Message}", "OK");
 			}
 		}
-		//AccountViewModel Entry Point
 		public void ApplyQueryAttributes(IDictionary<string, object> query)
 		{
 			RecievedUser = query.ContainsKey("selectedUser") ? (AppUser)query["selectedUser"] : null;
@@ -144,8 +140,6 @@ namespace ChessFinalProject.ViewModels
 			UserEmail = user.UserEmail!;
 			UserMobile = user.UserMobile!;
 		}
-
-		#region Validation Methods
 		private bool Validate()
 		{
 			var firstNameValid = ValidUserFirstName();
@@ -188,7 +182,5 @@ namespace ChessFinalProject.ViewModels
 			}
 			return true;
 		}
-		#endregion
-
 	}
 }

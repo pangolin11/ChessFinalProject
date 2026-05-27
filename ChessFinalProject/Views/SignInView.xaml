@@ -8,10 +8,8 @@
     NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Background>
-        <!--  Man Of Steel  -->
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
             <GradientStop Offset="0.0" Color="#780206" />
-            <!--<GradientStop Offset="0.5" Color="#12D8FA"/>-->
             <GradientStop Offset="1.0" Color="#061161" />
         </LinearGradientBrush>
     </ContentPage.Background>
@@ -22,7 +20,6 @@
             Spacing="25"
             VerticalOptions="Center">
 
-            <!--  Header  -->
             <Label
                 Margin="20"
                 FontAttributes="Bold"
@@ -32,7 +29,6 @@
                 TextColor="Snow"
                 VerticalOptions="Center" />
 
-            <!--  Error Message  -->
             <Label
                 FontSize="20"
                 HorizontalTextAlignment="Center"
@@ -40,14 +36,12 @@
                 Text="{Binding ErrorMessage}"
                 TextColor="#ff4dd2" />
 
-            <!--  Debug Mode Message  -->
             <Label
                 FontSize="20"
                 IsVisible="{Binding IsDebugMode}"
                 Text="Debug Mode!"
                 TextColor="#66ff66" />
 
-            <!--  Email Entry  -->
             <Border
                 Padding="10"
                 Stroke="#ccc"
@@ -62,7 +56,6 @@
                     TextColor="Wheat" />
             </Border>
 
-            <!--  Password Entry  -->
             <Border
                 Stroke="#ccc"
                 StrokeShape="RoundRectangle 8"
@@ -93,7 +86,6 @@
                 </Grid>
             </Border>
 
-            <!--  SignIn Button  -->
             <Button
                 Command="{Binding SignInCommand}"
                 CornerRadius="8"
@@ -101,7 +93,6 @@
                 HeightRequest="50"
                 Text="SignIn" />
 
-            <!--  Stay In Checkbox  -->
             <Border Stroke="Transparent">
                 <Grid Padding="2" ColumnDefinitions="*,4*,0.5*,6*">
 
@@ -126,12 +117,11 @@
                 </Grid>
             </Border>
 
-            <!--  Already have an account?  -->
             <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
                 <Label
                     Margin="14,0,0,0"
                     FontSize="16"
-                    Text="Already have an account?"
+                    Text="Dont have an account?"
                     TextColor="White"
                     VerticalTextAlignment="Center" />
                 <Button
@@ -144,7 +134,6 @@
 
         </VerticalStackLayout>
 
-        <!--  מסך טעינה  -->
         <Grid
             HorizontalOptions="Fill"
             IsVisible="{Binding IsBusy}"

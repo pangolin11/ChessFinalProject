@@ -4,13 +4,15 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:ChessFinalProject.Views"
+    Shell.FlyoutBehavior="Disabled"
     Title="ChessFinalProject">
 
     <Shell.TitleView>
-        <HorizontalStackLayout>
+        <Grid WidthRequest="300">
+            <HorizontalStackLayout>
 
-            <!--  HOME Option  -->
-            <Button
+                <!--  HOME Option  -->
+                <Button
                 Margin="5"
                 BackgroundColor="Wheat"
                 Command="{Binding NavigateToHomePageCommand}"
@@ -20,8 +22,8 @@
                 Text="{Binding HomeIcon}"
                 TextColor="Black" />
 
-            <!--  Account Option  -->
-            <Button
+                <!--  Account Option  -->
+                <Button
                 Margin="0,5,5,5"
                 BackgroundColor="Wheat"
                 Command="{Binding NavigateToAccountPageCommand}"
@@ -32,8 +34,8 @@
                 TextColor="Black" />
 
 
-            <!--  IsAdmin Option  -->
-            <Button
+                <!--  IsAdmin Option  -->
+                <Button
                 Margin="0,5,5,5"
                 BackgroundColor="Wheat"
                 Command="{Binding NavigateToAdminPageCommand}"
@@ -44,8 +46,8 @@
                 Text="{Binding AdminIcon}"
                 TextColor="Black" />
 
-            <!--  SignOut Option  -->
-            <Button
+                <!--  SignOut Option  -->
+                <Button
                 Margin="0,5,5,5"
                 BackgroundColor="Wheat"
                 Command="{Binding LogoutCommand}"
@@ -56,15 +58,18 @@
                 TextColor="Black" />
 
 
-        </HorizontalStackLayout>
+            </HorizontalStackLayout>
+        </Grid>
     </Shell.TitleView>
 
     <ShellContent
         Title="Home"
+        Shell.FlyoutItemIsVisible="False"
         ContentTemplate="{DataTemplate local:MainPageView}"
         Route="MainPage" />
     <ShellContent
-    Title="Home"
-    ContentTemplate="{DataTemplate local:ChessBoardView}"
-    Route="ChessBoard" />
+        Title="asd"
+        ContentTemplate="{DataTemplate local:ChessBoardView}"
+        Shell.FlyoutItemIsVisible="False"
+        Route="ChessBoard" />
 </Shell>

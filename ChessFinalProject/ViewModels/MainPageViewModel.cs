@@ -21,7 +21,6 @@ namespace ChessFinalProject.ViewModels
 		private string _name;
 		public MainPageViewModel() 
 		{
-			_name = "Hello " + (App.Current as App)!.CurrentUser!.FirstName!;
 		}
 
 		[RelayCommand]
@@ -34,5 +33,10 @@ namespace ChessFinalProject.ViewModels
 		{
 			await Shell.Current.GoToAsync("ChessBoardView");
         }
-	}
+
+        internal void OnAppearing()
+        {
+            _name = "Hello " + (App.Current as App)!.CurrentUser!.FirstName!;
+        }
+    }
 }
