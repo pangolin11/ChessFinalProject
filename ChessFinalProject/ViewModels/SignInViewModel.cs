@@ -88,12 +88,12 @@ namespace ChessFinalProject.ViewModels
 		{
 			//Debug Mode
 
-			_userEmail = "asd@gmail.com";
-			_userPassword = "123456";
+/*			_userEmail = "asd@gmail.com";
+			_userPassword = "123456";*/
 			_page = view;
 			_isBusy = false;
 			_dbService = dbService;			
-			_isDebugMode = true;
+			_isDebugMode = false;
 			_entryAsPassword = true;
 			_passwordIconCode = FontHelper.OPEN_EYE_ICON;
 			SignInCommand = new Command(SignIn, () =>
@@ -102,7 +102,6 @@ namespace ChessFinalProject.ViewModels
 
 		private async void SignIn()
 		{
-			//Show Progress Bar
 			IsBusy = true;
 			try
 			{
@@ -110,10 +109,8 @@ namespace ChessFinalProject.ViewModels
 				
 				IsBusy = false;
 
-				//Set CurrentUser
 				(App.Current as App)!.CurrentUser = user;
 
-				// Navigate to Main Page of Shell
 				var mainPage = IPlatformApplication.Current!.Services.GetService<AppShell>();
 				Application.Current!.Windows[0].Page = mainPage;		
 			}

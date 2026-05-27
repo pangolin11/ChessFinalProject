@@ -85,12 +85,11 @@ namespace ChessFinalProject.ViewModels
 			ErrorMessageIsVisible = false;
 			if (!Validate())
 			{
-				//ErrorMessageIsVisible = true;
 				await _alertService.ShowAlertAsync("Error", ErrorMessage, "OK");
 				return;
 			}
 			AppUser? user = null;
-			// If RecievedUser is not null (Came from Admin), use it; otherwise, use the current user
+			// If RecievedUser is not null then user is admin
 			if (RecievedUser != null)
 			{
 				user = RecievedUser;

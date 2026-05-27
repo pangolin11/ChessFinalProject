@@ -36,7 +36,7 @@ namespace ChessFinalProject.ViewModels
 
         internal void OnAppearing()
         {
-            _name = "Hello " + (App.Current as App)!.CurrentUser!.FirstName!;
+            Name = "Hello " + (App.Current as App)!.CurrentUser!.FirstName!;
         }
     }
 }

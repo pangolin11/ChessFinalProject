@@ -68,7 +68,7 @@
         ContentTemplate="{DataTemplate local:MainPageView}"
         Route="MainPage" />
     <ShellContent
-        Title="asd"
+        Title="Chess"
         ContentTemplate="{DataTemplate local:ChessBoardView}"
         Shell.FlyoutItemIsVisible="False"
         Route="ChessBoard" />
