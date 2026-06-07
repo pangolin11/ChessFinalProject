@@ -1,5 +1,7 @@
 ﻿
+using ChessFinalProject.Model;
 using ChessFinalProject.Models;
+using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Database.Query;
 using Firebase.Database.Streaming;
@@ -298,14 +300,37 @@ public class FirebaseService : FirebaseRealtimeService,IGameService
              .Child(newGameState.WinningPlayerId)
              .Child(newGameState.GameId)
              .PutAsync(newGameState);
-        newGameState.Status = "defeat";
+
+        AppUser winningPlayer = await _firebaseClient!
+            .Child("users")
+            .Child(newGameState.WinningPlayerId)
+            .OnceSingleAsync<AppUser>();
+        winningPlayer.Elo += 10;
+        await _firebaseClient!
+            .Child("users")
+            .Child(newGameState.WinningPlayerId)
+            .PutAsync(winningPlayer);
+
         //save game as loss for defeated player
+        newGameState.Status = "defeat";
         await _firebaseClient!
             .Child("UserGames")
              .Child(newGameState.LosingPlayerId)
              .Child(newGameState.GameId)
              .PutAsync(newGameState);
-       
+
+        AppUser losingPlayer = await _firebaseClient!
+             .Child("users")
+             .Child(newGameState.LosingPlayerId)
+             .OnceSingleAsync<AppUser>();
+        if (losingPlayer.Elo >= 10)
+        {
+            losingPlayer.Elo -= 10;
+            await _firebaseClient!
+                .Child("users")
+                .Child(newGameState.LosingPlayerId)
+                .PutAsync(losingPlayer);
+        } 
     }
     public async Task SendTime(GameState currentLocalGameState, string time, string kingType)
     {
@@ -333,7 +358,6 @@ public class FirebaseService : FirebaseRealtimeService,IGameService
                   .PatchAsync(timeDictionary);
         }
     }
-
     public async Task SendToFirebase(string squareFrom, string squareTo, string gameid, string Side)
     {
 
@@ -371,7 +395,6 @@ public class FirebaseService : FirebaseRealtimeService,IGameService
             .PutAsync(gameState);
 
     }
-
     public async Task SendToFirebase(string squareFrom, string squareTo, string gameid, bool MovedCastlePiece)
     {
         var gameState = await GetGameState(gameid);

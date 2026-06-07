@@ -43,7 +43,9 @@ namespace ChessFinalProject.ViewModels
 		[RelayCommand]
 		private void Logout()
 		{
-			(App.Current as App)!.CurrentUser = null;
+			SecureStorage.Default.Remove("UserEmail");
+            SecureStorage.Default.Remove("UserPass");
+            (App.Current as App)!.CurrentUser = null;
 			Application.Current.Windows[0].Page = new NavigationPage(_page);
 		}
 

@@ -100,7 +100,7 @@ namespace ChessFinalProject.ViewModels
 				!(string.IsNullOrEmpty(UserEmail) || string.IsNullOrEmpty(UserPassword)));						
 		}
 
-		private async void SignIn()
+		public async void SignIn()
 		{
 			IsBusy = true;
 			try
@@ -110,10 +110,23 @@ namespace ChessFinalProject.ViewModels
 				IsBusy = false;
 
 				(App.Current as App)!.CurrentUser = user;
+				if (IsRememberMeChecked || await SecureStorage.Default.GetAsync("UserEmail") != null)
+				{
+					await SecureStorage.Default.SetAsync("UserEmail", UserEmail);
+                    await SecureStorage.Default.SetAsync("UserPass", UserPassword);
 
-				var mainPage = IPlatformApplication.Current!.Services.GetService<AppShell>();
-				Application.Current!.Windows[0].Page = mainPage;		
-			}
+                }
+				else
+				{
+                     SecureStorage.Default.Remove("UserEmail");
+                     SecureStorage.Default.Remove("UserPass");
+                }
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    var mainPage = IPlatformApplication.Current!.Services.GetService<AppShell>();
+                    Application.Current!.Windows[0].Page = mainPage;
+                });
+            }
 			catch (Exception ex)
 			{
 				IsBusy = false;

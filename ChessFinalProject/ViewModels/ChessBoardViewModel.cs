@@ -455,12 +455,13 @@ namespace ChessFinalProject.ViewModels
         }
         public async Task EndGame()
         {
-            if (_currentLocalGameState == null)
-                return;
+            _gameStateSubscription?.Dispose();
             _playerTimer.Stop();
             _playerTimer.Tick -= OnPlayerTimerTick;
             IsEnding = false;
-            _gameStateSubscription?.Dispose();
+            
+            if (_currentLocalGameState == null)
+                return;
             await _gameService.EndGame(_currentLocalGameState, _currentLocalGameState.GameId, KingType);
             Console.WriteLine("EndGame");
             

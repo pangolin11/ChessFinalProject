@@ -94,27 +94,13 @@
                 Text="SignIn" />
 
             <Border Stroke="Transparent">
-                <Grid Padding="2" ColumnDefinitions="*,4*,0.5*,6*">
-
-                    <CheckBox
-                        HorizontalOptions="Start"
-                        IsChecked="{Binding IsRememberMeChecked}"
-                        IsEnabled="{Binding IsCheckBoxEnabled}" />
+                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                    <CheckBox IsChecked="{Binding IsRememberMeChecked}" />
                     <Label
-                        Grid.Column="1"
-                        HorizontalOptions="Start"
-                        Text="remember me"
+                        Text="Remember me"
                         TextColor="Wheat"
                         VerticalOptions="Center" />
-                    <Button
-                        Grid.Column="3"
-                        BackgroundColor="Transparent"
-                        FontFamily="LexendSemiBold"
-                        HorizontalOptions="End"
-                        Text="Forget Password"
-                        TextColor="Wheat"
-                        VerticalOptions="Center" />
-                </Grid>
+                </HorizontalStackLayout>
             </Border>
 
             <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
@@ -139,7 +125,6 @@
             IsVisible="{Binding IsBusy}"
             VerticalOptions="Fill">
 
-            <!--  מסך טעינה  -->
             <Grid
                 HorizontalOptions="Fill"
                 IsVisible="{Binding IsBusy}"

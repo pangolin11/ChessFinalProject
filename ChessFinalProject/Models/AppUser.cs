@@ -17,5 +17,6 @@ namespace ChessFinalProject.Model
 		public string? UBDate { get; set; }
 		public string? RegDate { get; set; }
 		public bool IsAdmin { get; set; } = false;
+		public int Elo { get; set; }
 	}
 }
