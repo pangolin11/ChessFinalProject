@@ -410,6 +410,7 @@ namespace ChessFinalProject.ViewModels
                             }
                             MainThread.BeginInvokeOnMainThread(() =>
                             {
+                                if(_currentLocalGameState != null)
                                 Board.FirstOrDefault(s => s.Name == squareTo)?.Image = _currentLocalGameState.Board[squareTo];
                                 Board.FirstOrDefault(s => s.Name == squareFrom)?.Image = "";
                             });
